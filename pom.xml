@@ -71,7 +71,9 @@
                 
     
     <module>ui.tests</module>
-      
+
+    <module>fonts</module>
+
   </modules>
         
   
