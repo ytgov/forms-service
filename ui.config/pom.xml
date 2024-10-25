@@ -22,7 +22,7 @@
     <!-- ====================================================================== -->
     <parent>
         <groupId>ca.yukon.aem</groupId>
-        <artifactId>forms-service</artifactId>
+        <artifactId>yukon-forms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -30,7 +30,7 @@
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>forms-service.ui.config</artifactId>
+    <artifactId>yukon-forms.ui.config</artifactId>
     <packaging>content-package</packaging>
     <name>Yukon Forms - UI config</name>
     <description>UI config package for Yukon Forms</description>
@@ -54,7 +54,7 @@
                     <repositoryStructurePackages>
                         <repositoryStructurePackage>
                             <groupId>ca.yukon.aem</groupId>
-                            <artifactId>forms-service.ui.apps.structure</artifactId>
+                            <artifactId>yukon-forms.ui.apps.structure</artifactId>
                         </repositoryStructurePackage>
                     </repositoryStructurePackages>
                 </configuration>
@@ -69,7 +69,7 @@
     <dependencies>
         <dependency>
             <groupId>ca.yukon.aem</groupId>
-            <artifactId>forms-service.ui.apps.structure</artifactId>
+            <artifactId>yukon-forms.ui.apps.structure</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
         </dependency>

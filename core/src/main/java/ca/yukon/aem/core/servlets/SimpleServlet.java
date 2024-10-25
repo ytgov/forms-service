@@ -38,7 +38,7 @@ import java.io.IOException;
  */
 @Component(service = { Servlet.class })
 @SlingServletResourceTypes(
-        resourceTypes="forms-service/components/page",
+        resourceTypes="yukon-forms/components/page",
         methods=HttpConstants.METHOD_GET,
         extensions="txt")
 @ServiceDescription("Simple Demo Servlet")

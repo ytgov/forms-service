@@ -8,12 +8,12 @@
     <!-- ====================================================================== -->
     <parent>
         <groupId>ca.yukon.aem</groupId>
-        <artifactId>forms-service</artifactId>
+        <artifactId>yukon-forms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>forms-service.dispatcher.cloud</artifactId>
+    <artifactId>yukon-forms.dispatcher.cloud</artifactId>
     <packaging>pom</packaging>
     <name>Yukon Forms - Dispatcher</name>
     <description>HTTP &amp; Dispatcher configurations for Yukon Forms</description>

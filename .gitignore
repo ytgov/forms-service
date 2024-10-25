@@ -106,4 +106,4 @@ reports/
 dispatcher/src/conf.d/variables/default.vars
 ui.tests.wdio/test-module/assets/form/themes/**/*diff.png
 ui.tests.wdio/test-module/assets/form/themes/**/*current.png
-ui.apps/src/main/content/jcr_root/apps/forms-service/clientlibs/clientlib-forms-react
+ui.apps/src/main/content/jcr_root/apps/yukon-forms/clientlibs/clientlib-forms-react

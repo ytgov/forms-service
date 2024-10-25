@@ -15,6 +15,6 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <workspaceFilter version="1.0">
-    <filter root="/apps/forms-service-packages"/>
-    <filter root="/apps/forms-service-vendor-packages"/>
+    <filter root="/apps/yukon-forms-packages"/>
+    <filter root="/apps/yukon-forms-vendor-packages"/>
 </workspaceFilter>

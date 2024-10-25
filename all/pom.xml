@@ -23,7 +23,7 @@
     <!-- ====================================================================== -->
     <parent>
         <groupId>ca.yukon.aem</groupId>
-        <artifactId>forms-service</artifactId>
+        <artifactId>yukon-forms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -31,7 +31,7 @@
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>forms-service.all</artifactId>
+    <artifactId>yukon-forms.all</artifactId>
     <packaging>content-package</packaging>
     <name>Yukon Forms - All</name>
     <description>All content package for Yukon Forms</description>
@@ -56,67 +56,67 @@
                     <embeddeds>
                         <embedded>
                             <groupId>ca.yukon.aem</groupId>
-                            <artifactId>forms-service.ui.apps</artifactId>
+                            <artifactId>yukon-forms.ui.apps</artifactId>
                             <type>zip</type>
-                            <target>/apps/forms-service-packages/application/install</target>
+                            <target>/apps/yukon-forms-packages/application/install</target>
                         </embedded>
                         <embedded>
                             <groupId>ca.yukon.aem</groupId>
-                            <artifactId>forms-service.core</artifactId>
-                            <target>/apps/forms-service-packages/application/install</target>
+                            <artifactId>yukon-forms.core</artifactId>
+                            <target>/apps/yukon-forms-packages/application/install</target>
                         </embedded>
                         <embedded>
                             <groupId>ca.yukon.aem</groupId>
-                            <artifactId>forms-service.ui.content</artifactId>
+                            <artifactId>yukon-forms.ui.content</artifactId>
                             <type>zip</type>
-                            <target>/apps/forms-service-packages/content/install</target>
+                            <target>/apps/yukon-forms-packages/content/install</target>
                         </embedded>
                         <embedded>
                             <groupId>ca.yukon.aem</groupId>
-                            <artifactId>forms-service.ui.config</artifactId>
+                            <artifactId>yukon-forms.ui.config</artifactId>
                             <type>zip</type>
-                            <target>/apps/forms-service-packages/application/install</target>
+                            <target>/apps/yukon-forms-packages/application/install</target>
                         </embedded>
                         <embedded>
                             <groupId>com.adobe.cq</groupId>
                             <artifactId>core.wcm.components.examples.ui.config</artifactId>
                             <type>zip</type>
-                            <target>/apps/forms-service-vendor-packages/application/install</target>
+                            <target>/apps/yukon-forms-vendor-packages/application/install</target>
                         </embedded>
                         <embedded>
                             <groupId>com.adobe.cq</groupId>
                             <artifactId>core.wcm.components.examples.ui.apps</artifactId>
                             <type>zip</type>
-                            <target>/apps/forms-service-vendor-packages/application/install</target>
+                            <target>/apps/yukon-forms-vendor-packages/application/install</target>
                         </embedded>
                         <embedded>
                             <groupId>com.adobe.cq</groupId>
                             <artifactId>core.wcm.components.examples.ui.content</artifactId>
                             <type>zip</type>
-                            <target>/apps/forms-service-vendor-packages/content/install</target>
+                            <target>/apps/yukon-forms-vendor-packages/content/install</target>
                         </embedded>
                         <embedded>
                             <groupId>com.adobe.aem</groupId>
                             <artifactId>core-forms-components-af-apps</artifactId>
                             <type>zip</type>
-                            <target>/apps/forms-service-vendor-packages/application/install</target>
+                            <target>/apps/yukon-forms-vendor-packages/application/install</target>
                         </embedded>
                         <embedded>
                             <groupId>com.adobe.aem</groupId>
                             <artifactId>core-forms-components-af-core</artifactId>
-                            <target>/apps/forms-service-vendor-packages/application/install</target>
+                            <target>/apps/yukon-forms-vendor-packages/application/install</target>
                         </embedded>
                                                                   <embedded>
                         <groupId>com.adobe.aem</groupId>
                         <artifactId>core-forms-components-examples-apps</artifactId>
                         <type>zip</type>
-                        <target>/apps/forms-service-vendor-packages/application/install</target>
+                        <target>/apps/yukon-forms-vendor-packages/application/install</target>
                       </embedded>
                       <embedded>
                         <groupId>com.adobe.aem</groupId>
                         <artifactId>core-forms-components-examples-content</artifactId>
                         <type>zip</type>
-                        <target>/apps/forms-service-vendor-packages/application/install</target>
+                        <target>/apps/yukon-forms-vendor-packages/application/install</target>
                       </embedded>
                                           </embeddeds>
                 </configuration>
@@ -221,19 +221,19 @@
     <dependencies>
         <dependency>
             <groupId>ca.yukon.aem</groupId>
-            <artifactId>forms-service.ui.apps</artifactId>
+            <artifactId>yukon-forms.ui.apps</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>ca.yukon.aem</groupId>
-            <artifactId>forms-service.ui.content</artifactId>
+            <artifactId>yukon-forms.ui.content</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>ca.yukon.aem</groupId>
-            <artifactId>forms-service.ui.config</artifactId>
+            <artifactId>yukon-forms.ui.config</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
         </dependency>

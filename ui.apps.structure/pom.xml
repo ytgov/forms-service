@@ -7,7 +7,7 @@
     <!-- ====================================================================== -->
     <parent>
         <groupId>ca.yukon.aem</groupId>
-        <artifactId>forms-service</artifactId>
+        <artifactId>yukon-forms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -15,7 +15,7 @@
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>forms-service.ui.apps.structure</artifactId>
+    <artifactId>yukon-forms.ui.apps.structure</artifactId>
     <packaging>content-package</packaging>
     <name>Yukon Forms - Repository Structure Package</name>
     <description>
@@ -35,7 +35,7 @@
                     <filters>
                         <!-- /apps root -->
                         <filter><root>/apps</root></filter>
-                        <filter><root>/apps/forms-service</root></filter>
+                        <filter><root>/apps/yukon-forms</root></filter>
                         <!-- Common overlay roots -->
                                                 <filter><root>/apps/fd</root></filter>
                         <filter><root>/apps/fd/af</root></filter>
@@ -50,7 +50,7 @@
                         <filter><root>/apps/settings</root></filter>
 
                         <!-- DAM folder root, will be created via repoinit -->
-                        <filter><root>/content/dam/forms-service</root></filter>
+                        <filter><root>/content/dam/yukon-forms</root></filter>
 
                     </filters>
                 </configuration>

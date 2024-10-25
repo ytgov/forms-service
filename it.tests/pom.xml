@@ -19,12 +19,12 @@
 
     <parent>
         <groupId>ca.yukon.aem</groupId>
-        <artifactId>forms-service</artifactId>
+        <artifactId>yukon-forms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>forms-service.it.tests</artifactId>
+    <artifactId>yukon-forms.it.tests</artifactId>
     <name>Yukon Forms - Integration Tests</name>
     <description>Integration Tests for Yukon Forms</description>
 

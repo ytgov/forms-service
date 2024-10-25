@@ -25,7 +25,7 @@ const CLIENTLIB_DIR = path.join(
     'content',
     'jcr_root',
     'apps',
-    'forms-service',
+    'yukon-forms',
     'clientlibs'
 );
 
@@ -44,7 +44,7 @@ module.exports = {
     {
       ...libsBaseConfig,
       name: 'clientlib-forms-react',
-      categories: ['forms-service.forms.react'],
+      categories: ['yukon-forms.forms.react'],
       assets: {
         // Copy entrypoint scripts and stylesheets into the respective ClientLib
         // directories
