@@ -3312,7 +3312,7 @@ Adjustments to registered member information
                         <extras>
                            <text name="dorElementType">AF_TABLEBODYROW_XFO</text>
                         </extras>
-                        <occur max="10" min="0"/>
+                        <bind match="none"/>
                         <field name="yhcipId" minH="9.001mm" id="guideContainer-rootPanel-guidepanel_936167221225552-panel-table_copy_copy-Row1-tableItem__">
                            <ui>
                               <numericEdit>
@@ -3332,7 +3332,7 @@ Adjustments to registered member information
                               <text name="dorElementType">AF_NUMERICFIELD_XFO</text>
                            </extras>
                            <value>
-                              <decimal/>
+                              <decimal>12345</decimal>
                            </value>
                         </field>
                         <field name="name" minH="9.001mm" id="guideContainer-rootPanel-guidepanel_936167221225552-panel-table_copy_copy-Row1-tableitem1_copy__">
@@ -3355,7 +3355,7 @@ Adjustments to registered member information
                               <text name="dorElementType">AF_TEXTFIELD_XFO</text>
                            </extras>
                            <value>
-                              <text/>
+                              <text>John Doe</text>
                            </value>
                         </field>
                         <field name="socialInsuranceNr" minH="9.001mm" id="guideContainer-rootPanel-guidepanel_936167221225552-panel-table_copy_copy-Row1-guidenumericbox_copy__">
@@ -3377,7 +3377,7 @@ Adjustments to registered member information
                               <text name="dorElementType">AF_NUMERICFIELD_XFO</text>
                            </extras>
                            <value>
-                              <decimal/>
+                              <decimal>23456</decimal>
                            </value>
                         </field>
                         <field name="birthDate" minH="9.001mm" id="guideContainer-rootPanel-guidepanel_936167221225552-panel-table_copy_copy-Row1-tableitem1_copy_1928570353__">
@@ -3394,7 +3394,7 @@ Adjustments to registered member information
                            <margin bottomInset="4.318mm" leftInset="1mm" rightInset="1mm" topInset="4.318mm"/>
                            <para hAlign="center" marginLeft="0pt" marginRight="0pt" spaceAbove="0pt" spaceBelow="0pt" vAlign="middle"/>
                            <value>
-                              <date/>
+                              <date>70-07-06</date>
                            </value>
                            <border/>
                            <keep intact="contentArea"/>
@@ -3508,6 +3508,9 @@ Adjustments to registered member information
                               <text name="dorElementType">AF_RADIOBUTTONLIST_XFO</text>
                            </extras>
                            <para hAlign="center" vAlign="middle"/>
+                           <value>
+                              <text>0</text>
+                           </value>
                         </subform>
                         <field name="bandNr" minH="9.001mm" id="guideContainer-rootPanel-guidepanel_936167221225552-panel-table_copy_copy-Row1-tableitem_copy__">
                            <ui>
@@ -3528,7 +3531,7 @@ Adjustments to registered member information
                               <text name="dorElementType">AF_NUMERICFIELD_XFO</text>
                            </extras>
                            <value>
-                              <decimal/>
+                              <decimal>45</decimal>
                            </value>
                         </field>
                      </subform>
@@ -3616,7 +3619,7 @@ Adjustments to registered member information
                         <text name="dorElementType">AF_TEXT_XFO</text>
                      </extras>
                   </draw>
-                  <subform w="184.149mm" name="table" layout="table" columnWidths="36.830000000000005mm 36.830000000000005mm 36.830000000000005mm 36.830000000000005mm 36.830000000000005mm" id="guideContainer-rootPanel-guidepanel_936167221225552-panel_2022846522-table_copy_copy__">
+                  <subform w="184.149mm" name="table" layout="table" columnWidths="46.0375mm 46.0375mm 46.0375mm 46.0375mm" id="guideContainer-rootPanel-guidepanel_936167221225552-panel_2022846522-table_copy_copy__">
                      <?templateDesigner rowpattern first:1, next:1, firstcolor:ffffff, nextcolor:999999, apply:1?>
                      <?templateDesigner expand 0?>
                      <margin bottomInset="2.54mm" topInset="2.54mm"/>
@@ -3746,29 +3749,6 @@ Adjustments to registered member information
                               <text name="dorElementType">AF_TEXT_XFO</text>
                            </extras>
                         </draw>
-                        <draw name="headerItem1" minH="8.999mm" hAlign="center" id="guideContainer-rootPanel-guidepanel_936167221225552-panel_2022846522-table_copy_copy-HeaderRow-tableItem1__">
-                           <ui>
-                              <textEdit/>
-                           </ui>
-                           <value>
-                              <exData contentType="text/html">
-                                 <body xmlns="http://www.w3.org/1999/xhtml" xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/"><p>Actions</p>
-</body>
-                              </exData>
-                           </value>
-                           <font size="9pt" usehref=".#som($template.#subform.#font)" weight="bold">
-                              <fill>
-                                 <color value="51,51,51"/>
-                              </fill>
-                           </font>
-                           <border/>
-                           <para hAlign="center" vAlign="middle">
-                              <hyphenation use="designer__defaultHyphenation.para.hyphenation"/>
-                           </para>
-                           <extras>
-                              <text name="dorElementType">AF_TEXT_XFO</text>
-                           </extras>
-                        </draw>
                      </subform>
                      <subform name="tableRow" layout="row" hAlign="center" y="0mm" id="guideContainer-rootPanel-guidepanel_936167221225552-panel_2022846522-table_copy_copy-Row1__">
                         <?templateDesigner expand 1?>
@@ -3786,7 +3766,7 @@ Adjustments to registered member information
                         <extras>
                            <text name="dorElementType">AF_TABLEBODYROW_XFO</text>
                         </extras>
-                        <occur max="10" min="0"/>
+                        <bind match="none"/>
                         <field name="yhcipId" minH="9.001mm" id="guideContainer-rootPanel-guidepanel_936167221225552-panel_2022846522-table_copy_copy-Row1-tableItem__">
                            <ui>
                               <numericEdit>
@@ -3806,7 +3786,7 @@ Adjustments to registered member information
                               <text name="dorElementType">AF_NUMERICFIELD_XFO</text>
                            </extras>
                            <value>
-                              <decimal/>
+                              <decimal>12345</decimal>
                            </value>
                         </field>
                         <field name="name" minH="9.001mm" id="guideContainer-rootPanel-guidepanel_936167221225552-panel_2022846522-table_copy_copy-Row1-tableitem1_copy__">
@@ -3829,7 +3809,7 @@ Adjustments to registered member information
                               <text name="dorElementType">AF_TEXTFIELD_XFO</text>
                            </extras>
                            <value>
-                              <text/>
+                              <text>John Doe</text>
                            </value>
                         </field>
                         <field name="deletionDate" minH="9.001mm" id="guideContainer-rootPanel-guidepanel_936167221225552-panel_2022846522-table_copy_copy-Row1-tableitem1_copy_1928570353__">
@@ -3846,7 +3826,7 @@ Adjustments to registered member information
                            <margin bottomInset="4.318mm" leftInset="1mm" rightInset="1mm" topInset="4.318mm"/>
                            <para hAlign="center" marginLeft="0pt" marginRight="0pt" spaceAbove="0pt" spaceBelow="0pt" vAlign="middle"/>
                            <value>
-                              <date/>
+                              <date>70-07-06</date>
                            </value>
                            <border/>
                            <keep intact="contentArea"/>
@@ -3877,30 +3857,6 @@ Adjustments to registered member information
                               <text/>
                            </value>
                         </field>
-                        <draw name="buttonsPlaceholder" minH="9.001mm" id="guideContainer-rootPanel-guidepanel_936167221225552-panel_2022846522-table_copy_copy-Row1-tableitem1_copy_copy__">
-                           <ui>
-                              <textEdit/>
-                           </ui>
-                           <value>
-                              <exData contentType="text/html">
-                                 <body xmlns="http://www.w3.org/1999/xhtml" xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/"/>
-                              </exData>
-                           </value>
-                           <font baselineShift="0pt" fontHorizontalScale="100%" fontVerticalScale="100%" kerningMode="none" letterSpacing="0" lineThrough="0" posture="normal" size="9pt" underline="0" usehref=".#som($template.#subform.#font)" weight="normal">
-                              <fill>
-                                 <color value="167,165,165"/>
-                              </fill>
-                           </font>
-                           <margin bottomInset="4.318mm" leftInset="1.0008mm" rightInset="1.0008mm" topInset="4.318mm"/>
-                           <para hAlign="center" marginLeft="0pt" marginRight="0pt" spaceAbove="0pt" spaceBelow="0pt" textIndent="0pt" vAlign="middle">
-                              <hyphenation use="designer__defaultHyphenation.para.hyphenation"/>
-                           </para>
-                           <border/>
-                           <keep intact="contentArea"/>
-                           <extras>
-                              <text name="dorElementType">AF_TEXT_XFO</text>
-                           </extras>
-                        </draw>
                      </subform>
                   </subform>
                </subform>

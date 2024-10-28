@@ -4,7 +4,7 @@
     <jcr:content
         cq:conf="/conf/global"
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-10-28T15:49:43.066Z"
+        cq:lastModified="{Date}2024-10-28T16:14:23.329Z"
         cq:lastModifiedBy="admin"
         cq:template="/conf/aem-forms-reference-content/settings/wcm/templates/basic-af"
         jcr:language="en"
@@ -47,7 +47,7 @@
         </parsys1>
         <guideContainer
             fd:version="1.1"
-            jcr:lastModified="{Date}2024-10-25T12:10:08.904+01:00"
+            jcr:lastModified="{Date}2024-10-28T12:56:06.220Z"
             jcr:lastModifiedBy="admin"
             jcr:primaryType="nt:unstructured"
             sling:resourceType="fd/af/components/guideContainer"
@@ -864,7 +864,7 @@
                                                 </items>
                                             </HeaderRow>
                                             <Row1
-                                                jcr:lastModified="{Date}2024-10-22T14:39:22.470+01:00"
+                                                jcr:lastModified="{Date}2024-10-28T12:53:12.937Z"
                                                 jcr:lastModifiedBy="admin"
                                                 jcr:primaryType="nt:unstructured"
                                                 jcr:title="Row 1"
@@ -872,8 +872,6 @@
                                                 enabled="{Boolean}true"
                                                 guideComponentType="true"
                                                 guideNodeClass="guideTableRow"
-                                                maxOccur="10"
-                                                minOccur="0"
                                                 name="tableRow"
                                                 visible="{Boolean}true">
                                                 <layout
@@ -884,11 +882,12 @@
                                                     jcr:primaryType="nt:unstructured"
                                                     sling:resourceType="fd/af/layouts/table/rowLayout">
                                                     <tableItem
-                                                        jcr:lastModified="{Date}2024-10-22T18:12:30.508+01:00"
+                                                        jcr:lastModified="{Date}2024-10-28T12:47:55.941Z"
                                                         jcr:lastModifiedBy="admin"
                                                         jcr:primaryType="nt:unstructured"
                                                         jcr:title="YHCIP I.D."
                                                         sling:resourceType="fd/af/components/guidenumericbox"
+                                                        _value="12345"
                                                         guideComponentType="true"
                                                         guideNodeClass="guideNumericBox"
                                                         hideTitle="true"
@@ -896,11 +895,12 @@
                                                         placeholderText="YHCIP I.D."
                                                         textIsRich="[true,true,true]"/>
                                                     <tableitem1_copy
-                                                        jcr:lastModified="{Date}2024-10-22T18:09:54.497+01:00"
+                                                        jcr:lastModified="{Date}2024-10-28T12:48:10.177Z"
                                                         jcr:lastModifiedBy="admin"
                                                         jcr:primaryType="nt:unstructured"
                                                         jcr:title="Name (Surname, First Name, Initials)"
                                                         sling:resourceType="fd/af/components/guidetextbox"
+                                                        _value="John Doe"
                                                         autofillFieldKeyword="name"
                                                         guideComponentType="true"
                                                         guideNodeClass="guideTextBox"
@@ -911,22 +911,24 @@
                                                     <guidenumericbox_copy
                                                         jcr:created="{Date}2024-10-21T14:53:45.047+01:00"
                                                         jcr:createdBy="admin"
-                                                        jcr:lastModified="{Date}2024-10-22T18:10:02.794+01:00"
+                                                        jcr:lastModified="{Date}2024-10-28T12:48:26.840Z"
                                                         jcr:lastModifiedBy="admin"
                                                         jcr:primaryType="nt:unstructured"
                                                         jcr:title="Social Insurance Number"
                                                         sling:resourceType="fd/af/components/guidenumericbox"
+                                                        _value="23456"
                                                         guideNodeClass="guideNumericBox"
                                                         hideTitle="true"
                                                         name="socialInsuranceNr"
                                                         placeholderText="Social Insurance Number"
                                                         textIsRich="[true,true,true]"/>
                                                     <tableitem1_copy_1928570353
-                                                        jcr:lastModified="{Date}2024-10-22T18:10:17.131+01:00"
+                                                        jcr:lastModified="{Date}2024-10-28T12:48:44.256Z"
                                                         jcr:lastModifiedBy="admin"
                                                         jcr:primaryType="nt:unstructured"
                                                         jcr:title="Birth Date"
                                                         sling:resourceType="fd/af/components/guidedatepicker"
+                                                        _value="70-07-06"
                                                         guideComponentType="true"
                                                         guideNodeClass="guideDatePicker"
                                                         hideTitle="true"
@@ -936,11 +938,12 @@
                                                     <guideradiobutton_cop
                                                         jcr:created="{Date}2024-10-21T14:54:18.417+01:00"
                                                         jcr:createdBy="admin"
-                                                        jcr:lastModified="{Date}2024-10-22T15:48:58.198+01:00"
+                                                        jcr:lastModified="{Date}2024-10-28T12:48:54.781Z"
                                                         jcr:lastModifiedBy="admin"
                                                         jcr:primaryType="nt:unstructured"
                                                         jcr:title="Sex"
                                                         sling:resourceType="fd/af/components/guideradiobutton"
+                                                        _value="0"
                                                         alignment="guideFieldHorizontalAlignment"
                                                         guideNodeClass="guideRadioButton"
                                                         hideTitle="true"
@@ -949,11 +952,12 @@
                                                         options="[0=M,1=F]"
                                                         textIsRich="[true,true,true,true,true]"/>
                                                     <tableitem_copy
-                                                        jcr:lastModified="{Date}2024-10-22T18:10:29.751+01:00"
+                                                        jcr:lastModified="{Date}2024-10-28T12:49:10.707Z"
                                                         jcr:lastModifiedBy="admin"
                                                         jcr:primaryType="nt:unstructured"
                                                         jcr:title="Band/Disc Number"
                                                         sling:resourceType="fd/af/components/guidenumericbox"
+                                                        _value="45"
                                                         guideComponentType="true"
                                                         guideNodeClass="guideNumericBox"
                                                         hideTitle="true"
@@ -1091,20 +1095,10 @@
                                                         guideNodeClass="guideTextDraw"
                                                         name="headerItem1_copy_3"
                                                         textIsRich="true"/>
-                                                    <tableItem1
-                                                        jcr:lastModified="{Date}2024-10-22T14:43:51.371+01:00"
-                                                        jcr:lastModifiedBy="admin"
-                                                        jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="fd/af/components/guidetextdraw"
-                                                        _value="&lt;p>Actions&lt;/p>&#xd;&#xa;"
-                                                        guideComponentType="true"
-                                                        guideNodeClass="guideTextDraw"
-                                                        name="headerItem1"
-                                                        textIsRich="true"/>
                                                 </items>
                                             </HeaderRow>
                                             <Row1
-                                                jcr:lastModified="{Date}2024-10-22T14:39:22.470+01:00"
+                                                jcr:lastModified="{Date}2024-10-28T12:52:22.916Z"
                                                 jcr:lastModifiedBy="admin"
                                                 jcr:primaryType="nt:unstructured"
                                                 jcr:title="Row 1"
@@ -1112,8 +1106,6 @@
                                                 enabled="{Boolean}true"
                                                 guideComponentType="true"
                                                 guideNodeClass="guideTableRow"
-                                                maxOccur="10"
-                                                minOccur="0"
                                                 name="tableRow"
                                                 visible="{Boolean}true">
                                                 <layout
@@ -1124,11 +1116,12 @@
                                                     jcr:primaryType="nt:unstructured"
                                                     sling:resourceType="fd/af/layouts/table/rowLayout">
                                                     <tableItem
-                                                        jcr:lastModified="{Date}2024-10-22T18:14:41.909+01:00"
+                                                        jcr:lastModified="{Date}2024-10-28T12:50:08.988Z"
                                                         jcr:lastModifiedBy="admin"
                                                         jcr:primaryType="nt:unstructured"
                                                         jcr:title="YHCIP I.D."
                                                         sling:resourceType="fd/af/components/guidenumericbox"
+                                                        _value="12345"
                                                         guideComponentType="true"
                                                         guideNodeClass="guideNumericBox"
                                                         hideTitle="true"
@@ -1136,11 +1129,12 @@
                                                         placeholderText="YHCIP I.D."
                                                         textIsRich="[true,true,true]"/>
                                                     <tableitem1_copy
-                                                        jcr:lastModified="{Date}2024-10-22T18:14:48.889+01:00"
+                                                        jcr:lastModified="{Date}2024-10-28T12:50:18.616Z"
                                                         jcr:lastModifiedBy="admin"
                                                         jcr:primaryType="nt:unstructured"
                                                         jcr:title="Name"
                                                         sling:resourceType="fd/af/components/guidetextbox"
+                                                        _value="John Doe"
                                                         autofillFieldKeyword="name"
                                                         guideComponentType="true"
                                                         guideNodeClass="guideTextBox"
@@ -1149,11 +1143,12 @@
                                                         placeholderText="Name"
                                                         textIsRich="[true,true,true,true]"/>
                                                     <tableitem1_copy_1928570353
-                                                        jcr:lastModified="{Date}2024-10-22T18:15:01.327+01:00"
+                                                        jcr:lastModified="{Date}2024-10-28T12:50:36.671Z"
                                                         jcr:lastModifiedBy="admin"
                                                         jcr:primaryType="nt:unstructured"
                                                         jcr:title="Deletion Date"
                                                         sling:resourceType="fd/af/components/guidedatepicker"
+                                                        _value="70-07-06"
                                                         guideComponentType="true"
                                                         guideNodeClass="guideDatePicker"
                                                         hideTitle="true"
@@ -1174,18 +1169,6 @@
                                                         name="deletionReason"
                                                         placeholderText="Reason"
                                                         textIsRich="[true,true,true,true]"/>
-                                                    <tableitem1_copy_copy
-                                                        jcr:lastModified="{Date}2024-10-22T14:47:18.983+01:00"
-                                                        jcr:lastModifiedBy="admin"
-                                                        jcr:primaryType="nt:unstructured"
-                                                        jcr:title="Name"
-                                                        sling:resourceType="fd/af/components/guidetextdraw"
-                                                        autofillFieldKeyword="name"
-                                                        guideComponentType="true"
-                                                        guideNodeClass="guideTextDraw"
-                                                        hideTitle="true"
-                                                        name="buttonsPlaceholder"
-                                                        textIsRich="[true]"/>
                                                 </items>
                                             </Row1>
                                         </items>
@@ -1359,7 +1342,7 @@
             <view jcr:primaryType="nt:unstructured">
                 <print
                     jcr:created="{Date}2024-10-22T19:06:45.432+01:00"
-                    jcr:lastModified="{Date}2024-10-23T13:22:44.626+01:00"
+                    jcr:lastModified="{Date}2024-10-28T12:54:32.994Z"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/authoring/components/dor/dorProperties"
