@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "stylelint-config-standard"
+  ],
+  "ignoreFiles": [
+    "ui.apps/src/**/clientlib-site/**/*",
+    "ui.apps/src/**/clientlib-dependencies/**/*",
+    "ui.apps/src/**/clientlib-forms-react/**/*"
+  ],
+  "rules": {
+    "selector-class-pattern": "^[a-z][a-zA-Z0-9-]*(__[a-zA-Z0-9-]*)?$",
+    "selector-no-qualifying-type": null,
+    "max-nesting-depth": 3,
+    "at-rule-no-unknown": null
+  }
+}

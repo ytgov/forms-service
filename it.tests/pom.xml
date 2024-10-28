@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
  |  Copyright 2015 Adobe Systems Incorporated
  |
@@ -14,7 +14,11 @@
  |  See the License for the specific language governing permissions and
  |  limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -90,7 +94,8 @@
                             <testClassesDirectory>${project.build.directory}/classes/</testClassesDirectory>
                             <systemPropertyVariables>
                                 <!-- Same properties as used when run in a AEM CI/CD pipeline -->
-                                <sling.it.configure.default.replication.agents>false</sling.it.configure.default.replication.agents>
+                                <sling.it.configure.default.replication.agents
+                >false</sling.it.configure.default.replication.agents>
                                 <com.sun.security.enableAIAcaIssuers>true</com.sun.security.enableAIAcaIssuers>
                                 <it.logintokenauth>true</it.logintokenauth>
 

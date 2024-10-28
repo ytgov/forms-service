@@ -15,26 +15,26 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 import { useEffect, useState } from 'react';
 
-export const cookieValue = cookieName => {
-    let b = document.cookie.match(`(^|[^;]+)\\s*${cookieName}\\s*=\\s*([^;]+)`);
-    return b ? b.pop() : '';
+export const cookieValue = (cookieName) => {
+  let b = document.cookie.match(`(^|[^;]+)\\s*${cookieName}\\s*=\\s*([^;]+)`);
+  return b ? b.pop() : '';
 };
 
-const checkCookie = cookieName => {
-    return document.cookie.split(';').filter(item => item.trim().startsWith(`${cookieName}=`)).length > 0;
+const checkCookie = (cookieName) => {
+  return document.cookie.split(';').filter((item) => item.trim().startsWith(`${cookieName}=`)).length > 0;
 };
 
-const useCookieValue = cookieName => {
-    if (!cookieName || cookieName.length === 0) {
-        return '';
-    }
-    let value = checkCookie(cookieName) ? cookieValue(cookieName) : '';
-    const setCookieValue = (value, age) => {
-        const cookieSettings = `path=/; domain=${window.location.hostname};Max-Age=${age !== undefined ? age : 3600}`;
-        document.cookie = `${cookieName}=${value};${cookieSettings}`;
-    };
+const useCookieValue = (cookieName) => {
+  if (!cookieName || cookieName.length === 0) {
+    return '';
+  }
+  let value = checkCookie(cookieName) ? cookieValue(cookieName) : '';
+  const setCookieValue = (value, age) => {
+    const cookieSettings = `path=/; domain=${window.location.hostname};Max-Age=${age !== undefined ? age : 3600}`;
+    document.cookie = `${cookieName}=${value};${cookieSettings}`;
+  };
 
-    return [value, setCookieValue];
+  return [value, setCookieValue];
 };
 
 /**
@@ -42,41 +42,41 @@ const useCookieValue = cookieName => {
  * and triggers a re-render of components using the hook.
  */
 const useEditorEvents = () => {
-    const [wcmmode] = useCookieValue('wcmmode');
-    const [state, setState] = useState(1)
-    const onMessage = event => {
-        // Drop events from unknown origins
-        if (event.origin !== window.location.origin) {
-            return;
-        }
+  const [wcmmode] = useCookieValue('wcmmode');
+  const [state, setState] = useState(1);
+  const onMessage = (event) => {
+    // Drop events from unknown origins
+    if (event.origin !== window.location.origin) {
+      return;
+    }
 
-        // Drop events that are not AEM Sites editor commands
-        if (!event.data || !event.data.msg || event.data.msg !== 'cqauthor-cmd') {
-            return;
-        }
+    // Drop events that are not AEM Sites editor commands
+    if (!event.data || !event.data.msg || event.data.msg !== 'cqauthor-cmd') {
+      return;
+    }
 
-        // Skip commands that do not require a re-render
-        if (event.data.data && event.data.data.cmd && event.data.data.cmd === 'toggleClass') {
-            return;
-        }
+    // Skip commands that do not require a re-render
+    if (event.data.data && event.data.data.cmd && event.data.data.cmd === 'toggleClass') {
+      return;
+    }
 
-        // Update state to force re-render
-        setState(state => state + 1)
+    // Update state to force re-render
+    setState((state) => state + 1);
+  };
+
+  useEffect(() => {
+    // Only during editing
+    if (wcmmode !== 'edit') {
+      return;
+    }
+
+    window.addEventListener('message', onMessage, false);
+    return () => {
+      window.removeEventListener('message', onMessage, false);
     };
+  }, []);
 
-    useEffect(() => {
-        // Only during editing
-        if (wcmmode !== 'edit') {
-            return;
-        }
-
-        window.addEventListener('message', onMessage, false);
-        return () => {
-            window.removeEventListener('message', onMessage, false);
-        };
-    }, []);
-
-    return [state, setState]
+  return [state, setState];
 };
 
 export default useEditorEvents;

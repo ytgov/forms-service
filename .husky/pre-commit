@@ -1,1 +1,1 @@
-npm --version
+npx lint-staged

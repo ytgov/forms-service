@@ -18,14 +18,15 @@
  **************************************************************************/
 
 .fileAttachmentListingCloseButton button[data-dismiss] {
-    min-width: 100px;
-}
-@media(max-width: 767px) {
-    .fileAttachmentListingCloseButton {
-        margin-right: 15px;
-    }
-    .fileAttachmentListingCloseButton button[data-dismiss] {
-    	min-width: 40px;
-	}
+  min-width: 100px;
 }
 
+@media (width <= 767px) {
+  .fileAttachmentListingCloseButton {
+    margin-right: 15px;
+  }
+
+  .fileAttachmentListingCloseButton button[data-dismiss] {
+    min-width: 40px;
+  }
+}
