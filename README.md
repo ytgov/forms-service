@@ -17,6 +17,45 @@ The main parts of the template are:
 - all: a single content package that embeds all of the compiled modules (bundles and content packages) including any vendor dependencies
 - analyse: this module runs analysis on the project which provides additional validation for deploying into AEMaaCS
 
+## How to set up local development
+
+Ensure node is install and its version is great or equal to v20.18.0+
+
+    node --version
+    v20.18.0
+
+Install dev dependencies (mainly for linters and formatters)
+
+    npm install
+
+Initialize Husky (commit hooks)
+
+    npm run prepare
+
+## How to commit code
+
+Run the following git commit would trigger lint-staged to auto lint/format staged files
+
+    git commit -m "commit message here"
+
+Run the following git push command would trigger mvn clean verify command to ensure it builds successfully before pushing to the git repo
+
+    git push
+
+## How to deploy code (Optional)
+
+Add cloud manager origin
+
+    git remote add cm-origin https://git.cloudmanager.adobe.com/governmentofyukon/FormsSandbox-p125405-uk97084/
+
+Force push to dev branch on CM git repo to trigger deploy to DEV environment
+
+    git push cm-origin dev --force
+
+Force push to main branch on CM git repo to trigger deploy to STG environment
+
+    git push cm-origin main --force
+
 ## How to build
 
 To build all the modules run in the project root directory the following command with Maven 3:
