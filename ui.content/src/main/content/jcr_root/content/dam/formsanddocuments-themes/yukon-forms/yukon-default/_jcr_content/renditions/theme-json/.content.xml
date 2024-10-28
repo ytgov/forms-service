@@ -234,7 +234,7 @@
                     smallScreen_x0023_default_x0023_ui="[marginLock:linkOff,marginPopover:Set]"/>
                 <af_accordionpanelheader
                     jcr:primaryType="nt:unstructured"
-                    default_x0023_active="[color:#666666,background:url(../assets/accordion-expanded-01.svg) 15px 50% / 15px 11px no-repeat\,#e5f1f8,border-left-width:1px,border-bottom-width:0px,border-top-width:1px,border-right-width:1px,border-style:solid,border-color:#0f79c0]"
+                    default_x0023_active="[color:#666666,background:url(../assets/accordion-expanded-01.svg) 15px 50% / 15px 11px no-repeat\,#e5f1f8,border-left-width:1px,border-bottom-width:0px,border-top-width:1px,border-right-width:1px,border-style:solid,border-color:#00616d]"
                     default_x0023_active_x0023_ui="[backgroundColor:#e5f1f8,backgroundContainer:{&quot;itemList&quot;:[{&quot;id&quot;:&quot;image.1458287924638&quot;\,&quot;imageSrc&quot;:&quot;../assets/accordion-expanded-01.svg&quot;\,&quot;size&quot;:&quot;custom&quot;\,&quot;width&quot;:&quot;15px&quot;\,&quot;height&quot;:&quot;11px&quot;\,&quot;position&quot;:&quot;custom&quot;\,&quot;x-position&quot;:&quot;15px&quot;\,&quot;y-position&quot;:&quot;50%&quot;\,&quot;tiling&quot;:&quot;no-repeat&quot;}]},borderWidthPopover:1px\, 1px\, 0px\, 1px,borderWidthLock:linkOff]"
                     default_x0023_default="[display:block,border-style:solid,border-top-width:1px,border-left-width:1px,border-right-width:1px,border-color:#b3b5b9,padding-bottom:1rem,padding-left:3rem,padding-top:1rem,padding-right:1rem,font-size:16px,text-decoration:none,cursor:pointer,background:url(../assets/accordion-close-default-01.svg) 15px 50% / 11px 15px no-repeat\,#fff,border-bottom-width:1px,margin-top:10px,color:#000]"
                     default_x0023_default_x0023_ui="[backgroundColor:#fff,backgroundContainer:{&quot;itemList&quot;:[{&quot;id&quot;:&quot;image.1458287877800&quot;\,&quot;imageSrc&quot;:&quot;../assets/accordion-close-default-01.svg&quot;\,&quot;size&quot;:&quot;custom&quot;\,&quot;width&quot;:&quot;11px&quot;\,&quot;height&quot;:&quot;15px&quot;\,&quot;position&quot;:&quot;custom&quot;\,&quot;y-position&quot;:&quot;50%&quot;\,&quot;tiling&quot;:&quot;no-repeat&quot;\,&quot;x-position&quot;:&quot;15px&quot;}]},paddingPopover:1rem\, 1rem\, 1rem\, 3rem,paddingLock:linkOff,borderWidthLock:link,borderWidthPopover:1px,marginLock:linkOff,marginPopover:10px]"
@@ -505,7 +505,7 @@
                     default_x0023_default_x0023_ui="[paddingPopover:Set,marginLock:linkOff,marginPopover:0px,backgroundColor:#D4ECEF,borderWidthLock:linkOff,borderWidthPopover:—\, —\, —\, 4px]"/>
                 <af_tableheadercell
                     jcr:primaryType="nt:unstructured"
-                    default_x0023_default="[font-weight:bold,padding-right:.625rem,padding-left:.625rem,height:3.875rem,text-align:left,color:#424141]"
+                    default_x0023_default="[font-weight:bold,padding-right:.625rem,padding-left:.625rem,height:3.875rem,text-align:left,color:#000]"
                     default_x0023_default_x0023_ui="[paddingLock:linkOff,paddingPopover:—\, .625rem\, —\, .625rem]"/>
                 <af_table
                     jcr:primaryType="nt:unstructured"
@@ -549,8 +549,8 @@
                     tablet_x0023_default_x0023_ui="[marginLock:linkOff,marginPopover:20px,paddingPopover:10px]"/>
                 <af_form
                     jcr:primaryType="nt:unstructured"
-                    default_x0023_default="[background:url('/content/dam/aem-forms/Aurora-main.svg') right top / contain no-repeat fixed\,,cssOverride:font-family: &quot;Montserrat&quot;\, Helvetica\, Arial\, sans-serif;]"
-                    default_x0023_default_x0023_ui="[backgroundContainer:{&quot;itemList&quot;:[{&quot;id&quot;:&quot;image.1729512824661&quot;\,&quot;imageSrc&quot;:&quot;/content/dam/aem-forms/Aurora-main.svg&quot;\,&quot;size&quot;:&quot;contain&quot;\,&quot;position&quot;:&quot;right top&quot;\,&quot;tiling&quot;:&quot;no-repeat&quot;\,&quot;scrolling&quot;:&quot;fixed&quot;}\,{&quot;id&quot;:&quot;image.1729526865441&quot;\,&quot;imageSrc&quot;:&quot;&quot;\,&quot;tiling&quot;:&quot;no-repeat&quot;\,&quot;position&quot;:&quot;right top&quot;\,&quot;size&quot;:&quot;contain&quot;}]}]"
+                    default_x0023_default="[]"
+                    default_x0023_default_x0023_ui="[]"
                     phone_x0023_default_x0023_ui="[marginLock:linkOff,marginPopover:Set]"/>
                 <af_separator
                     jcr:primaryType="nt:unstructured"
@@ -648,10 +648,10 @@
                     tablet_x0023_default_x0023_ui="[paddingLock:linkOff,paddingPopover:—\, 0px\, —\, 0px]"/>
                 <af_tnccheckboxlabel
                     jcr:primaryType="nt:unstructured"
-                    default_x0023_default="[font-size:0.875rem,color:#888888,line-height:50px]"/>
+                    default_x0023_default="[font-size:0.875rem,color:#000,line-height:50px]"/>
                 <af_accordionpanelcontentarea
                     jcr:primaryType="nt:unstructured"
-                    default_x0023_default="[padding-left:3.5rem,padding-bottom:1rem,padding-right:3.5rem,padding-top:1rem,border-style:solid,border-left-width:1px,border-bottom-width:1px,border-top-width:0px,border-right-width:1px,border-color:#0f79c0]"
+                    default_x0023_default="[padding-left:3.5rem,padding-bottom:1rem,padding-right:3.5rem,padding-top:1rem,border-style:solid,border-left-width:1px,border-bottom-width:1px,border-top-width:0px,border-right-width:1px,border-color:#00616d]"
                     default_x0023_default_x0023_ui="[paddingPopover:1rem\, 3.5rem\, 1rem\, 3.5rem,paddingLock:linkOff,borderWidthPopover:0px\, 1px\, 1px\, 1px,borderWidthLock:linkOff]"
                     tablet_x0023_default="[padding-left:10px,padding-bottom:10px,padding-top:10px,padding-right:10px]"
                     tablet_x0023_default_x0023_ui="[paddingPopover:10px]"/>
@@ -699,7 +699,7 @@
                     smallScreen_x0023_default_x0023_ui="[marginPopover:Set,marginLock:linkOff,paddingPopover:Set,paddingLock:linkOff]"/>
                 <af_numericstepperwidgetandtext
                     jcr:primaryType="nt:unstructured"
-                    default_x0023_default="[addonCss:{&quot;selectors&quot;:{&quot;parent&quot;:{&quot;cssSelector&quot;:&quot; .guideFieldWidget.numericInput&quot;\,&quot;properties&quot;:{&quot;width&quot;:&quot;40%&quot;}}}},min-width:200px,border-color:#aeb0b5,border-left-width:1px,border-bottom-width:1px,border-top-width:1px,border-right-width:1px,border-style:solid,color:#000]"
+                    default_x0023_default="[addonCss:{&quot;selectors&quot;:{&quot;parent&quot;:{&quot;cssSelector&quot;:&quot; .guideFieldWidget.numericInput&quot;\,&quot;properties&quot;:{&quot;width&quot;:&quot;40%&quot;}}}},min-width:200px,border-color:#aeb0b5,border-left-width:1px,border-bottom-width:1px,border-top-width:1px,border-right-width:1px,border-style:solid,color:#5b616b]"
                     default_x0023_default_x0023_ui="[width:40%,borderWidthPopover:1px]"/>
                 <af_tableheaderrow
                     jcr:primaryType="nt:unstructured"
@@ -725,7 +725,7 @@
                     phone_x0023_default_x0023_ui="[marginLock:linkOff,marginPopover:—\, 0px\, —\, 0px]"/>
                 <af_verify
                     jcr:primaryType="nt:unstructured"
-                    default_x0023_default="[border-right-width:1px,border-bottom-width:1px,border-left-width:1px,border-top-width:1px,border-style:solid,height:540px,max-width:100%,position:relative,overflow:auto,padding-top:0.625rem,padding-bottom:0.625rem,padding-left:0.625rem,padding-right:0.625rem,margin-left:0.75rem,margin-right:0.75rem,margin-top:0.25rem,margin-bottom:0.25rem,border-top-left-radius:4px,border-bottom-left-radius:4px,border-bottom-right-radius:4px,border-top-right-radius:4px,color:#000,font-size:16px]"
+                    default_x0023_default="[border-right-width:1px,border-bottom-width:1px,border-left-width:1px,border-top-width:1px,border-style:solid,height:540px,max-width:100%,position:relative,overflow:auto,padding-top:0.625rem,padding-bottom:0.625rem,padding-left:0.625rem,padding-right:0.625rem,margin-left:0.75rem,margin-right:0.75rem,margin-top:0.25rem,margin-bottom:0.25rem,border-top-left-radius:4px,border-bottom-left-radius:4px,border-bottom-right-radius:4px,border-top-right-radius:4px,color:#5b616b,font-size:16px]"
                     default_x0023_default_x0023_ui="[borderWidthPopover:1px,positionPopover:relative,paddingPopover:0.625rem,marginLock:linkOff,marginPopover:0.25rem\, 0.75rem\, 0.25rem\, 0.75rem,borderRadiusPopover:4px]"
                     phone_x0023_default="[margin-right:0px,margin-left:0px]"
                     phone_x0023_default_x0023_ui="[marginLock:linkOff,marginPopover:—\, 0px\, —\, 0px]"/>
