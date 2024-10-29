@@ -18,5 +18,7 @@
  **************************************************************************/
 
 .wizard-navigators > li {
-  vertical-align: top;
+    
+    vertical-align: top;
 }
+

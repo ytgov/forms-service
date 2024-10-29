@@ -15,34 +15,27 @@
 */-->
 
 <sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html">
-  <sly data-sly-call="${clientlib.js @ categories='yukon-forms.base'}" />
+    <sly data-sly-call="${clientlib.js @ categories='yukon-forms.base'}"/>
 </sly>
 
-<sly data-sly-use.page="com.adobe.cq.wcm.core.components.models.Page" data-sly-list="${page.htmlPageItems}">
-  <script
-    data-sly-test="${item.location.name == 'footer'}"
-    data-sly-element="${item.element.name @ context='unsafe'}"
-    data-sly-attribute="${item.attributes}"
-  ></script>
+
+<sly data-sly-use.page="com.adobe.cq.wcm.core.components.models.Page"
+     data-sly-list="${page.htmlPageItems}">
+    <script data-sly-test="${item.location.name == 'footer'}"
+            data-sly-element="${item.element.name @ context='unsafe'}"
+            data-sly-attribute="${item.attributes}"></script>
 </sly>
 
-<sly
-  data-sly-use.clientlib="core/wcm/components/commons/v1/templates/clientlib.html"
-  data-sly-use.formstructparser="com.adobe.cq.forms.core.components.models.form.FormStructureParser"
-  data-sly-test.hasForm="${formstructparser.containsFormContainer}"
->
-  <sly
-    data-sly-test="${hasForm}"
-    data-sly-call="${clientlib.js @ categories='core.forms.components.runtime.all', async=true}"
-  />
+<sly data-sly-use.clientlib="core/wcm/components/commons/v1/templates/clientlib.html"
+     data-sly-use.formstructparser="com.adobe.cq.forms.core.components.models.form.FormStructureParser"
+     data-sly-test.hasForm="${formstructparser.containsFormContainer}">
+    <sly data-sly-test="${hasForm}" data-sly-call="${clientlib.js @ categories='core.forms.components.runtime.all', async=true}"/>
 </sly>
 <!--/*
     Below clientlibs are included from https://github.com/adobe/aem-core-forms-components/blob/master/ui.af.apps/src/main/content/jcr_root/apps/core/fd/components/page/v1/page/customfooterlibs.html#L24
     These clientlibs are only included if Forms is enabled, and datalayer is activated by expicitely setting datalayer='y'.
 */-->
 <sly data-sly-use.page="com.adobe.cq.wcm.core.components.models.Page">
-  <sly
-    data-sly-test="${page.data && page.dataLayerClientlibIncluded}"
-    data-sly-call="${ clientlib.js @ categories='core.forms.components.commons.v1.datalayer', async=true}"
-  ></sly>
+    <sly data-sly-test="${page.data && page.dataLayerClientlibIncluded}" data-sly-call="${ clientlib.js @ categories='core.forms.components.commons.v1.datalayer', async=true}"></sly>
 </sly>
+

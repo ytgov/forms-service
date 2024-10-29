@@ -6,16 +6,16 @@ This is a project template for AEM-based applications. It is intended as a best-
 
 The main parts of the template are:
 
-- [core:](core/README.md) Java bundle containing all core functionality like OSGi services, listeners or schedulers, as well as component-related Java code such as servlets or request filters.
-- [it.tests:](it.tests/README.md) Java based integration tests
-- [ui.apps:](ui.apps/README.md) contains the /apps (and /etc) parts of the project, ie JS&CSS clientlibs, components, and templates
-- [ui.content:](ui.content/README.md) contains sample content using the components from the ui.apps
-- ui.config: contains runmode specific OSGi configs for the project
-- [ui.frontend:](ui.frontend.general/README.md) an optional dedicated front-end build mechanism (Angular, React or general Webpack project)
-- [ui.tests.cypress:](ui.tests.cypress/README.md) Cypress based UI tests
-- [ui.tests.wdio:](ui.tests.wdio/README.md) Selenium based UI tests
-- all: a single content package that embeds all of the compiled modules (bundles and content packages) including any vendor dependencies
-- analyse: this module runs analysis on the project which provides additional validation for deploying into AEMaaCS
+* [core:](core/README.md) Java bundle containing all core functionality like OSGi services, listeners or schedulers, as well as component-related Java code such as servlets or request filters.
+* [it.tests:](it.tests/README.md) Java based integration tests
+* [ui.apps:](ui.apps/README.md) contains the /apps (and /etc) parts of the project, ie JS&CSS clientlibs, components, and templates
+* [ui.content:](ui.content/README.md) contains sample content using the components from the ui.apps
+* ui.config: contains runmode specific OSGi configs for the project
+* [ui.frontend:](ui.frontend.general/README.md) an optional dedicated front-end build mechanism (Angular, React or general Webpack project)
+* [ui.tests.cypress:](ui.tests.cypress/README.md) Cypress based UI tests
+* [ui.tests.wdio:](ui.tests.wdio/README.md) Selenium based UI tests
+* all: a single content package that embeds all of the compiled modules (bundles and content packages) including any vendor dependencies
+* analyse: this module runs analysis on the project which provides additional validation for deploying into AEMaaCS
 
 ## How to set up local development
 
@@ -112,14 +112,14 @@ AEM. If you want to point the integration tests to different AEM author and
 publish instances, you can use the following system properties via Maven's `-D`
 flag.
 
-| Property              | Description                                         | Default value           |
-| --------------------- | --------------------------------------------------- | ----------------------- |
-| `it.author.url`       | URL of the author instance                          | `http://localhost:4502` |
-| `it.author.user`      | Admin user for the author instance                  | `admin`                 |
-| `it.author.password`  | Password of the admin user for the author instance  | `admin`                 |
-| `it.publish.url`      | URL of the publish instance                         | `http://localhost:4503` |
-| `it.publish.user`     | Admin user for the publish instance                 | `admin`                 |
-| `it.publish.password` | Password of the admin user for the publish instance | `admin`                 |
+| Property | Description | Default value |
+| --- | --- | --- |
+| `it.author.url` | URL of the author instance | `http://localhost:4502` |
+| `it.author.user` | Admin user for the author instance | `admin` |
+| `it.author.password` | Password of the admin user for the author instance | `admin` |
+| `it.publish.url` | URL of the publish instance | `http://localhost:4503` |
+| `it.publish.user` | Admin user for the publish instance | `admin` |
+| `it.publish.password` | Password of the admin user for the publish instance | `admin` |
 
 The integration tests in this archetype use the [AEM Testing
 Clients](https://github.com/adobe/aem-testing-clients) and showcase some

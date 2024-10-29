@@ -1,32 +1,8 @@
 {
   "devDependencies": {
-    "@eslint/eslintrc": "^3.1.0",
-    "@eslint/js": "^9.13.0",
-    "@prettier/plugin-xml": "^3.4.1",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "@typescript-eslint/eslint-plugin": "^8.12.0",
-    "@typescript-eslint/parser": "^8.12.0",
-    "eslint": "^9.13.0",
-    "husky": "^9.1.6",
-    "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3",
-    "prettier-plugin-java": "^2.6.5",
-    "sort-json": "^2.0.1",
-    "stylelint": "^16.10.0",
-    "stylelint-config-sass-guidelines": "^12.1.0",
-    "stylelint-config-standard": "^36.0.1"
+    "husky": "^9.1.6"
   },
   "scripts": {
-    "prepare": "husky",
-    "format": "prettier --write '**/src/**/*.{js,css,html,java,md}'",
-    "lint-script": "eslint --fix 'ui.apps/src/**/*.js'",
-    "lint-style": "stylelint --fix 'ui.apps/src/**/*.{css,less}'",
-    "pre-commit": "lint-staged"
-  },
-  "lint-staged": {
-    "*.+(js|jsx|ts|tsx)": "eslint --fix",
-    "*.+(css|less|scss)": "stylelint --fix",
-    "*.+(js|jsx|ts|tsx|css|less|scss|html|json|java)": "prettier --write",
-    "*.+(md)": "prettier --write"
+    "prepare": "husky"
   }
 }

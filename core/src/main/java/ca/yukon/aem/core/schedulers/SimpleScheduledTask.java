@@ -28,33 +28,38 @@ import org.slf4j.LoggerFactory;
  * It also demonstrates how property values can be set. Users can
  * set the property values in /system/console/configMgr
  */
-@Designate(ocd = SimpleScheduledTask.Config.class)
-@Component(service = Runnable.class)
+@Designate(ocd=SimpleScheduledTask.Config.class)
+@Component(service=Runnable.class)
 public class SimpleScheduledTask implements Runnable {
 
-  @ObjectClassDefinition(name = "A scheduled task", description = "Simple demo for cron-job like task with properties")
-  public static @interface Config {
-    @AttributeDefinition(name = "Cron-job expression")
-    String scheduler_expression() default "*/30 * * * * ?";
+    @ObjectClassDefinition(name="A scheduled task",
+                           description = "Simple demo for cron-job like task with properties")
+    public static @interface Config {
 
-    @AttributeDefinition(name = "Concurrent task", description = "Whether or not to schedule this task concurrently")
-    boolean scheduler_concurrent() default false;
+        @AttributeDefinition(name = "Cron-job expression")
+        String scheduler_expression() default "*/30 * * * * ?";
 
-    @AttributeDefinition(name = "A parameter", description = "Can be configured in /system/console/configMgr")
-    String myParameter() default "";
-  }
+        @AttributeDefinition(name = "Concurrent task",
+                             description = "Whether or not to schedule this task concurrently")
+        boolean scheduler_concurrent() default false;
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+        @AttributeDefinition(name = "A parameter",
+                             description = "Can be configured in /system/console/configMgr")
+        String myParameter() default "";
+    }
 
-  private String myParameter;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  @Override
-  public void run() {
-    logger.debug("SimpleScheduledTask is now running, myParameter='{}'", myParameter);
-  }
+    private String myParameter;
+    
+    @Override
+    public void run() {
+        logger.debug("SimpleScheduledTask is now running, myParameter='{}'", myParameter);
+    }
 
-  @Activate
-  protected void activate(final Config config) {
-    myParameter = config.myParameter();
-  }
+    @Activate
+    protected void activate(final Config config) {
+        myParameter = config.myParameter();
+    }
+
 }

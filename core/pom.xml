@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  |  Copyright 2017 Adobe Systems Incorporated
  |
@@ -14,11 +14,8 @@
  |  See the License for the specific language governing permissions and
  |  limitations under the License.
 -->
-<project
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ca.yukon.aem</groupId>
@@ -45,11 +42,9 @@
                             <goal>bnd-process</goal>
                         </goals>
                         <configuration>
-                            <bnd>
-                                <![CDATA[
+                            <bnd><![CDATA[
 Import-Package: javax.annotation;version=0.0.0,*
-                                ]]>
-                            </bnd>
+                                ]]></bnd>
                         </configuration>
                     </execution>
                 </executions>
@@ -84,6 +79,7 @@ Import-Package: javax.annotation;version=0.0.0,*
             </plugin>
         </plugins>
     </build>
+
     <dependencies>
         <dependency>
             <groupId>uk.org.lidalia</groupId>
@@ -99,18 +95,20 @@ Import-Package: javax.annotation;version=0.0.0,*
             <artifactId>core.wcm.components.core</artifactId>
             <scope>test</scope>
         </dependency>
+
+
         <!-- AEM Forms Dependencies -->
-        <dependency>
-            <groupId>com.adobe.aem</groupId>
-            <artifactId>aem-forms-sdk-api</artifactId>
+             <dependency>
+         <groupId>com.adobe.aem</groupId>
+         <artifactId>aem-forms-sdk-api</artifactId>
+       </dependency>
+              <dependency>
+          <groupId>com.adobe.aem</groupId>
+          <artifactId>core-forms-components-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.adobe.aem</groupId>
-            <artifactId>core-forms-components-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.adobe.aem</groupId>
-            <artifactId>core-forms-components-af-core</artifactId>
+          <groupId>com.adobe.aem</groupId>
+          <artifactId>core-forms-components-af-core</artifactId>
         </dependency>
         <!-- Testing -->
         <dependency>

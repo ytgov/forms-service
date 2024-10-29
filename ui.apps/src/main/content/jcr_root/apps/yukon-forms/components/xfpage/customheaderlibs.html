@@ -14,23 +14,20 @@
     limitations under the License.
 */-->
 
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<sly
-  data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"
-  data-sly-call="${clientlib.js @ categories='yukon-forms.dependencies'}"
-/>
-<sly
-  data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"
-  data-sly-call="${clientlib.css @ categories='yukon-forms.base'}"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"
+     data-sly-call="${clientlib.js @ categories='yukon-forms.dependencies'}"/>
+<sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"
+     data-sly-call="${clientlib.css @ categories='yukon-forms.base'}"/>
 
 <!--/* Include Context Hub */-->
-<sly data-sly-resource="${'contexthub' @ resourceType='granite/contexthub/components/contexthub'}" />
+<sly data-sly-resource="${'contexthub' @ resourceType='granite/contexthub/components/contexthub'}"/>
 
-<sly data-sly-use.page="com.adobe.cq.wcm.core.components.models.Page" data-sly-list="${page.htmlPageItems}">
-  <script
-    data-sly-test="${item.location.name == 'header'}"
-    data-sly-element="${item.element.name @ context='unsafe'}"
-    data-sly-attribute="${item.attributes}"
-  ></script>
+<sly data-sly-use.page="com.adobe.cq.wcm.core.components.models.Page"
+     data-sly-list="${page.htmlPageItems}">
+    <script data-sly-test="${item.location.name == 'header'}"
+            data-sly-element="${item.element.name @ context='unsafe'}"
+            data-sly-attribute="${item.attributes}"></script>
 </sly>
+
+
