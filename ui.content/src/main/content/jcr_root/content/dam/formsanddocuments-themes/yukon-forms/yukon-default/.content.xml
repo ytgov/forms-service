@@ -12,12 +12,11 @@
             fd:version="2.0"
             jcr:primaryType="nt:unstructured"
             author="adobe"
-            baseClientLib="fdtheme.aem-forms-reference-content.ultramarine.style"
             clientlibCategory="fdtheme.yukon-forms.yukon-default"
             clientlibRef="/etc/clientlibs/fd/themes/yukon-forms"
             formRef="/libs/fd/af/themes/default"
             hasCustomThumbnail="{Boolean}false"
-            title="yukon-default">
+            title="Yukon Default">
             <breakpoints jcr:primaryType="nt:unstructured">
                 <default
                     jcr:primaryType="nt:unstructured"

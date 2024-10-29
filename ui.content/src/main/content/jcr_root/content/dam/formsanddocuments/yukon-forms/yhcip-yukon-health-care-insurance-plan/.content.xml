@@ -22,7 +22,7 @@
             dorType="generate"
             formmodel="none"
             hasCustomThumbnail="{Boolean}false"
-            themeRef="/content/dam/formsanddocuments-themes/aem-forms-reference-content/yukon-default"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
             title="YHCIP Yukon Health Care Insurance Plan"/>
     </jcr:content>
 </jcr:root>

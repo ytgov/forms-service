@@ -6,7 +6,7 @@
         cq:deviceGroups="[mobile/groups/responsive]"
         cq:lastModified="{Date}2024-10-28T16:14:23.329Z"
         cq:lastModifiedBy="admin"
-        cq:template="/conf/aem-forms-reference-content/settings/wcm/templates/basic-af"
+        cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af"
         jcr:language="en"
         jcr:lastModified="{Date}2021-03-24T18:22:20.809+05:30"
         jcr:primaryType="cq:PageContent"
@@ -69,7 +69,7 @@
             textIsRich="true"
             thankYouMessage="&lt;p>Thank you for submitting the form.&lt;/p>&#xd;&#xa;"
             thankYouOption="page"
-            themeRef="/content/dam/formsanddocuments-themes/aem-forms-reference-content/yukon-default"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
             useExistingAF="false">
             <layout
                 jcr:primaryType="nt:unstructured"
@@ -252,7 +252,7 @@
                                 alignment="guideFieldHorizontalAlignment"
                                 guideNodeClass="guideRadioButton"
                                 name="imagechoice1457080363345"
-                                options="[Woman=/conf/aem-forms-reference-content/settings/wcm/templates/basic-af/initial/_jcr_content/guideContainer/rootPanel/items/basics/items/basics1/items/guideimagechoice2/file-1.png,Man=/conf/aem-forms-reference-content/settings/wcm/templates/basic-af/initial/jcr:content/guideContainer/rootPanel/items/basics/items/basics1/items/guideimagechoice2/file-2.png]">
+                                options="[Woman=/conf/yukon-forms/settings/wcm/templates/basic-af/initial/_jcr_content/guideContainer/rootPanel/items/basics/items/basics1/items/guideimagechoice2/file-1.png,Man=/conf/yukon-forms/settings/wcm/templates/basic-af/initial/jcr:content/guideContainer/rootPanel/items/basics/items/basics1/items/guideimagechoice2/file-2.png]">
                                 <file-2.png/>
                                 <file-1.png/>
                             </guideimagechoice>
@@ -1199,7 +1199,7 @@
                                 jcr:title="Image"
                                 sling:resourceType="fd/af/components/guideimage"
                                 fileName="sample_terms.png"
-                                fileReference="/content/dam/aem-forms-reference-content/sample_terms.png"
+                                fileReference="/content/dam/yukon-forms/sample_terms.png"
                                 guideNodeClass="guideImage"
                                 name="image1456030886190"/>
                             <guidetextdraw

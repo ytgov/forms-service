@@ -18,7 +18,7 @@
             dorType="none"
             formmodel="none"
             hasCustomThumbnail="{Boolean}false"
-            themeRef="/content/dam/formsanddocuments-themes/aem-forms-reference-content/yukon-default"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
             title="Demo - Tables"/>
     </jcr:content>
 </jcr:root>
