@@ -4,7 +4,7 @@
     <jcr:content
         cq:conf="/conf/global"
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-10-28T16:14:23.329Z"
+        cq:lastModified="{Date}2024-10-29T17:38:26.422-07:00"
         cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af"
         jcr:language="en"
@@ -28,7 +28,7 @@
                     css="logoImage"
                     enabled="{Boolean}true"
                     fileName="logo.svg"
-                    fileReference="/content/dam/aem-forms/logo.svg"
+                    fileReference="/content/dam/yukon-forms/yukon-logo.png"
                     guideNodeClass="guideImage"
                     imageRotate="0"
                     name="Yukon_Logo"
