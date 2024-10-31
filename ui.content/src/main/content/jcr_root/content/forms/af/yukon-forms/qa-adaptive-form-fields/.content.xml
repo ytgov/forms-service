@@ -5,7 +5,7 @@
         cq:deviceGroups="[mobile/groups/responsive]"
         cq:lastModified="{Date}2024-10-31T09:08:17.571+02:00"
         cq:lastModifiedBy="admin"
-        cq:template="/conf/aem-forms-reference-content/settings/wcm/templates/basic-af"
+        cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af"
         jcr:language="en"
         jcr:lastModified="{Date}2021-03-24T18:22:20.809+05:30"
         jcr:primaryType="cq:PageContent"
@@ -69,7 +69,7 @@
             name="guide1"
             schemaType="none"
             thankYouOption="page"
-            themeRef="/content/dam/formsanddocuments-themes/aem-forms-reference-content/yukon-default"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
             useExistingAF="false">
             <layout
                 jcr:primaryType="nt:unstructured"
