@@ -27,7 +27,7 @@
                     css="logoImage"
                     enabled="{Boolean}true"
                     fileName="logo.svg"
-                    fileReference="/content/dam/aem-forms/logo.svg"
+                    fileReference="/content/dam/yukon-forms/yukon-logo.png"
                     guideNodeClass="guideImage"
                     imageRotate="0"
                     name="sample_logo_image"
@@ -829,7 +829,7 @@
                                     altText="Company Name"
                                     css="logoImage"
                                     fileName="logo.svg"
-                                    fileReference="/content/dam/aem-forms/logo.svg"
+                                    fileReference="/content/dam/yukon-forms/yukon-logo.png"
                                     guideNodeClass="guideImage"
                                     imageRotate="0"
                                     name="logoImage"/>
@@ -1062,7 +1062,7 @@
                                 jcr:title="Image"
                                 sling:resourceType="fd/af/components/guideimage"
                                 fileName="Aurora-main.svg"
-                                fileReference="/content/dam/aem-forms/Aurora-main.svg"
+                                fileReference="/content/dam/yukon-forms/Aurora-main.2615cb39.png"
                                 guideNodeClass="guideImage"
                                 name="image1729865154523"/>
                             <guidetextdraw_copy_1_42377107
