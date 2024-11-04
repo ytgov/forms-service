@@ -1,0 +1,9 @@
+{
+    "scripts": [
+        "create path (sling:OrderedFolder) /content/dam/yukon-forms",
+        "create path (sling:OrderedFolder) /content/dam/formsanddocuments/yukon-forms",
+        "create path (sling:OrderedFolder) /content/forms/af/yukon-forms",
+        "create path (nt:unstructured) /content/dam/yukon-forms/jcr:content",
+        "set properties on /content/dam/yukon-forms/jcr:content\n  set cq:conf{String} to /conf/yukon-forms\n  set jcr:title{String} to \"Yukon Forms\"\nend"
+    ]
+}

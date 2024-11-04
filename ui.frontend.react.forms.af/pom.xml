@@ -22,7 +22,7 @@
     <!-- ====================================================================== -->
     <parent>
         <groupId>ca.yukon.aem</groupId>
-        <artifactId>forms-service</artifactId>
+        <artifactId>yukon-forms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -30,7 +30,7 @@
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>forms-service.ui.frontend.react.forms.af</artifactId>
+    <artifactId>yukon-forms.ui.frontend.react.forms.af</artifactId>
     <packaging>pom</packaging>
     <name>Yukon Forms - UI Frontend Forms</name>
 

@@ -22,7 +22,7 @@
   <groupId>ca.yukon.aem</groupId>
         
   
-  <artifactId>forms-service</artifactId>
+  <artifactId>yukon-forms</artifactId>
         
   
   <packaging>pom</packaging>

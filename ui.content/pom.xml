@@ -22,7 +22,7 @@
     <!-- ====================================================================== -->
     <parent>
         <groupId>ca.yukon.aem</groupId>
-        <artifactId>forms-service</artifactId>
+        <artifactId>yukon-forms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -30,7 +30,7 @@
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>forms-service.ui.content</artifactId>
+    <artifactId>yukon-forms.ui.content</artifactId>
     <packaging>content-package</packaging>
     <name>Yukon Forms - UI content</name>
     <description>UI content package for Yukon Forms</description>
@@ -51,7 +51,7 @@
                         <cloudManagerTarget>none</cloudManagerTarget>
                     </properties>
                     <group>ca.yukon.aem</group>
-                    <name>forms-service.ui.content</name>
+                    <name>yukon-forms.ui.content</name>
                     <packageType>content</packageType>
                     <accessControlHandling>merge</accessControlHandling>
                     <validatorsSettings>
@@ -64,7 +64,7 @@
                     <dependencies>
                         <dependency>
                             <groupId>ca.yukon.aem</groupId>
-                            <artifactId>forms-service.ui.apps</artifactId>
+                            <artifactId>yukon-forms.ui.apps</artifactId>
                             <version>${project.version}</version>
                         </dependency>
                     </dependencies>
@@ -88,12 +88,12 @@
     <dependencies>
         <dependency>
             <groupId>ca.yukon.aem</groupId>
-            <artifactId>forms-service.core</artifactId>
+            <artifactId>yukon-forms.core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>ca.yukon.aem</groupId>
-            <artifactId>forms-service.ui.apps</artifactId>
+            <artifactId>yukon-forms.ui.apps</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
         </dependency>

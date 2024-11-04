@@ -22,7 +22,7 @@
     <!-- ====================================================================== -->
     <parent>
         <groupId>ca.yukon.aem</groupId>
-        <artifactId>forms-service</artifactId>
+        <artifactId>yukon-forms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -30,7 +30,7 @@
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>forms-service.ui.apps</artifactId>
+    <artifactId>yukon-forms.ui.apps</artifactId>
     <packaging>content-package</packaging>
     <name>Yukon Forms - UI apps</name>
     <description>UI apps package for Yukon Forms</description>
@@ -52,14 +52,14 @@
                         <cloudManagerTarget>none</cloudManagerTarget>
                     </properties>
                     <group>ca.yukon.aem</group>
-                    <name>forms-service.ui.apps</name>
+                    <name>yukon-forms.ui.apps</name>
                     <packageType>application</packageType>
                     <skipSubPackageValidation>true</skipSubPackageValidation>
                     <accessControlHandling>merge</accessControlHandling>
                     <repositoryStructurePackages>
                         <repositoryStructurePackage>
                             <groupId>ca.yukon.aem</groupId>
-                            <artifactId>forms-service.ui.apps.structure</artifactId>
+                            <artifactId>yukon-forms.ui.apps.structure</artifactId>
                         </repositoryStructurePackage>
                     </repositoryStructurePackages>
                     <dependencies>
@@ -110,27 +110,27 @@
     <dependencies>
         <dependency>
             <groupId>ca.yukon.aem</groupId>
-            <artifactId>forms-service.core</artifactId>
+            <artifactId>yukon-forms.core</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>ca.yukon.aem</groupId>
-            <artifactId>forms-service.ui.frontend</artifactId>
+            <artifactId>yukon-forms.ui.frontend</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
         </dependency>
 
       <dependency>
         <groupId>ca.yukon.aem</groupId>
-        <artifactId>forms-service.ui.frontend.react.forms.af</artifactId>
+        <artifactId>yukon-forms.ui.frontend.react.forms.af</artifactId>
         <version>${project.version}</version>
         <type>zip</type>
       </dependency>
 
         <dependency>
             <groupId>ca.yukon.aem</groupId>
-            <artifactId>forms-service.ui.apps.structure</artifactId>
+            <artifactId>yukon-forms.ui.apps.structure</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
         </dependency>
