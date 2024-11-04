@@ -754,8 +754,8 @@
                 component="fd/af/components/guidefooter">
                 <af_footer
                     jcr:primaryType="nt:unstructured"
-                    default_x0023_default="[width:100%,text-align:center,margin-top:4rem,cssOverride:box-sizing : content-box;&#xa;,padding-top:.5em,padding-bottom:.5rem,background:url('/content/dam/aem-forms/Aurora-main.svg') right top / contain no-repeat local\,#0E3E50]"
-                    default_x0023_default_x0023_ui="[paddingLock:linkOff,marginLock:linkOff,marginPopover:4rem\, —\, —\, —,paddingPopover:.5em\, —\, .5rem\, —,positionPopover:Set,backgroundContainer:{&quot;itemList&quot;:[{&quot;id&quot;:&quot;image.1729513034352&quot;\,&quot;imageSrc&quot;:&quot;/content/dam/aem-forms/Aurora-main.svg&quot;\,&quot;size&quot;:&quot;contain&quot;\,&quot;scrolling&quot;:&quot;local&quot;\,&quot;tiling&quot;:&quot;no-repeat&quot;\,&quot;position&quot;:&quot;right top&quot;}]},backgroundColor:#0E3E50]"
+                    default_x0023_default="[width:100%,text-align:center,margin-top:4rem,cssOverride:box-sizing : content-box;&#xa;,padding-top:.5em,padding-bottom:.5rem,background:url('/content/dam/yukon-forms/Aurora-main.2615cb39.png') right top / contain no-repeat local\,#0E3E50]"
+                    default_x0023_default_x0023_ui="[paddingLock:linkOff,marginLock:linkOff,marginPopover:4rem\, —\, —\, —,paddingPopover:.5em\, —\, .5rem\, —,positionPopover:Set,backgroundContainer:{&quot;itemList&quot;:[{&quot;id&quot;:&quot;image.1729513034352&quot;\,&quot;imageSrc&quot;:&quot;/content/dam/yukon-forms/Aurora-main.2615cb39.png&quot;\,&quot;size&quot;:&quot;contain&quot;\,&quot;scrolling&quot;:&quot;local&quot;\,&quot;tiling&quot;:&quot;no-repeat&quot;\,&quot;position&quot;:&quot;right top&quot;}]},backgroundColor:#0E3E50]"
                     phone_x0023_default="[margin-bottom:4rem]"
                     phone_x0023_default_x0023_ui="[marginLock:linkOff,marginPopover:—\, —\, 4rem\, —]"/>
                 <af_footertext
