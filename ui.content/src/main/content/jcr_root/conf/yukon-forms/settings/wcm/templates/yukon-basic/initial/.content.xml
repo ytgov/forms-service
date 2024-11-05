@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:fd="http://www.adobe.com/aemfd/fd/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:deviceGroups="[mobile/groups/responsive]"
+        cq:lastModified="{Date}2024-11-05T14:14:39.899Z"
+        cq:lastModifiedBy="admin"
+        cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af1"
+        jcr:lastModified="{Date}2021-03-24T18:22:20.809+05:30"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Yukon Basic"
+        sling:resourceType="fd/af/components/page2/aftemplatedpage"
+        guideComponentType="fd/af/templates">
+        <parsys1
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <guideheader
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="fd/af/components/guideheader"
+                name="header1730815250618">
+                <guideimage
+                    jcr:lastModified="{Date}2024-11-05T14:04:47.298Z"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Logo Image"
+                    sling:resourceType="fd/af/components/guideimage"
+                    css="logoImage"
+                    enabled="{Boolean}true"
+                    fileName="yukon-logo.png"
+                    fileReference="/content/dam/yukon-forms/yukon-logo.png"
+                    guideNodeClass="guideImage"
+                    imageRotate="0"
+                    name="logo"
+                    visible="{Boolean}true"/>
+            </guideheader>
+            <guideformtitle
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="fd/af/components/afFormTitle"
+                _value="&lt;p>Application Form&lt;/p>&#xd;&#xa;&#xd;&#xa;"
+                css="guideformtitle container"
+                guideNodeClass="guideTextDraw"
+                name="formTitle"/>
+        </parsys1>
+        <guideContainer
+            fd:version="1.1"
+            jcr:lastModified="{Date}2024-11-05T14:03:51.559Z"
+            jcr:lastModifiedBy="admin"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="fd/af/components/guideContainer"
+            _invokeSubmitActionSync="true"
+            actionType="fd/af/components/guidesubmittype/restendpoint"
+            autoSaveStartExpression="true"
+            autoSaveStrategyType="fd/af/components/actions/autosave/eventbased"
+            disableSwipeGesture="{Boolean}false"
+            dorType="generate"
+            enableFocusOnFirstField="{Boolean}true"
+            enableLayoutLayer="false"
+            guideCss="guideContainer"
+            guideNodeClass="guideContainerNode"
+            name="guide1"
+            textIsRich="true"
+            thankYouMessage="&lt;p>Thank you for submitting the form.&lt;/p>&#xd;&#xa;"
+            thankYouOption="page"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
+            useExistingAF="false">
+            <layout
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="fd/af/layouts/defaultGuideLayout"
+                mobileLayout="fd/af/layouts/mobile/step"
+                toolbarPosition="Bottom"/>
+            <rootPanel
+                jcr:lastModified="{Date}2024-11-05T14:05:24.869Z"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                jcr:title="Root Panel"
+                sling:resourceType="fd/af/components/rootPanel"
+                completionExpReq="{Boolean}true"
+                dorExcludeDescription="true"
+                dorExcludeTitle="true"
+                editable="{Boolean}true"
+                guideNodeClass="rootPanelNode"
+                name="guideRootPanel"
+                panelSetType="Navigable"
+                validateOnStepCompletion="{Boolean}false">
+                <layout
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="fd/af/layouts/panel/wizard"
+                    enableLayoutOptimization="{Boolean}true"
+                    guideNavigatorTab="wizard-tab"
+                    toolbarPosition="Bottom"/>
+                <items jcr:primaryType="nt:unstructured">
+                    <basics
+                        jcr:description="Personal Information"
+                        jcr:lastModified="{Date}2024-11-05T14:06:12.373Z"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="General"
+                        sling:resourceType="fd/af/components/panel"
+                        completionExpReq="{Boolean}false"
+                        guideNodeClass="guidePanel"
+                        longDescription="&lt;p>Personal information section of the form&lt;/p>&#xd;&#xa;"
+                        name="general"
+                        textIsRich="true"
+                        validateOnStepCompletion="{Boolean}false">
+                        <items jcr:primaryType="nt:unstructured">
+                            <basics1
+                                jcr:description="Basic Information"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Basic Information"
+                                sling:resourceType="fd/af/components/panel"
+                                guideNodeClass="guidePanel"
+                                longDescription="&lt;p>Basic information section of the form&lt;/p>&#xd;&#xa;&#xd;&#xa;&#xd;&#xa;"
+                                name="basics1">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <guidetextbox
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="First Name"
+                                        sling:resourceType="fd/af/components/guidetextbox"
+                                        displayPatternType="none"
+                                        guideNodeClass="guideTextBox"
+                                        mandatory="true"
+                                        name="textbox1455878674524"
+                                        shortDescription="&lt;p>Applicant First Name&lt;/p>"
+                                        validationPatternType="none"/>
+                                    <guidetextbox_1170565
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Last Name"
+                                        sling:resourceType="fd/af/components/guidetextbox"
+                                        displayPatternType="none"
+                                        guideNodeClass="guideTextBox"
+                                        mandatory="true"
+                                        name="textbox_11705659171455878681385"
+                                        shortDescription="&lt;p>Applicant Last Name&lt;/p>"
+                                        validationPatternType="none"/>
+                                    <guideimagechoice2
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Gender"
+                                        sling:resourceType="fd/af/components/guideimagechoice"
+                                        alignment="guideFieldHorizontalAlignment"
+                                        guideNodeClass="guideRadioButton"
+                                        name="imagechoice1457080363345"
+                                        options="[Woman=/conf/yukon-forms/settings/wcm/templates/basic-af/initial/_jcr_content/guideContainer/rootPanel/items/basics/items/basics1/items/guideimagechoice2/file-1.png,Man=/conf/yukon-forms/settings/wcm/templates/basic-af/initial/jcr:content/guideContainer/rootPanel/items/basics/items/basics1/items/guideimagechoice2/file-2.png]">
+                                        <file-2.png/>
+                                        <file-1.png/>
+                                    </guideimagechoice2>
+                                    <guidedateinput
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Date of Birth"
+                                        sling:resourceType="fd/af/components/guidedateinput"
+                                        dateDisplayFormat="date{M/D/YYYY}"
+                                        guideNodeClass="guideDatePicker"
+                                        mandatory="true"
+                                        name="dateinput1455879035630"
+                                        placeholderDay="DD"
+                                        placeholderMonth="MM"
+                                        placeholderYear="YYYY"
+                                        titleDay="Day"
+                                        titleMonth="Month"
+                                        titleYear="Year"/>
+                                    <guideradiobutton_37676193
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Marital Status"
+                                        sling:resourceType="fd/af/components/guideradiobutton"
+                                        guideNodeClass="guideRadioButton"
+                                        name="radiobutton_376761931456432027512"
+                                        options="[0=Single,1=Married]"/>
+                                    <guidenumericstepper
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Number of Children"
+                                        sling:resourceType="fd/af/components/guidenumericstepper"
+                                        _value="1"
+                                        guideNodeClass="guideNumericBox"
+                                        name="numericstepper1456433056666"
+                                        stepSize="1"/>
+                                </items>
+                                <layout
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="fd/af/layouts/gridFluidLayout2"
+                                    nonNavigable="{Boolean}true"
+                                    toolbarPosition="Bottom"/>
+                            </basics1>
+                        </items>
+                        <layout
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="fd/af/layouts/gridFluidLayout2"
+                            columns="1"
+                            dorLayoutType="columnar"
+                            nonNavigable="{Boolean}true"
+                            toolbarPosition="Bottom"/>
+                    </basics>
+                    <expenditure
+                        jcr:description="Expenditure"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Expenditure"
+                        sling:resourceType="fd/af/components/panel"
+                        guideNodeClass="guidePanel"
+                        name="expenditure">
+                        <items jcr:primaryType="nt:unstructured">
+                            <table
+                                jcr:description="Details"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Details Table"
+                                sling:resourceType="fd/af/components/table"
+                                guideNodeClass="guideTable"
+                                name="DetailsTable">
+                                <layout
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="fd/af/layouts/tableLayout"
+                                    columns="2"
+                                    mobileLayout="headersLeft"
+                                    nonNavigable="{Boolean}true"
+                                    rows="2"/>
+                                <items
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="fd/af/layouts/tableLayout">
+                                    <HeaderRow
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Header Row"
+                                        sling:resourceType="fd/af/components/tableHeader"
+                                        enabled="{Boolean}true"
+                                        guideComponentType="true"
+                                        guideNodeClass="guideTableRow"
+                                        name="HeaderRow"
+                                        visible="{Boolean}true">
+                                        <layout
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="fd/af/layouts/table/headerLayout"
+                                            nonNavigable="{Boolean}true"/>
+                                        <items
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="fd/af/layouts/table/headerLayout">
+                                            <tableItem
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="fd/af/components/guidetextdraw"
+                                                _value="&lt;p>Serial Number&lt;/p>&#xa;"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextDraw"
+                                                name="SerialNumber"/>
+                                            <tableItem1
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="fd/af/components/guidetextdraw"
+                                                _value="&lt;p>Category&lt;/p>&#xd;&#xa;&#xd;&#xa;"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextDraw"
+                                                name="Category"/>
+                                            <tableItem1455887953946
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="fd/af/components/guidetextdraw"
+                                                _value="&lt;p>Amount&lt;/p>&#xd;&#xa;&#xd;&#xa;"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextDraw"
+                                                name="Amount"/>
+                                        </items>
+                                    </HeaderRow>
+                                    <Row1
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Travel Row"
+                                        sling:resourceType="fd/af/components/tableRow"
+                                        enabled="{Boolean}true"
+                                        guideComponentType="true"
+                                        guideNodeClass="guideTableRow"
+                                        name="TravelRow"
+                                        visible="{Boolean}true">
+                                        <layout
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="fd/af/layouts/table/rowLayout"
+                                            nonNavigable="{Boolean}true"/>
+                                        <items
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="fd/af/layouts/table/rowLayout">
+                                            <tableItem
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Travel Serial Number"
+                                                sling:resourceType="fd/af/components/guidetextbox"
+                                                _value="1"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextBox"
+                                                hideTitle="true"
+                                                name="TravelSerialNumber"/>
+                                            <tableItem1
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Travel Category"
+                                                sling:resourceType="fd/af/components/guidetextbox"
+                                                _value="Travel"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextBox"
+                                                hideTitle="true"
+                                                name="TravelCategory"/>
+                                            <tableItem1455887954048
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Travel Amount"
+                                                sling:resourceType="fd/af/components/guidetextbox"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextBox"
+                                                hideTitle="true"
+                                                name="TravelAmount"
+                                                placeholderText=" ($)"/>
+                                        </items>
+                                    </Row1>
+                                    <Row2
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Entertainment Row"
+                                        sling:resourceType="fd/af/components/tableRow"
+                                        enabled="{Boolean}true"
+                                        guideComponentType="true"
+                                        guideNodeClass="guideTableRow"
+                                        name="EntertainmentRow"
+                                        visible="{Boolean}true">
+                                        <layout
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="fd/af/layouts/table/rowLayout"
+                                            nonNavigable="{Boolean}true"/>
+                                        <items
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="fd/af/layouts/table/rowLayout">
+                                            <tableItem
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Entertainment Serial Number"
+                                                sling:resourceType="fd/af/components/guidetextbox"
+                                                _value="2"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextBox"
+                                                hideTitle="true"
+                                                name="EntertainmentSerialNumber"
+                                                placeholderText="2"/>
+                                            <tableItem1
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Entertainment Category"
+                                                sling:resourceType="fd/af/components/guidetextbox"
+                                                _value="Entertainment"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextBox"
+                                                hideTitle="true"
+                                                name="EntertainmentCategory"/>
+                                            <tableItem1455887954144
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Entertainment Amount"
+                                                sling:resourceType="fd/af/components/guidetextbox"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextBox"
+                                                hideTitle="true"
+                                                name="EntertainmentAmount"
+                                                placeholderText=" ($)"/>
+                                        </items>
+                                    </Row2>
+                                    <Row1456028531739
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Restaurants Row"
+                                        sling:resourceType="fd/af/components/tableRow"
+                                        enabled="{Boolean}true"
+                                        guideComponentType="true"
+                                        guideNodeClass="guideTableRow"
+                                        name="RestaurantsRow"
+                                        visible="{Boolean}true">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <tableItem1456028531740
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Restaurants Serial Number"
+                                                sling:resourceType="fd/af/components/guidetextbox"
+                                                _value="3"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextBox"
+                                                hideTitle="true"
+                                                name="RestaurantsSerialNumber"/>
+                                            <tableItem1456028531741
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Restaurants Category"
+                                                sling:resourceType="fd/af/components/guidetextbox"
+                                                _value="Restaurants"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextBox"
+                                                hideTitle="true"
+                                                name="RestaurantsCategory"/>
+                                            <tableItem1456028531742
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Restaurants Amount"
+                                                sling:resourceType="fd/af/components/guidetextbox"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextBox"
+                                                hideTitle="true"
+                                                name="RestaurantsAmount"
+                                                placeholderText=" ($)"/>
+                                        </items>
+                                        <layout
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="fd/af/layouts/table/rowLayout"
+                                            nonNavigable="{Boolean}true"/>
+                                    </Row1456028531739>
+                                    <Row1457086510895
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Miscellaneous Row"
+                                        sling:resourceType="fd/af/components/tableRow"
+                                        enabled="{Boolean}true"
+                                        guideComponentType="true"
+                                        guideNodeClass="guideTableRow"
+                                        maxOccur="4"
+                                        minOccur="1"
+                                        name="MiscellaneousRow"
+                                        visible="{Boolean}true">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <tableItem1457086510896
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Miscellaneous Serial Number"
+                                                sling:resourceType="fd/af/components/guidetextbox"
+                                                _value="4"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextBox"
+                                                hideTitle="true"
+                                                name="MiscellaneousSerialNumber"/>
+                                            <tableItem1457086510898
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Miscellaneous Category"
+                                                sling:resourceType="fd/af/components/guidetextbox"
+                                                _value="Miscellaneous"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextBox"
+                                                hideTitle="true"
+                                                name="MiscellaneousCategory"/>
+                                            <tableItem1457086510899
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Miscellaneous Amount"
+                                                sling:resourceType="fd/af/components/guidetextbox"
+                                                guideComponentType="true"
+                                                guideNodeClass="guideTextBox"
+                                                hideTitle="true"
+                                                name="MiscellaneousAmount"
+                                                placeholderText=" ($)"/>
+                                        </items>
+                                        <layout
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="fd/af/layouts/table/rowLayout"
+                                            nonNavigable="{Boolean}true"/>
+                                    </Row1457086510895>
+                                </items>
+                            </table>
+                        </items>
+                        <layout
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="fd/af/layouts/gridFluidLayout2"
+                            nonNavigable="{Boolean}true"
+                            toolbarPosition="Bottom"/>
+                    </expenditure>
+                    <panel1392199234944
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Confirmation"
+                        sling:resourceType="fd/af/components/panel"
+                        css="cert"
+                        guideNodeClass="guidePanel"
+                        name="panel3">
+                        <items jcr:primaryType="nt:unstructured">
+                            <image1456030886190
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Image"
+                                sling:resourceType="fd/af/components/guideimage"
+                                fileName="sample_terms.png"
+                                fileReference="/content/dam/yukon-forms/sample_terms.png"
+                                guideNodeClass="guideImage"
+                                name="image1456030886190"/>
+                            <guidetextdraw
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="fd/af/components/guidetextdraw"
+                                _value="&lt;p>Please sign below to confirm that the information provided by you in this form is valid.&lt;/p>&#xd;&#xa;&#xd;&#xa;"
+                                guideNodeClass="guideTextDraw"
+                                name="textdraw"/>
+                            <guideseparator
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Separator"
+                                sling:resourceType="fd/af/components/guideseparator"
+                                guideNodeClass="guideSeparator"
+                                name="separator1457087010294"
+                                thickness="1"/>
+                            <guidetermsandconditi
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Terms and conditions"
+                                sling:resourceType="fd/af/components/guidetermsandconditions"
+                                custom="Terms And Conditions"
+                                guideNodeClass="guideTermsAndConditions"
+                                name="termsandconditi1457090709578"
+                                showApprovalOption="true"
+                                tncCheckBoxContent="I agree to the terms &amp; conditions"
+                                tncTextContent="&lt;p>If any provision of these Terms and Conditions is held to be invalid or unenforceable, the provision shall be removed (or interpreted, if possible, in a manner as to be enforceable), and the remaining provisions shall be enforced. Headings are for reference purposes only and in no way define, limit, construe or describe the scope or extent of such section. Our failure to act with respect to a breach by you or others does not waive our right to act with respect to subsequent or similar breaches. These Terms and Conditions set forth the entire understanding and agreement between us with respect to the subject matter contained herein and supersede any other agreement, proposals and communications, written or oral, between our representatives and you with respect to the subject matter hereof, including any terms and conditions on any of customer's documents or purchase orders.&lt;br>&#xd;&#xa;&#xd;&#xa;&lt;/p>&#xd;&#xa;&#xd;&#xa;">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <reviewDocument
+                                        jcr:primaryType="nt:unstructured"
+                                        guideNodeClass="guideTextBox"
+                                        name="reviewDocument"/>
+                                    <reviewStatus
+                                        jcr:primaryType="nt:unstructured"
+                                        guideNodeClass="guideCheckBox"
+                                        name="reviewStatus"/>
+                                </items>
+                            </guidetermsandconditi>
+                            <guidescribble
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Signature"
+                                sling:resourceType="fd/af/components/guidescribble"
+                                aspectRatio="10"
+                                guideNodeClass="guideScribble"
+                                mandatory="true"
+                                name="scribble"/>
+                            <guidedatepicker
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Date"
+                                sling:resourceType="fd/af/components/guidedatepicker"
+                                displayPatternType="date{DD MMMM, YYYY}"
+                                displayPictureClause="date{DD MMMM, YYYY}"
+                                guideNodeClass="guideDatePicker"
+                                mandatory="true"
+                                name="datepicker1456116122783"/>
+                        </items>
+                        <layout
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="fd/af/layouts/gridFluidLayout2"
+                            nonNavigable="{Boolean}true"
+                            toolbarPosition="Bottom"/>
+                    </panel1392199234944>
+                </items>
+            </rootPanel>
+            <toolbar
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="fd/af/components/toolbar"
+                guideNodeClass="guideToolbar"
+                name="toolbar">
+                <items jcr:primaryType="nt:unstructured">
+                    <reset
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Reset"
+                        sling:resourceSuperType="fd/af/components/guidebutton"
+                        sling:resourceType="fd/af/components/actions/reset"
+                        guideNodeClass="guideButton"
+                        name="reset"
+                        type="reset">
+                        <fd:rules
+                            fd:click="[{&quot;nodeName&quot;:&quot;ROOT&quot;\,&quot;items&quot;:[{&quot;nodeName&quot;:&quot;STATEMENT&quot;\,&quot;choice&quot;:{&quot;nodeName&quot;:&quot;EVENT_SCRIPTS&quot;\,&quot;items&quot;:[{&quot;nodeName&quot;:&quot;EVENT_CONDITION&quot;\,&quot;choice&quot;:{&quot;nodeName&quot;:&quot;EVENT_AND_COMPARISON&quot;\,&quot;items&quot;:[{&quot;nodeName&quot;:&quot;COMPONENT&quot;\,&quot;value&quot;:{&quot;id&quot;:&quot;XX&quot;\,&quot;type&quot;:&quot;BUTTON&quot;\,&quot;name&quot;:&quot;XX&quot;}}\,{&quot;nodeName&quot;:&quot;EVENT_AND_COMPARISON_OPERATOR&quot;\,&quot;choice&quot;:{&quot;nodeName&quot;:&quot;is clicked&quot;\,&quot;value&quot;:null}}\,{&quot;nodeName&quot;:&quot;PRIMITIVE_EXPRESSION&quot;\,&quot;choice&quot;:null}]}\,&quot;nested&quot;:false}\,{&quot;nodeName&quot;:&quot;Then&quot;\,&quot;value&quot;:null}\,{&quot;nodeName&quot;:&quot;BLOCK_STATEMENTS&quot;\,&quot;items&quot;:[{&quot;nodeName&quot;:&quot;BLOCK_STATEMENT&quot;\,&quot;choice&quot;:{&quot;nodeName&quot;:&quot;RESET_FORM&quot;\,&quot;items&quot;:[]}}]}]}}]\,&quot;isValid&quot;:true\,&quot;enabled&quot;:true\,&quot;version&quot;:1\,&quot;script&quot;:&quot;/**\\n\\n * This is a machine-generated code for the rule.\\n * If you modify it in the code editor\, you will not be able to view and edit the rule in the visual editor.\\n */\\n\\nguideBridge.reset();\\n\\n&quot;\,&quot;eventName&quot;:&quot;Click&quot;}]"
+                            jcr:primaryType="nt:unstructured"/>
+                    </reset>
+                    <submit
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Submit"
+                        sling:resourceSuperType="fd/af/components/guidebutton"
+                        sling:resourceType="fd/af/components/actions/submit"
+                        guideNodeClass="guideButton"
+                        name="submit"
+                        type="submit">
+                        <fd:rules
+                            fd:click="[{&quot;nodeName&quot;:&quot;ROOT&quot;\,&quot;items&quot;:[{&quot;nodeName&quot;:&quot;STATEMENT&quot;\,&quot;choice&quot;:{&quot;nodeName&quot;:&quot;EVENT_SCRIPTS&quot;\,&quot;items&quot;:[{&quot;nodeName&quot;:&quot;EVENT_CONDITION&quot;\,&quot;choice&quot;:{&quot;nodeName&quot;:&quot;EVENT_AND_COMPARISON&quot;\,&quot;items&quot;:[{&quot;nodeName&quot;:&quot;COMPONENT&quot;\,&quot;value&quot;:{&quot;id&quot;:&quot;XX&quot;\,&quot;type&quot;:&quot;BUTTON&quot;\,&quot;name&quot;:&quot;XX&quot;}}\,{&quot;nodeName&quot;:&quot;EVENT_AND_COMPARISON_OPERATOR&quot;\,&quot;choice&quot;:{&quot;nodeName&quot;:&quot;is clicked&quot;\,&quot;value&quot;:null}}\,{&quot;nodeName&quot;:&quot;PRIMITIVE_EXPRESSION&quot;\,&quot;choice&quot;:null}]}\,&quot;nested&quot;:false}\,{&quot;nodeName&quot;:&quot;Then&quot;\,&quot;value&quot;:null}\,{&quot;nodeName&quot;:&quot;BLOCK_STATEMENTS&quot;\,&quot;items&quot;:[{&quot;nodeName&quot;:&quot;BLOCK_STATEMENT&quot;\,&quot;choice&quot;:{&quot;nodeName&quot;:&quot;SUBMIT_FORM&quot;\,&quot;items&quot;:[]}}]}]}}]\,&quot;isValid&quot;:true\,&quot;enabled&quot;:true\,&quot;version&quot;:1\,&quot;script&quot;:&quot;/**\\n\\n * This is a machine-generated code for the rule.\\n * If you modify it in the code editor\, you will not be able to view and edit the rule in the visual editor.\\n */\\n\\nguideBridge.submit();\\n\\n&quot;\,&quot;eventName&quot;:&quot;Click&quot;}]"
+                            jcr:primaryType="nt:unstructured"/>
+                    </submit>
+                </items>
+                <layout
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="fd/af/layouts/toolbar/mobileFixedToolbarLayout"/>
+            </toolbar>
+            <signerInfo
+                jcr:primaryType="nt:unstructured"
+                firstSignerFormFiller="false"
+                workflowType="SEQUENTIAL">
+                <signer0
+                    jcr:primaryType="nt:unstructured"
+                    countryCode="undefined"
+                    countryCodeSource="undefined"
+                    delegateTo="undefined"
+                    email="undefined"
+                    emailSource="undefined"
+                    phone="undefined"
+                    phoneSource="undefined"
+                    recipientRole="undefined"
+                    securityOption="undefined"
+                    signerTitle="Signer One"/>
+            </signerInfo>
+            <autoSaveInfo jcr:primaryType="nt:unstructured"/>
+            <view jcr:primaryType="nt:unstructured">
+                <print
+                    jcr:created="{Date}2024-11-05T14:03:31.997Z"
+                    jcr:lastModified="{Date}2024-11-05T14:03:51.559Z"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="fd/af/authoring/components/dor/dorProperties"
+                    metaTemplateRef="/libs/fd/af/dor/templates/defaultTemplate.xdp"/>
+            </view>
+        </guideContainer>
+        <parsys2
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <guidefooter
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="fd/af/components/guidefooter"
+                name="footer1730815251657">
+                <guidetextdraw1
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="fd/af/components/guidetextdraw"
+                    _value="&lt;p>© 2017 Company name | All rights reserved&lt;/p>"
+                    css="footerText"
+                    guideNodeClass="guideTextDraw"
+                    name="footerText"/>
+            </guidefooter>
+        </parsys2>
+        <image jcr:primaryType="nt:unstructured">
+            <file/>
+        </image>
+    </jcr:content>
+</jcr:root>
