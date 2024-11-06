@@ -9,6 +9,7 @@
     <filter root="/content/dam/yukon-forms/asset.jpg" mode="merge"/>
     <filter root="/content/experience-fragments/yukon-forms" mode="merge"/>
     <filter root="/content/dam/formsanddocuments/yukon-forms" mode="merge"/>
+    <filter root="/content/dam/formsanddocuments/documents-of-record" mode="merge"/>
     <filter root="/content/dam/formsanddocuments-themes/yukon-forms" mode="merge"/>
     <filter root="/content/dam/formsanddocuments-fdm/yukon-forms" mode="merge"/>
     <filter root="/content/dam/yukon-forms/sample_logo.png" mode="merge"/>

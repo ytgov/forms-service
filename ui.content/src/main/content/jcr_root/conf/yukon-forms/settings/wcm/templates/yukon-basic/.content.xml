@@ -2,7 +2,7 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
     jcr:primaryType="cq:Template">
     <jcr:content
-        cq:lastModified="{Date}2024-11-05T14:21:16.768Z"
+        cq:lastModified="{Date}2024-11-06T19:30:19.767Z"
         cq:lastModifiedBy="admin"
         cq:templateType="/conf/yukon-forms/settings/wcm/template-types/af-page"
         jcr:description="Basic Adaptive Forms Template"
@@ -10,5 +10,5 @@
         jcr:primaryType="cq:PageContent"
         jcr:title="Yukon Basic"
         author="adobe"
-        status="draft"/>
+        status="enabled"/>
 </jcr:root>

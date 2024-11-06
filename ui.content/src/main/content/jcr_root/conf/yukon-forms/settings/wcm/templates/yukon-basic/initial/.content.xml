@@ -3,7 +3,7 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-11-05T14:14:39.899Z"
+        cq:lastModified="{Date}2024-11-06T19:30:19.767Z"
         cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af1"
         jcr:lastModified="{Date}2021-03-24T18:22:20.809+05:30"
@@ -572,10 +572,60 @@
             <view jcr:primaryType="nt:unstructured">
                 <print
                     jcr:created="{Date}2024-11-05T14:03:31.997Z"
-                    jcr:lastModified="{Date}2024-11-05T14:03:51.559Z"
+                    jcr:lastModified="{Date}2024-11-06T19:30:19.754Z"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/authoring/components/dor/dorProperties"
-                    metaTemplateRef="/libs/fd/af/dor/templates/defaultTemplate.xdp"/>
+                    accentColor="#1A606C"
+                    alignment="dorFieldVerticalAlignment"
+                    excludeFromDoRIfHidden="true"
+                    fontFamily="Arial"
+                    hidePanelDescriptions="true"
+                    metaTemplateRef="/content/dam/formsanddocuments/documents-of-record/Yukon_Default_DoR.xdp"
+                    optionSeparator=", "
+                    showSelectedOptions="true">
+                    <branding jcr:primaryType="nt:unstructured">
+                        <items jcr:primaryType="nt:unstructured">
+                            <masterpage0 jcr:primaryType="nt:unstructured">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <Header jcr:primaryType="nt:unstructured">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <AF_LOGO_IMAGE
+                                                jcr:lastModified="{Date}2024-11-06T19:30:19.754Z"
+                                                jcr:lastModifiedBy="admin"
+                                                jcr:primaryType="nt:unstructured"
+                                                valueFrom="template"/>
+                                            <HeaderInfo jcr:primaryType="nt:unstructured">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <AF_FORM_TITLE
+                                                        jcr:primaryType="nt:unstructured"
+                                                        resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                        valueFrom="formTitle"/>
+                                                    <AF_HEADER_TEXT
+                                                        jcr:primaryType="nt:unstructured"
+                                                        resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                        valueFrom="template"/>
+                                                </items>
+                                            </HeaderInfo>
+                                        </items>
+                                    </Header>
+                                    <Footer jcr:primaryType="nt:unstructured">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <disclaimerLabel
+                                                jcr:primaryType="nt:unstructured"
+                                                resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                valueFrom="template"/>
+                                            <disclaimerText
+                                                jcr:primaryType="nt:unstructured"
+                                                resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                valueFrom="template"/>
+                                        </items>
+                                    </Footer>
+                                </items>
+                            </masterpage0>
+                        </items>
+                    </branding>
+                </print>
             </view>
         </guideContainer>
         <parsys2
@@ -586,12 +636,15 @@
                 sling:resourceType="fd/af/components/guidefooter"
                 name="footer1730815251657">
                 <guidetextdraw1
+                    jcr:lastModified="{Date}2024-11-05T14:23:58.309Z"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/components/guidetextdraw"
-                    _value="&lt;p>© 2017 Company name | All rights reserved&lt;/p>"
+                    _value="&lt;p>© 2024 Yukon | All rights reserved&lt;/p>&#xd;&#xa;"
                     css="footerText"
                     guideNodeClass="guideTextDraw"
-                    name="footerText"/>
+                    name="footerText"
+                    textIsRich="true"/>
             </guidefooter>
         </parsys2>
         <image jcr:primaryType="nt:unstructured">
