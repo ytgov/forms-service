@@ -2,9 +2,9 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:fd="http://www.adobe.com/aemfd/fd/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:conf="/conf/global"
+        cq:conf="/conf/yukon-forms"
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-10-29T17:38:26.422-07:00"
+        cq:lastModified="{Date}2024-11-05T20:24:04.984Z"
         cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af"
         jcr:language="en"
@@ -47,18 +47,20 @@
         </parsys1>
         <guideContainer
             fd:version="1.1"
-            jcr:lastModified="{Date}2024-10-28T12:56:06.220Z"
+            jcr:lastModified="{Date}2024-11-05T20:24:04.931Z"
             jcr:lastModifiedBy="admin"
             jcr:primaryType="nt:unstructured"
             sling:resourceType="fd/af/components/guideContainer"
             _invokeSubmitActionSync="true"
-            actionType="fd/af/components/guidesubmittype/restendpoint"
+            actionType="fd/afaddon/components/actions/sharepointstorage"
             autoSaveStartExpression="true"
             autoSaveStrategyType="fd/af/components/actions/autosave/eventbased"
+            cloudConfigPath="/conf/yukon-forms/settings/cloudconfigs/microsoftoffice/sharepoint-cloud-config/jcr:content"
             disableSwipeGesture="{Boolean}false"
             dorTemplateRef="/content/dam/formsanddocuments/yukon-forms/yhcip-yukon-health-care-insurance-plan/jcr:content/renditions/dorTemplate"
             dorType="generate"
             enableAsyncSubmission="true"
+            enableDoRSubmission="true"
             enableFocusOnFirstField="{Boolean}true"
             enableLayoutLayer="false"
             enableServerValidation="true"
@@ -68,7 +70,7 @@
             schemaType="none"
             textIsRich="true"
             thankYouMessage="&lt;p>Thank you for submitting the form.&lt;/p>&#xd;&#xa;"
-            thankYouOption="page"
+            thankYouOption="message"
             themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
             useExistingAF="false">
             <layout
@@ -1342,7 +1344,7 @@
             <view jcr:primaryType="nt:unstructured">
                 <print
                     jcr:created="{Date}2024-10-22T19:06:45.432+01:00"
-                    jcr:lastModified="{Date}2024-10-28T12:54:32.994Z"
+                    jcr:lastModified="{Date}2024-11-05T20:06:17.005Z"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/authoring/components/dor/dorProperties"
