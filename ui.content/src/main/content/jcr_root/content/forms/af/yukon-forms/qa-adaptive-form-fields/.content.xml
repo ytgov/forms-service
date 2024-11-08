@@ -5,7 +5,7 @@
         cq:deviceGroups="[mobile/groups/responsive]"
         cq:lastModified="{Date}2024-11-08T12:27:49.616Z"
         cq:lastModifiedBy="admin"
-        cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af"
+        cq:template="/conf/yukon-forms/settings/wcm/templates/yukon-default-template"
         jcr:language="en"
         jcr:lastModified="{Date}2021-03-24T18:22:20.809+05:30"
         jcr:primaryType="cq:PageContent"
