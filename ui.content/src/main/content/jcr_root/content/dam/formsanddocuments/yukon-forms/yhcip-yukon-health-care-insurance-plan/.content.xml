@@ -9,6 +9,7 @@
         guide="1"
         type="guide">
         <metadata
+            cq:conf="/conf/yukon-forms"
             fd:version="1.1"
             jcr:language="en"
             jcr:primaryType="nt:unstructured"
