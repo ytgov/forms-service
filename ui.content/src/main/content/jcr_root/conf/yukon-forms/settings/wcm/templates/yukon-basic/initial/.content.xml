@@ -3,7 +3,7 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-11-07T11:19:11.590Z"
+        cq:lastModified="{Date}2024-11-08T12:42:09.969Z"
         cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af1"
         jcr:lastModified="{Date}2021-03-24T18:22:20.809+05:30"
@@ -43,7 +43,7 @@
         </parsys1>
         <guideContainer
             fd:version="1.1"
-            jcr:lastModified="{Date}2024-11-05T14:03:51.559Z"
+            jcr:lastModified="{Date}2024-11-08T12:42:09.953Z"
             jcr:lastModifiedBy="admin"
             jcr:primaryType="nt:unstructured"
             sling:resourceType="fd/af/components/guideContainer"
@@ -61,7 +61,7 @@
             textIsRich="true"
             thankYouMessage="&lt;p>Thank you for submitting the form.&lt;/p>&#xd;&#xa;"
             thankYouOption="page"
-            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default-theme"
             useExistingAF="false">
             <layout
                 jcr:primaryType="nt:unstructured"
@@ -572,7 +572,7 @@
             <view jcr:primaryType="nt:unstructured">
                 <print
                     jcr:created="{Date}2024-11-05T14:03:31.997Z"
-                    jcr:lastModified="{Date}2024-11-07T11:19:11.577Z"
+                    jcr:lastModified="{Date}2024-11-07T16:04:35.540Z"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/authoring/components/dor/dorProperties"
@@ -591,7 +591,7 @@
                                     <Header jcr:primaryType="nt:unstructured">
                                         <items jcr:primaryType="nt:unstructured">
                                             <AF_LOGO_IMAGE
-                                                jcr:lastModified="{Date}2024-11-07T11:19:11.577Z"
+                                                jcr:lastModified="{Date}2024-11-07T16:04:35.540Z"
                                                 jcr:lastModifiedBy="admin"
                                                 jcr:primaryType="nt:unstructured"
                                                 valueFrom="template"/>
