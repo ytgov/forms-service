@@ -3,7 +3,7 @@
     jcr:primaryType="dam:Asset">
     <jcr:content
         cq:conf="\0"
-        jcr:lastModified="{Date}2024-10-28T16:14:23.353Z"
+        jcr:lastModified="{Date}2024-11-08T12:33:35.191Z"
         jcr:primaryType="dam:AssetContent"
         sling:resourceType="fd/fm/af/render"
         guide="1"
@@ -22,7 +22,7 @@
             dorType="generate"
             formmodel="none"
             hasCustomThumbnail="{Boolean}false"
-            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default-theme"
             title="YHCIP Yukon Health Care Insurance Plan"/>
     </jcr:content>
 </jcr:root>

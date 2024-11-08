@@ -3,7 +3,7 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-10-31T09:08:17.571+02:00"
+        cq:lastModified="{Date}2024-11-08T12:27:49.616Z"
         cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af"
         jcr:language="en"
@@ -32,16 +32,6 @@
                     imageRotate="0"
                     name="sample_logo_image"
                     visible="{Boolean}true"/>
-                <guidetextdraw
-                    jcr:lastModified="{Date}2024-10-25T13:12:20.445+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="fd/af/components/guidetextdraw"
-                    _value="&lt;p>Yukon&lt;/p>&#xd;&#xa;"
-                    css="headerText"
-                    guideNodeClass="guideTextDraw"
-                    name="headerText"
-                    textIsRich="true"/>
             </guideheader>
             <guideformtitle
                 jcr:lastModified="{Date}2024-10-25T13:12:11.299+01:00"
@@ -69,7 +59,7 @@
             name="guide1"
             schemaType="none"
             thankYouOption="page"
-            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default-theme"
             useExistingAF="false">
             <layout
                 jcr:primaryType="nt:unstructured"
@@ -1942,7 +1932,7 @@
             <view jcr:primaryType="nt:unstructured">
                 <print
                     jcr:created="{Date}2024-10-25T15:13:14.858+01:00"
-                    jcr:lastModified="{Date}2024-10-28T16:20:22.963Z"
+                    jcr:lastModified="{Date}2024-11-08T12:27:49.603Z"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/authoring/components/dor/dorProperties"
                     metaTemplateRef="/libs/fd/af/dor/templates/defaultTemplate.xdp"/>

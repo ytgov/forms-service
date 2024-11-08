@@ -2,7 +2,7 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:fd="http://www.adobe.com/aemfd/fd/1.0"
     jcr:primaryType="dam:Asset">
     <jcr:content
-        jcr:lastModified="{Date}2024-11-05T13:52:44.098Z"
+        jcr:lastModified="{Date}2024-11-08T12:25:35.074Z"
         jcr:primaryType="dam:AssetContent"
         sling:resourceType="fd/fm/theme/render"
         theme="1"
@@ -12,11 +12,11 @@
             fd:version="2.0"
             jcr:primaryType="nt:unstructured"
             author="adobe"
-            clientlibCategory="fdtheme.yukon-forms.yukon-default"
+            clientlibCategory="fdtheme.yukon-forms.yukon-default-theme"
             clientlibRef="/etc/clientlibs/fd/themes/yukon-forms"
             formRef="/content/dam/formsanddocuments/yukon-forms/qa-adaptive-form-fields"
             hasCustomThumbnail="{Boolean}false"
-            title="Yukon Default">
+            title="Yukon Default Theme">
             <breakpoints jcr:primaryType="nt:unstructured">
                 <default
                     jcr:primaryType="nt:unstructured"

@@ -3,7 +3,7 @@
     jcr:primaryType="dam:Asset">
     <jcr:content
         cq:conf="\0"
-        jcr:lastModified="{Date}2024-10-28T16:26:51.618Z"
+        jcr:lastModified="{Date}2024-11-08T12:33:23.157Z"
         jcr:primaryType="dam:AssetContent"
         sling:resourceType="fd/fm/af/render"
         guide="1"
@@ -15,10 +15,12 @@
             xmp:CreatorTool="AEM Forms AF Wizard"
             allowedRenderFormat="HTML"
             author="admin"
+            availableInMobileApp="{Boolean}false"
+            dorTemplateChanged="Boolean"
             dorType="none"
             formmodel="none"
             hasCustomThumbnail="{Boolean}false"
-            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default-theme"
             title="Demo - Tables"/>
     </jcr:content>
 </jcr:root>

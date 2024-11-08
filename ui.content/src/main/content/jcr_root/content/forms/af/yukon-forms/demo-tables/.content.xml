@@ -3,7 +3,7 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-10-29T16:39:47.000-07:00"
+        cq:lastModified="{Date}2024-11-08T12:33:23.124Z"
         cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af"
         jcr:language="en"
@@ -58,8 +58,9 @@
             guideCss="guideContainer"
             guideNodeClass="guideContainerNode"
             name="guide1"
+            schemaType="none"
             thankYouOption="page"
-            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default-theme"
             useExistingAF="false">
             <layout
                 jcr:primaryType="nt:unstructured"
