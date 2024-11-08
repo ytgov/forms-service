@@ -3,7 +3,7 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-11-08T13:20:40.321Z"
+        cq:lastModified="{Date}2024-11-08T14:03:39.828Z"
         cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/yukon-default-template"
         jcr:language="en"
@@ -60,6 +60,7 @@
             guideCss="guideContainer"
             guideNodeClass="guideContainerNode"
             name="guide1"
+            schemaType="none"
             textIsRich="true"
             thankYouMessage="&lt;p>Thank you for submitting the form.&lt;/p>&#xd;&#xa;"
             thankYouOption="page"
@@ -1530,7 +1531,7 @@
             <view jcr:primaryType="nt:unstructured">
                 <print
                     jcr:created="{Date}2024-11-05T14:03:31.997Z"
-                    jcr:lastModified="{Date}2024-11-07T16:04:35.540Z"
+                    jcr:lastModified="{Date}2024-11-08T14:03:39.817Z"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/authoring/components/dor/dorProperties"

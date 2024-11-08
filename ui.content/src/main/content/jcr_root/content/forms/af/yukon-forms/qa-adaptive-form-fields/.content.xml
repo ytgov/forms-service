@@ -3,7 +3,7 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-11-08T12:27:49.616Z"
+        cq:lastModified="{Date}2024-11-08T14:03:28.304Z"
         cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/yukon-default-template"
         jcr:language="en"
@@ -17,23 +17,23 @@
             <guideheader
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="fd/af/components/guideheader"
-                name="header1729858313855">
+                name="header1730815250618">
                 <guideimage
-                    jcr:lastModified="{Date}2024-10-25T15:03:17.377+01:00"
+                    jcr:lastModified="{Date}2024-11-05T14:04:47.298Z"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Logo Image"
                     sling:resourceType="fd/af/components/guideimage"
                     css="logoImage"
                     enabled="{Boolean}true"
-                    fileName="logo.svg"
+                    fileName="yukon-logo.png"
                     fileReference="/content/dam/yukon-forms/yukon-logo.png"
                     guideNodeClass="guideImage"
                     imageRotate="0"
-                    name="sample_logo_image"
+                    name="logo"
                     visible="{Boolean}true"/>
             </guideheader>
-            <guideformtitle
+            <guideformtitle_1215441715
                 jcr:lastModified="{Date}2024-10-25T13:12:11.299+01:00"
                 jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
@@ -46,18 +46,26 @@
         </parsys1>
         <guideContainer
             fd:version="1.1"
+            jcr:lastModified="{Date}2024-11-08T12:42:09.953Z"
+            jcr:lastModifiedBy="admin"
             jcr:primaryType="nt:unstructured"
             sling:resourceType="fd/af/components/guideContainer"
+            _invokeSubmitActionSync="true"
             actionType="fd/af/components/guidesubmittype/restendpoint"
+            autoSaveStartExpression="true"
+            autoSaveStrategyType="fd/af/components/actions/autosave/eventbased"
             disableSwipeGesture="{Boolean}false"
-            dorTemplateRef="/content/dam/formsanddocuments/yukon-forms/qa-adaptive-form-fields/jcr:content/renditions/dorTemplate"
             dorType="generate"
             enableAsyncSubmission="true"
+            enableFocusOnFirstField="{Boolean}true"
+            enableLayoutLayer="false"
             enableServerValidation="true"
             guideCss="guideContainer"
             guideNodeClass="guideContainerNode"
             name="guide1"
             schemaType="none"
+            textIsRich="true"
+            thankYouMessage="&lt;p>Thank you for submitting the form.&lt;/p>&#xd;&#xa;"
             thankYouOption="page"
             themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default-theme"
             useExistingAF="false">
@@ -67,7 +75,7 @@
                 mobileLayout="fd/af/layouts/mobile/step"
                 toolbarPosition="Bottom"/>
             <rootPanel
-                jcr:lastModified="{Date}2024-10-25T15:29:58.000+01:00"
+                jcr:lastModified="{Date}2024-11-08T13:27:29.286Z"
                 jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 jcr:title="Root Panel"
@@ -87,8 +95,8 @@
                     toolbarPosition="Bottom"/>
                 <items
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="fd/af/layouts/panel/tabbedPanelLayout">
-                    <communication
+                    sling:resourceType="fd/af/layouts/panel/wizard">
+                    <communication_copy
                         jcr:description="List of all AEM Form Elements"
                         jcr:lastModified="{Date}2024-10-25T13:15:20.821+01:00"
                         jcr:lastModifiedBy="admin"
@@ -905,14 +913,14 @@
                             <panel_1359861613
                                 jcr:created="{Date}2024-10-25T15:25:19.919+01:00"
                                 jcr:createdBy="admin"
-                                jcr:lastModified="{Date}2024-10-25T15:25:34.585+01:00"
+                                jcr:lastModified="{Date}2024-11-08T13:46:04.541Z"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                jcr:title="Section"
+                                jcr:title="HorizontalTab"
                                 sling:resourceType="fd/af/components/panel"
                                 completionExpReq="{Boolean}false"
                                 guideNodeClass="guidePanel"
-                                name="panel_13598616131729866319966"
+                                name="horizontalTab"
                                 textIsRich="true"
                                 validateOnStepCompletion="{Boolean}false">
                                 <layout
@@ -921,7 +929,7 @@
                                     columns="1"
                                     dorLayoutType="columnar"
                                     enableLayoutOptimization="{Boolean}true"
-                                    toolbarPosition="Bottom"/>
+                                    toolbarPosition="Top"/>
                                 <items
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="fd/af/components/panel">
@@ -929,13 +937,13 @@
                                         jcr:created="{Date}2024-10-25T15:25:46.767+01:00"
                                         jcr:createdBy="admin"
                                         jcr:description="Section One"
-                                        jcr:lastModified="{Date}2024-10-25T15:28:04.325+01:00"
+                                        jcr:lastModified="{Date}2024-11-08T13:35:48.945Z"
                                         jcr:lastModifiedBy="admin"
                                         jcr:primaryType="nt:unstructured"
                                         jcr:title="Section One"
                                         sling:resourceType="fd/af/components/panel"
                                         guideNodeClass="guidePanel"
-                                        name="panel_4044169461729866346802_copy_1"
+                                        name="panel1"
                                         textIsRich="true"
                                         validateOnStepCompletion="{Boolean}false">
                                         <layout
@@ -964,13 +972,13 @@
                                         jcr:created="{Date}2024-10-25T15:25:46.767+01:00"
                                         jcr:createdBy="admin"
                                         jcr:description="Section Two"
-                                        jcr:lastModified="{Date}2024-10-25T15:28:30.912+01:00"
+                                        jcr:lastModified="{Date}2024-11-08T13:35:58.612Z"
                                         jcr:lastModifiedBy="admin"
                                         jcr:primaryType="nt:unstructured"
                                         jcr:title="Section Two"
                                         sling:resourceType="fd/af/components/panel"
                                         guideNodeClass="guidePanel"
-                                        name="panel_4044169461729866346802_copy_2"
+                                        name="panel2"
                                         textIsRich="true"
                                         validateOnStepCompletion="{Boolean}false">
                                         <layout
@@ -999,13 +1007,13 @@
                                         jcr:created="{Date}2024-10-25T15:25:46.767+01:00"
                                         jcr:createdBy="admin"
                                         jcr:description="Section Three"
-                                        jcr:lastModified="{Date}2024-10-25T15:28:52.197+01:00"
+                                        jcr:lastModified="{Date}2024-11-08T13:36:08.788Z"
                                         jcr:lastModifiedBy="admin"
                                         jcr:primaryType="nt:unstructured"
                                         jcr:title="Section Three"
                                         sling:resourceType="fd/af/components/panel"
                                         guideNodeClass="guidePanel"
-                                        name="panel_4044169461729866346802"
+                                        name="panel3"
                                         textIsRich="true"
                                         validateOnStepCompletion="{Boolean}false">
                                         <layout
@@ -1837,8 +1845,8 @@
                             columns="1"
                             nonNavigable="{Boolean}true"
                             toolbarPosition="Bottom"/>
-                    </communication>
-                    <panel_656718276
+                    </communication_copy>
+                    <panel_656718276_copy
                         jcr:created="{Date}2024-10-25T15:21:18.445+01:00"
                         jcr:createdBy="admin"
                         jcr:description="Demo Section A"
@@ -1859,8 +1867,8 @@
                             nonNavigable="{Boolean}true"
                             toolbarPosition="Bottom"/>
                         <items jcr:primaryType="nt:unstructured"/>
-                    </panel_656718276>
-                    <panel
+                    </panel_656718276_copy>
+                    <panel_copy
                         jcr:created="{Date}2024-10-25T15:21:04.188+01:00"
                         jcr:createdBy="admin"
                         jcr:description="Demo Section B"
@@ -1880,8 +1888,10 @@
                             dorLayoutType="columnar"
                             nonNavigable="{Boolean}true"
                             toolbarPosition="Bottom"/>
-                        <items jcr:primaryType="nt:unstructured"/>
-                    </panel>
+                        <items
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="fd/af/layouts/gridFluidLayout2"/>
+                    </panel_copy>
                 </items>
             </rootPanel>
             <toolbar
@@ -1889,9 +1899,7 @@
                 sling:resourceType="fd/af/components/toolbar"
                 guideNodeClass="guideToolbar"
                 name="toolbar">
-                <items
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="fd/af/layouts/toolbar/mobileFixedToolbarLayout">
+                <items jcr:primaryType="nt:unstructured">
                     <reset
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Reset"
@@ -1923,19 +1931,79 @@
             </toolbar>
             <signerInfo
                 jcr:primaryType="nt:unstructured"
-                firstSignerFormFiller="{Boolean}false"
+                firstSignerFormFiller="false"
                 workflowType="SEQUENTIAL">
                 <signer0
                     jcr:primaryType="nt:unstructured"
+                    countryCode="undefined"
+                    countryCodeSource="undefined"
+                    delegateTo="undefined"
+                    email="undefined"
+                    emailSource="undefined"
+                    phone="undefined"
+                    phoneSource="undefined"
+                    recipientRole="undefined"
+                    securityOption="undefined"
                     signerTitle="Signer One"/>
             </signerInfo>
+            <autoSaveInfo jcr:primaryType="nt:unstructured"/>
             <view jcr:primaryType="nt:unstructured">
                 <print
-                    jcr:created="{Date}2024-10-25T15:13:14.858+01:00"
-                    jcr:lastModified="{Date}2024-11-08T12:27:49.603Z"
+                    jcr:created="{Date}2024-11-05T14:03:31.997Z"
+                    jcr:lastModified="{Date}2024-11-08T14:03:28.289Z"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/authoring/components/dor/dorProperties"
-                    metaTemplateRef="/libs/fd/af/dor/templates/defaultTemplate.xdp"/>
+                    accentColor="#1A606C"
+                    alignment="dorFieldVerticalAlignment"
+                    excludeFromDoRIfHidden="true"
+                    fontFamily="Montserrat"
+                    hidePanelDescriptions="true"
+                    metaTemplateRef="/content/dam/formsanddocuments/documents-of-record/Yukon_Default_DoR.xdp"
+                    optionSeparator=", "
+                    showSelectedOptions="true">
+                    <branding jcr:primaryType="nt:unstructured">
+                        <items jcr:primaryType="nt:unstructured">
+                            <masterpage0 jcr:primaryType="nt:unstructured">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <Header jcr:primaryType="nt:unstructured">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <AF_LOGO_IMAGE
+                                                jcr:lastModified="{Date}2024-11-07T16:04:35.540Z"
+                                                jcr:lastModifiedBy="admin"
+                                                jcr:primaryType="nt:unstructured"
+                                                valueFrom="template"/>
+                                            <HeaderInfo jcr:primaryType="nt:unstructured">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <AF_FORM_TITLE
+                                                        jcr:primaryType="nt:unstructured"
+                                                        resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                        valueFrom="formTitle"/>
+                                                    <AF_HEADER_TEXT
+                                                        jcr:primaryType="nt:unstructured"
+                                                        resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                        valueFrom="template"/>
+                                                </items>
+                                            </HeaderInfo>
+                                        </items>
+                                    </Header>
+                                    <Footer jcr:primaryType="nt:unstructured">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <disclaimerLabel
+                                                jcr:primaryType="nt:unstructured"
+                                                resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                valueFrom="template"/>
+                                            <disclaimerText
+                                                jcr:primaryType="nt:unstructured"
+                                                resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                valueFrom="template"/>
+                                        </items>
+                                    </Footer>
+                                </items>
+                            </masterpage0>
+                        </items>
+                    </branding>
+                </print>
             </view>
         </guideContainer>
         <parsys2
@@ -1944,15 +2012,21 @@
             <guidefooter
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="fd/af/components/guidefooter"
-                name="footer1729858315026">
+                name="footer1730815251657">
                 <guidetextdraw1
+                    jcr:lastModified="{Date}2024-11-05T14:23:58.309Z"
+                    jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/components/guidetextdraw"
-                    _value="&lt;p>© 2017 Company name | All rights reserved&lt;/p>"
+                    _value="&lt;p>© 2024 Yukon | All rights reserved&lt;/p>&#xd;&#xa;"
                     css="footerText"
                     guideNodeClass="guideTextDraw"
-                    name="footerText"/>
+                    name="footerText"
+                    textIsRich="true"/>
             </guidefooter>
         </parsys2>
+        <image jcr:primaryType="nt:unstructured">
+            <file/>
+        </image>
     </jcr:content>
 </jcr:root>
