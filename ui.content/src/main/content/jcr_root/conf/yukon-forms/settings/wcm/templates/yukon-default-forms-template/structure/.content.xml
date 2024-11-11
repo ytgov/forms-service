@@ -35,11 +35,6 @@
                     visible="{Boolean}true"/>
             </guideheader>
         </parsys1>
-        <containerTitle
-            jcr:primaryType="nt:unstructured"
-            sling:resourceType="yukon-forms/components/container"
-            editable="{Boolean}true"
-            layout="responsiveGrid"/>
         <guideContainer
             jcr:primaryType="nt:unstructured"
             sling:resourceType="yukon-forms/components/adaptiveForm/formcontainer"

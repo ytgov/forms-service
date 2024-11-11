@@ -18,8 +18,8 @@
                     default_x0023_default_x0023_ui="[marginLock:linkOff,marginPopover:—\, 1rem\, —\, 0.75rem]"/>
                 <af_page
                     jcr:primaryType="nt:unstructured"
-                    default_x0023_default="[line-height:1.42857143,margin-left:0px,margin-bottom:0px,margin-right:0px,margin-top:0px,font-family:'Montserrat'\,Arial\,Palatino Linotype\,inherit]"
-                    default_x0023_default_x0023_ui="[marginPopover:0px]"/>
+                    default_x0023_default="[line-height:1.42857143,margin-left:0px,margin-bottom:0px,margin-right:0px,margin-top:0px,font-family:'Montserrat'\,Arial\,Palatino Linotype\,inherit,background:#fff]"
+                    default_x0023_default_x0023_ui="[marginPopover:0px,backgroundColor:#fff]"/>
                 <af_chart
                     jcr:primaryType="nt:unstructured"
                     default_x0023_default="[height:100%,width:inherit,max-width:100%,max-height:100%]"/>

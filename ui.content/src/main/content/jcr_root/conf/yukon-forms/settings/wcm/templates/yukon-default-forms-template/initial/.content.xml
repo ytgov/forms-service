@@ -35,37 +35,6 @@
                     visible="{Boolean}true"/>
             </guideheader>
         </parsys1>
-        <containerTitle
-            jcr:primaryType="nt:unstructured"
-            sling:resourceType="yukon-forms/components/container"
-            editable="{Boolean}true"
-            layout="responsiveGrid">
-            <items
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="fd/af/layouts/gridFluidLayout2">
-                <afformtitle
-                    jcr:created="{Date}2024-11-11T14:19:00.452Z"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2024-11-11T14:19:00.452Z"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Adaptive Form Title"
-                    sling:resourceType="fd/af/components/afFormTitle"
-                    _value="&lt;p>Form Title &lt;/p>"
-                    css="guideformtitle container"
-                    editable="{Boolean}true"
-                    guideNodeClass="guideTextDraw"
-                    name="formTitle"/>
-            </items>
-            <title
-                jcr:created="{Date}2024-11-11T16:28:27.487Z"
-                jcr:createdBy="admin"
-                jcr:lastModified="{Date}2024-11-11T16:28:27.487Z"
-                jcr:lastModifiedBy="admin"
-                jcr:primaryType="nt:unstructured"
-                editable="{Boolean}true"
-                sling:resourceType="yukon-forms/components/title"/>
-        </containerTitle>
         <guideContainer
             fd:version="1.1"
             jcr:lastModified="{Date}2024-11-08T12:42:09.953Z"
