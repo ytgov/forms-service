@@ -2,16 +2,16 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:fd="http://www.adobe.com/aemfd/fd/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:conf="/conf/yukon-forms"
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-11-08T14:11:08.200Z"
+        cq:lastModified="{Date}2024-11-11T17:33:53.351Z"
         cq:lastModifiedBy="admin"
-        cq:template="/conf/yukon-forms/settings/wcm/templates/yukon-default-template"
+        cq:template="/conf/yukon-forms/settings/wcm/templates/yukon-default-forms-template"
         jcr:language="en"
         jcr:lastModified="{Date}2021-03-24T18:22:20.809+05:30"
         jcr:primaryType="cq:PageContent"
         jcr:title="YHCIP Yukon Health Care Insurance Plan"
-        sling:resourceType="fd/af/components/page2/aftemplatedpage">
+        sling:resourceType="fd/af/components/page2/aftemplatedpage"
+        pageTitle="Yukon Default Forms Template">
         <parsys1
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
@@ -34,16 +34,6 @@
                     name="logo"
                     visible="{Boolean}true"/>
             </guideheader>
-            <guideformtitle_copy
-                jcr:lastModified="{Date}2024-10-21T13:27:46.713+01:00"
-                jcr:lastModifiedBy="admin"
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="fd/af/components/afFormTitle"
-                _value="&lt;p>Yukon Health Care Insurance Plan (YHCIP)&lt;/p>&#xd;&#xa;&lt;h1>NOTICE OF CHANGE&lt;/h1>&#xd;&#xa;&lt;h3>Adjustments to registered member information&lt;/h3>&#xd;&#xa;"
-                css="guideformtitle container"
-                guideNodeClass="guideTextDraw"
-                name="formTitle"
-                textIsRich="true"/>
         </parsys1>
         <guideContainer
             fd:version="1.1"
@@ -52,14 +42,12 @@
             jcr:primaryType="nt:unstructured"
             sling:resourceType="fd/af/components/guideContainer"
             _invokeSubmitActionSync="true"
-            actionType="fd/afaddon/components/actions/sharepointstorage"
+            actionType="fd/af/components/guidesubmittype/restendpoint"
             autoSaveStartExpression="true"
             autoSaveStrategyType="fd/af/components/actions/autosave/eventbased"
-            cloudConfigPath="/conf/yukon-forms/settings/cloudconfigs/microsoftoffice/sharepoint-cloud-config/jcr:content"
             disableSwipeGesture="{Boolean}false"
             dorType="generate"
             enableAsyncSubmission="true"
-            enableDoRSubmission="true"
             enableFocusOnFirstField="{Boolean}true"
             enableLayoutLayer="false"
             enableServerValidation="true"
@@ -78,7 +66,7 @@
                 mobileLayout="fd/af/layouts/mobile/step"
                 toolbarPosition="Bottom"/>
             <rootPanel
-                jcr:lastModified="{Date}2024-11-05T14:05:24.869Z"
+                jcr:lastModified="{Date}2024-11-11T17:20:13.078Z"
                 jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 jcr:title="Root Panel"
@@ -99,8 +87,8 @@
                     toolbarPosition="Bottom"/>
                 <items
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="fd/af/layouts/panel/wizard">
-                    <basics_copy
+                    sling:resourceType="fd/af/layouts/gridFluidLayout2">
+                    <basics_copy_copy
                         jcr:lastModified="{Date}2024-10-21T13:36:25.981+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
@@ -189,8 +177,8 @@
                             columns="1"
                             nonNavigable="{Boolean}true"
                             toolbarPosition="Bottom"/>
-                    </basics_copy>
-                    <expenditure_copy
+                    </basics_copy_copy>
+                    <expenditure_copy_cop
                         jcr:lastModified="{Date}2024-10-21T14:23:27.842+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
@@ -381,7 +369,7 @@
                             columns="1"
                             nonNavigable="{Boolean}true"
                             toolbarPosition="Bottom"/>
-                    </expenditure_copy>
+                    </expenditure_copy_cop>
                     <guidepanel_936167221
                         jcr:lastModified="{Date}2024-10-21T14:51:36.161+01:00"
                         jcr:lastModifiedBy="admin"
@@ -1347,7 +1335,7 @@
             <view jcr:primaryType="nt:unstructured">
                 <print
                     jcr:created="{Date}2024-11-05T14:03:31.997Z"
-                    jcr:lastModified="{Date}2024-11-08T14:11:08.188Z"
+                    jcr:lastModified="{Date}2024-11-11T17:33:53.340Z"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/authoring/components/dor/dorProperties"

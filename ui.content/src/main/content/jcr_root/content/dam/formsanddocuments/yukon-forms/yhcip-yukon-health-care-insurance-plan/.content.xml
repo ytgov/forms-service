@@ -3,13 +3,12 @@
     jcr:primaryType="dam:Asset">
     <jcr:content
         cq:conf="\0"
-        jcr:lastModified="{Date}2024-11-08T14:11:08.218Z"
+        jcr:lastModified="{Date}2024-11-11T17:33:53.372Z"
         jcr:primaryType="dam:AssetContent"
         sling:resourceType="fd/fm/af/render"
         guide="1"
         type="guide">
         <metadata
-            cq:conf="/conf/yukon-forms"
             fd:version="1.1"
             jcr:language="en"
             jcr:primaryType="nt:unstructured"
