@@ -3,14 +3,15 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-11-11T14:46:04.798Z"
+        cq:lastModified="{Date}2024-11-11T16:28:27.492Z"
         cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af1"
         jcr:lastModified="{Date}2021-03-24T18:22:20.809+05:30"
         jcr:primaryType="cq:PageContent"
-        jcr:title="Yukon Basic"
+        jcr:title="Yukon Default Forms Template"
         sling:resourceType="fd/af/components/page2/aftemplatedpage"
-        guideComponentType="fd/af/templates">
+        guideComponentType="fd/af/templates"
+        pageTitle="Yukon Default Forms Template">
         <parsys1
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
@@ -39,31 +40,32 @@
             sling:resourceType="yukon-forms/components/container"
             editable="{Boolean}true"
             layout="responsiveGrid">
-            <title_2039543837
-                jcr:created="{Date}2024-11-11T14:45:45.129Z"
+            <items
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="fd/af/layouts/gridFluidLayout2">
+                <afformtitle
+                    jcr:created="{Date}2024-11-11T14:19:00.452Z"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2024-11-11T14:19:00.452Z"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Adaptive Form Title"
+                    sling:resourceType="fd/af/components/afFormTitle"
+                    _value="&lt;p>Form Title &lt;/p>"
+                    css="guideformtitle container"
+                    editable="{Boolean}true"
+                    guideNodeClass="guideTextDraw"
+                    name="formTitle"/>
+            </items>
+            <title
+                jcr:created="{Date}2024-11-11T16:28:27.487Z"
                 jcr:createdBy="admin"
-                jcr:lastModified="{Date}2024-11-11T14:46:04.791Z"
+                jcr:lastModified="{Date}2024-11-11T16:28:27.487Z"
                 jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
-                jcr:title="My Form Title"
-                sling:resourceType="yukon-forms/components/adaptiveForm/title"/>
+                editable="{Boolean}true"
+                sling:resourceType="yukon-forms/components/title"/>
         </containerTitle>
-        <items
-            jcr:primaryType="nt:unstructured"
-            sling:resourceType="fd/af/layouts/gridFluidLayout2">
-            <afformtitle
-                jcr:created="{Date}2024-11-11T14:19:00.452Z"
-                jcr:createdBy="admin"
-                jcr:lastModified="{Date}2024-11-11T14:19:00.452Z"
-                jcr:lastModifiedBy="admin"
-                jcr:primaryType="nt:unstructured"
-                jcr:title="Adaptive Form Title"
-                sling:resourceType="fd/af/components/afFormTitle"
-                _value="&lt;p>Form Title &lt;/p>"
-                css="guideformtitle container"
-                guideNodeClass="guideTextDraw"
-                name="formTitle"/>
-        </items>
         <guideContainer
             fd:version="1.1"
             jcr:lastModified="{Date}2024-11-08T12:42:09.953Z"
