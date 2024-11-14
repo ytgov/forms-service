@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:fd="http://www.adobe.com/aemfd/fd/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[etc/mobile/groups/responsive]"
@@ -30,51 +30,17 @@
                 name="header1730815250618"/>
         </container1>
         <guideContainer
-            jcr:primaryType="nt:unstructured"
-            sling:resourceType="yukon-forms/components/adaptiveForm/formcontainer"
-            editable="{Boolean}true"
-            fieldType="form"
-            guideCss="guideContainer"
-            guideNodeClass="guideContainerNode"
-            name="guide1">
-            <layout
+                fd:version="2.1"
+                fieldType="form"
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="fd/af/layouts/defaultGuideLayout"
-                mobileLayout="fd/af/layouts/mobile/step"
-                toolbarPosition="Bottom"/>
-            <rootPanel
-                jcr:primaryType="nt:unstructured"
-                jcr:title="Root Panel"
-                sling:resourceType="fd/af/components/rootPanel"
-                dorExcludeDescription="true"
-                dorExcludeTitle="true"
                 editable="{Boolean}true"
-                guideNodeClass="rootPanelNode"
-                name="guideRootPanel"
-                panelSetType="Navigable">
-                <layout
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="fd/af/layouts/gridFluidLayout2"
-                    editable="{Boolean}true"
-                    nonNavigable="{Boolean}true"
-                    toolbarPosition="Bottom"/>
-                <items
-                    jcr:primaryType="nt:unstructured"
-                    editable="{Boolean}true"/>
-            </rootPanel>
-            <signerInfo
-                jcr:primaryType="nt:unstructured"
-                firstSignerFormFiller="{Boolean}false"
-                workflowType="SEQUENTIAL">
-                <signer0
-                    jcr:primaryType="nt:unstructured"
-                    signerTitle="Signer One"/>
-            </signerInfo>
+                sling:resourceType="yukon-forms/components/adaptiveForm/formcontainer">
         </guideContainer>
         <container2
             jcr:lastModified="{Date}2024-11-11T14:12:35.003Z"
             jcr:lastModifiedBy="admin"
             jcr:primaryType="nt:unstructured"
+            layout="responsiveGrid"
             sling:resourceType="yukon-forms/components/container">
             <experiencefragment
                 jcr:created="{Date}2024-11-14T13:16:40.977Z"
@@ -91,18 +57,14 @@
         </container2>
         <cq:responsive jcr:primaryType="nt:unstructured">
             <breakpoints jcr:primaryType="nt:unstructured">
-                <smallScreen
-                    jcr:primaryType="nt:unstructured"
-                    title="Smaller Screen"
-                    width="{Decimal}479"/>
                 <phone
-                    jcr:primaryType="nt:unstructured"
-                    title="Phone"
-                    width="{Decimal}767"/>
+                        jcr:primaryType="nt:unstructured"
+                        title="Smaller Screen"
+                        width="{Long}768"/>
                 <tablet
-                    jcr:primaryType="nt:unstructured"
-                    title="Tablet"
-                    width="{Decimal}991"/>
+                        jcr:primaryType="nt:unstructured"
+                        title="Tablet"
+                        width="{Long}1200"/>
             </breakpoints>
         </cq:responsive>
     </jcr:content>
