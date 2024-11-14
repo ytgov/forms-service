@@ -10,11 +10,11 @@
         jcr:primaryType="cq:PageContent"
         sling:resourceType="yukon-forms/components/adaptiveForm/page"
         guideComponentType="fd/af/templates">
-        <parsys1
+        <container1
             jcr:lastModified="{Date}2024-11-11T14:12:39.389Z"
             jcr:lastModifiedBy="admin"
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="wcm/foundation/components/responsivegrid">
+            sling:resourceType="yukon-forms/components/container">
             <guideheader
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="fd/af/components/guideheader"
@@ -34,7 +34,7 @@
                     name="logo"
                     visible="{Boolean}true"/>
             </guideheader>
-        </parsys1>
+        </container1>
         <guideContainer
             jcr:primaryType="nt:unstructured"
             sling:resourceType="yukon-forms/components/adaptiveForm/formcontainer"
@@ -77,11 +77,11 @@
                     signerTitle="Signer One"/>
             </signerInfo>
         </guideContainer>
-        <parsys2
+        <container2
             jcr:lastModified="{Date}2024-11-11T14:12:35.003Z"
             jcr:lastModifiedBy="admin"
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="wcm/foundation/components/responsivegrid">
+            sling:resourceType="yukon-forms/components/container">
             <guidefooter
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="fd/af/components/guidefooter"
@@ -97,7 +97,7 @@
                     name="footerText"
                     textIsRich="true"/>
             </guidefooter>
-        </parsys2>
+        </container2>
         <cq:responsive jcr:primaryType="nt:unstructured">
             <breakpoints jcr:primaryType="nt:unstructured">
                 <smallScreen
