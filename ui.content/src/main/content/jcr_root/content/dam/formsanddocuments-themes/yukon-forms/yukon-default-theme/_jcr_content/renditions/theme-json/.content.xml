@@ -18,7 +18,7 @@
                     default_x0023_default_x0023_ui="[marginLock:linkOff,marginPopover:—\, 1rem\, —\, 0.75rem]"/>
                 <af_page
                     jcr:primaryType="nt:unstructured"
-                    default_x0023_default="[line-height:1.42857143,margin-left:0px,margin-bottom:0px,margin-right:0px,margin-top:0px,font-family:'Montserrat'\,Arial\,Palatino Linotype\,inherit,background:#fff]"
+                    default_x0023_default="[line-height:1.42857143,margin-left:0px,margin-bottom:0px,margin-right:0px,margin-top:0px,font-family:'Montserrat'\,Arial\,Palatino Linotype\,inherit,background:#fff,color:#000]"
                     default_x0023_default_x0023_ui="[marginPopover:0px,backgroundColor:#fff]"/>
                 <af_chart
                     jcr:primaryType="nt:unstructured"
@@ -256,7 +256,7 @@
                     default_x0023_hover_x0023_ui="[backgroundContainer:{&quot;itemList&quot;:[]}]"/>
                 <af_responsivepanel
                     jcr:primaryType="nt:unstructured"
-                    default_x0023_default="[color:#666666,margin-top:20px]"
+                    default_x0023_default="[margin-top:20px,color:#000]"
                     default_x0023_default_x0023_ui="[marginLock:linkOff,marginPopover:20px]"
                     phone_x0023_default="[padding-left:0.5rem,padding-right:0.5rem,padding-top:0.25rem,margin-top:0px]"
                     phone_x0023_default_x0023_ui="[paddingLock:linkOff,paddingPopover:0.25rem\, 0.5rem\, —\, 0.5rem,marginPopover:0px\, —\, —\, —,marginLock:linkOff]"
@@ -549,7 +549,7 @@
                     tablet_x0023_default_x0023_ui="[marginLock:linkOff,marginPopover:20px,paddingPopover:10px]"/>
                 <af_form
                     jcr:primaryType="nt:unstructured"
-                    default_x0023_default="[]"
+                    default_x0023_default="[color:#000]"
                     default_x0023_default_x0023_ui="[]"
                     phone_x0023_default_x0023_ui="[marginLock:linkOff,marginPopover:Set]"/>
                 <af_separator
@@ -748,6 +748,9 @@
                     jcr:primaryType="nt:unstructured"
                     default_x0023_hover="[]"
                     default_x0023_hover_x0023_ui="[]"/>
+                <af_tncpopuptitle
+                    jcr:primaryType="nt:unstructured"
+                    default_x0023_default="[color:#000]"/>
             </af_guideContainer>
             <af_guideFooter
                 jcr:primaryType="nt:unstructured"

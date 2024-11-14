@@ -3,7 +3,7 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-11-11T17:17:27.740Z"
+        cq:lastModified="{Date}2024-11-14T19:58:23.882Z"
         cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af1"
         jcr:lastModified="{Date}2021-03-24T18:22:20.809+05:30"
@@ -35,6 +35,28 @@
                     visible="{Boolean}true"/>
             </guideheader>
         </container1>
+        <container2
+            jcr:lastModified="{Date}2024-11-14T19:32:37.325Z"
+            jcr:lastModifiedBy="admin"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="yukon-forms/components/container">
+            <title
+                jcr:created="{Date}2024-11-14T19:54:31.953Z"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2024-11-14T19:54:31.953Z"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="yukon-forms/components/title"/>
+            <text
+                jcr:created="{Date}2024-11-14T19:58:16.148Z"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2024-11-14T19:58:23.877Z"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="yukon-forms/components/text"
+                text="&lt;p>Subtitle&lt;/p>&#xd;&#xa;"
+                textIsRich="true"/>
+        </container2>
         <guideContainer
             fd:version="1.1"
             jcr:lastModified="{Date}2024-11-08T12:42:09.953Z"
@@ -196,7 +218,7 @@
                 </print>
             </view>
         </guideContainer>
-        <container2
+        <container3
             jcr:primaryType="nt:unstructured"
             sling:resourceType="yukon-forms/components/container">
             <guidefooter
@@ -214,9 +236,6 @@
                     name="footerText"
                     textIsRich="true"/>
             </guidefooter>
-        </container2>
-        <image jcr:primaryType="nt:unstructured">
-            <file/>
-        </image>
+        </container3>
     </jcr:content>
 </jcr:root>

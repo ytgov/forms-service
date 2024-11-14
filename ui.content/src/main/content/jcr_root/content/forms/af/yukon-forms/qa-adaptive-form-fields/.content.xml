@@ -3,7 +3,7 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-11-11T17:40:00.532Z"
+        cq:lastModified="{Date}2024-11-14T20:00:59.424Z"
         cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/yukon-default-forms-template"
         jcr:language="en"
@@ -707,7 +707,7 @@
                                         name="comment"/>
                                 </items>
                             </guidefileupload>
-                            <guidetextdraw_copy_1_974700374
+                            <guidetextdraw_copy_1_1344039448
                                 jcr:created="{Date}2024-10-25T13:15:25.758+01:00"
                                 jcr:createdBy="admin"
                                 jcr:lastModified="{Date}2024-10-25T16:24:12.257+01:00"
@@ -716,7 +716,7 @@
                                 sling:resourceType="fd/af/components/guidetextdraw"
                                 _value="&lt;h3>&amp;nbsp;&lt;/h3>&#xd;&#xa;&lt;h3>&amp;nbsp;&lt;/h3>&#xd;&#xa;&lt;h3>Form Container&lt;/h3>&#xd;&#xa;"
                                 guideNodeClass="guideTextDraw"
-                                name="formContainer"
+                                name="formContainer_copy_1"
                                 textIsRich="true"/>
                             <guideseparator_20144_2081850411
                                 jcr:created="{Date}2024-10-25T16:14:08.959+01:00"

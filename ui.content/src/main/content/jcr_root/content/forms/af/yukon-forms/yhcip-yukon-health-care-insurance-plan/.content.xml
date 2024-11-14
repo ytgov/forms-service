@@ -3,7 +3,7 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-11-11T17:33:53.351Z"
+        cq:lastModified="{Date}2024-11-14T20:00:04.056Z"
         cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/yukon-default-forms-template"
         jcr:language="en"
@@ -1413,5 +1413,26 @@
         <image jcr:primaryType="nt:unstructured">
             <file/>
         </image>
+        <container2
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="yukon-forms/components/container">
+            <title
+                jcr:created="{Date}2024-11-14T19:56:55.944Z"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2024-11-14T19:59:29.945Z"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                jcr:title="Yukon Health Care Insurance Plan (YHCIP)"
+                sling:resourceType="yukon-forms/components/title"/>
+            <text
+                jcr:created="{Date}2024-11-14T19:59:16.112Z"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2024-11-14T20:00:04.046Z"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="yukon-forms/components/text"
+                text="&lt;p>&lt;b>Notice of Change&lt;/b>&lt;/p>&#xd;&#xa;&lt;p>Adjustments to registered member information&lt;/p>&#xd;&#xa;"
+                textIsRich="true"/>
+        </container2>
     </jcr:content>
 </jcr:root>
