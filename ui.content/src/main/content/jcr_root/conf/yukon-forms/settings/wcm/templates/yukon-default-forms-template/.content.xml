@@ -2,13 +2,13 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
     jcr:primaryType="cq:Template">
     <jcr:content
-        cq:lastModified="{Date}2024-11-08T12:46:11.708Z"
+        cq:lastModified="{Date}2024-11-14T19:58:23.882Z"
         cq:lastModifiedBy="admin"
-        cq:templateType="/conf/yukon-forms/settings/wcm/template-types/af-page"
-        jcr:description="Default Adaptive Forms Template"
+        cq:templateType="/conf/yukon-forms/settings/wcm/template-types/af-page-v2"
+        jcr:description="Custom Adaptive Forms Template"
         jcr:lastModified="{Date}2021-03-24T18:22:20.809+05:30"
         jcr:primaryType="cq:PageContent"
-        jcr:title="Yukon Default Template"
-        author="adobe"
+        jcr:title="Yukon Default Adaptive Forms Template"
+        author="ensemble"
         status="enabled"/>
 </jcr:root>
