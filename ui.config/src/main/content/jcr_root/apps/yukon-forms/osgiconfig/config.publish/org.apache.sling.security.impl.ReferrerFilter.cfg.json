@@ -1,0 +1,11 @@
+{
+    "allow.empty": true,
+    "allow.hosts.regexp": [ ],
+    "allow.hosts": [
+        "$[env:REFERRER_ALLOW_HOST]"
+    ],
+    "filter.methods": [
+        "POST"
+    ],
+    "exclude.agents.regexp": [ ]
+}

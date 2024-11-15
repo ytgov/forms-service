@@ -2,65 +2,52 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:fd="http://www.adobe.com/aemfd/fd/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:conf="/conf/yukon-forms"
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2024-11-05T20:24:04.984Z"
+        cq:lastModified="{Date}2024-11-14T20:00:04.056Z"
         cq:lastModifiedBy="admin"
-        cq:template="/conf/yukon-forms/settings/wcm/templates/basic-af"
+        cq:template="/conf/yukon-forms/settings/wcm/templates/yukon-default-forms-template"
         jcr:language="en"
         jcr:lastModified="{Date}2021-03-24T18:22:20.809+05:30"
         jcr:primaryType="cq:PageContent"
         jcr:title="YHCIP Yukon Health Care Insurance Plan"
-        sling:resourceType="fd/af/components/page2/aftemplatedpage">
+        sling:resourceType="fd/af/components/page2/aftemplatedpage"
+        pageTitle="Yukon Default Forms Template">
         <parsys1
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
             <guideheader
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="fd/af/components/guideheader"
-                name="header1729513365807">
+                name="header1730815250618">
                 <guideimage
-                    jcr:lastModified="{Date}2024-10-21T13:23:33.749+01:00"
+                    jcr:lastModified="{Date}2024-11-05T14:04:47.298Z"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Logo Image"
                     sling:resourceType="fd/af/components/guideimage"
                     css="logoImage"
                     enabled="{Boolean}true"
-                    fileName="logo.svg"
+                    fileName="yukon-logo.png"
                     fileReference="/content/dam/yukon-forms/yukon-logo.png"
                     guideNodeClass="guideImage"
                     imageRotate="0"
-                    name="Yukon_Logo"
+                    name="logo"
                     visible="{Boolean}true"/>
             </guideheader>
-            <guideformtitle
-                jcr:lastModified="{Date}2024-10-21T13:27:46.713+01:00"
-                jcr:lastModifiedBy="admin"
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="fd/af/components/afFormTitle"
-                _value="&lt;p>Yukon Health Care Insurance Plan (YHCIP)&lt;/p>&#xd;&#xa;&lt;h1>NOTICE OF CHANGE&lt;/h1>&#xd;&#xa;&lt;h3>Adjustments to registered member information&lt;/h3>&#xd;&#xa;"
-                css="guideformtitle container"
-                guideNodeClass="guideTextDraw"
-                name="formTitle"
-                textIsRich="true"/>
         </parsys1>
         <guideContainer
             fd:version="1.1"
-            jcr:lastModified="{Date}2024-11-05T20:24:04.931Z"
+            jcr:lastModified="{Date}2024-11-08T12:42:09.953Z"
             jcr:lastModifiedBy="admin"
             jcr:primaryType="nt:unstructured"
             sling:resourceType="fd/af/components/guideContainer"
             _invokeSubmitActionSync="true"
-            actionType="fd/afaddon/components/actions/sharepointstorage"
+            actionType="fd/af/components/guidesubmittype/restendpoint"
             autoSaveStartExpression="true"
             autoSaveStrategyType="fd/af/components/actions/autosave/eventbased"
-            cloudConfigPath="/conf/yukon-forms/settings/cloudconfigs/microsoftoffice/sharepoint-cloud-config/jcr:content"
             disableSwipeGesture="{Boolean}false"
-            dorTemplateRef="/content/dam/formsanddocuments/yukon-forms/yhcip-yukon-health-care-insurance-plan/jcr:content/renditions/dorTemplate"
             dorType="generate"
             enableAsyncSubmission="true"
-            enableDoRSubmission="true"
             enableFocusOnFirstField="{Boolean}true"
             enableLayoutLayer="false"
             enableServerValidation="true"
@@ -70,25 +57,28 @@
             schemaType="none"
             textIsRich="true"
             thankYouMessage="&lt;p>Thank you for submitting the form.&lt;/p>&#xd;&#xa;"
-            thankYouOption="message"
-            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
+            thankYouOption="page"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default-theme"
             useExistingAF="false">
             <layout
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="fd/af/layouts/defaultGuideLayout"
-                mobileLayout="fd/af/layouts/mobile/simple"
-                parseGridLayoutForMenu="true"
+                mobileLayout="fd/af/layouts/mobile/step"
                 toolbarPosition="Bottom"/>
             <rootPanel
+                jcr:lastModified="{Date}2024-11-11T17:20:13.078Z"
+                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 jcr:title="Root Panel"
                 sling:resourceType="fd/af/components/rootPanel"
+                completionExpReq="{Boolean}true"
                 dorExcludeDescription="true"
                 dorExcludeTitle="true"
                 editable="{Boolean}true"
                 guideNodeClass="rootPanelNode"
                 name="guideRootPanel"
-                panelSetType="Navigable">
+                panelSetType="Navigable"
+                validateOnStepCompletion="{Boolean}false">
                 <layout
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/layouts/panel/wizard"
@@ -97,8 +87,8 @@
                     toolbarPosition="Bottom"/>
                 <items
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="fd/af/layouts/panel/wizard">
-                    <basics
+                    sling:resourceType="fd/af/layouts/gridFluidLayout2">
+                    <basics_copy_copy
                         jcr:lastModified="{Date}2024-10-21T13:36:25.981+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
@@ -187,8 +177,8 @@
                             columns="1"
                             nonNavigable="{Boolean}true"
                             toolbarPosition="Bottom"/>
-                    </basics>
-                    <expenditure
+                    </basics_copy_copy>
+                    <expenditure_copy_cop
                         jcr:lastModified="{Date}2024-10-21T14:23:27.842+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
@@ -226,13 +216,13 @@
                                 shortDescription="&lt;p>Applicant First Name&lt;/p>&#xd;&#xa;"
                                 textIsRich="[true,true,true]"/>
                             <guidedateinput
-                                jcr:lastModified="{Date}2024-10-21T14:26:10.577+01:00"
+                                jcr:lastModified="{Date}2024-11-08T14:10:16.166Z"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Date of Birth"
                                 sling:resourceType="fd/af/components/guidedateinput"
-                                _value="YY-MM-DD"
                                 dateDisplayFormat="date{YYYY/M/D}"
+                                exclusiveMaximum="true"
                                 guideNodeClass="guideDatePicker"
                                 mandatory="true"
                                 name="dateinput1455879035630"
@@ -379,8 +369,8 @@
                             columns="1"
                             nonNavigable="{Boolean}true"
                             toolbarPosition="Bottom"/>
-                    </expenditure>
-                    <guidepanel_936167221225552
+                    </expenditure_copy_cop>
+                    <guidepanel_936167221
                         jcr:lastModified="{Date}2024-10-21T14:51:36.161+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
@@ -1181,8 +1171,8 @@
                                     jcr:primaryType="nt:unstructured"/>
                             </panel_2022846522>
                         </items>
-                    </guidepanel_936167221225552>
-                    <panel1392199234944
+                    </guidepanel_936167221>
+                    <panel1392199234944_c
                         jcr:lastModified="{Date}2024-10-21T13:31:46.246+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
@@ -1286,7 +1276,7 @@
                             columns="1"
                             nonNavigable="{Boolean}true"
                             toolbarPosition="Bottom"/>
-                    </panel1392199234944>
+                    </panel1392199234944_c>
                 </items>
             </rootPanel>
             <toolbar
@@ -1341,20 +1331,21 @@
                     securityOption="undefined"
                     signerTitle="Signer One"/>
             </signerInfo>
+            <autoSaveInfo jcr:primaryType="nt:unstructured"/>
             <view jcr:primaryType="nt:unstructured">
                 <print
-                    jcr:created="{Date}2024-10-22T19:06:45.432+01:00"
-                    jcr:lastModified="{Date}2024-11-05T20:06:17.005Z"
+                    jcr:created="{Date}2024-11-05T14:03:31.997Z"
+                    jcr:lastModified="{Date}2024-11-11T17:33:53.340Z"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/authoring/components/dor/dorProperties"
                     accentColor="#1A606C"
                     alignment="dorFieldVerticalAlignment"
+                    excludeFromDoRIfHidden="true"
                     fontFamily="Montserrat"
                     hidePanelDescriptions="true"
-                    metaTemplateRef="/libs/fd/af/dor/templates/defaultTemplate.xdp"
+                    metaTemplateRef="/content/dam/formsanddocuments/documents-of-record/Yukon_Default_DoR.xdp"
                     optionSeparator=", "
-                    optionsNumberInHorizontalAlign="4"
                     showSelectedOptions="true">
                     <branding jcr:primaryType="nt:unstructured">
                         <items jcr:primaryType="nt:unstructured">
@@ -1363,10 +1354,10 @@
                                     <Header jcr:primaryType="nt:unstructured">
                                         <items jcr:primaryType="nt:unstructured">
                                             <AF_LOGO_IMAGE
-                                                jcr:lastModified="{Date}2024-10-23T13:22:44.626+01:00"
+                                                jcr:lastModified="{Date}2024-11-07T16:04:35.540Z"
                                                 jcr:lastModifiedBy="admin"
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="fd/af/components/guideimage"/>
+                                                valueFrom="template"/>
                                             <HeaderInfo jcr:primaryType="nt:unstructured">
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <AF_FORM_TITLE
@@ -1375,19 +1366,22 @@
                                                         valueFrom="formTitle"/>
                                                     <AF_HEADER_TEXT
                                                         jcr:primaryType="nt:unstructured"
-                                                        resourceType="granite/ui/components/coral/foundation/form/textarea"/>
+                                                        resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                        valueFrom="template"/>
                                                 </items>
                                             </HeaderInfo>
                                         </items>
                                     </Header>
                                     <Footer jcr:primaryType="nt:unstructured">
                                         <items jcr:primaryType="nt:unstructured">
-                                            <AF_DISCLAIMER_LABEL
+                                            <disclaimerLabel
                                                 jcr:primaryType="nt:unstructured"
-                                                resourceType="granite/ui/components/coral/foundation/form/textarea"/>
-                                            <AF_DISCLAIMER_TEXT
+                                                resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                valueFrom="template"/>
+                                            <disclaimerText
                                                 jcr:primaryType="nt:unstructured"
-                                                resourceType="granite/ui/components/coral/foundation/form/textarea"/>
+                                                resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                valueFrom="template"/>
                                         </items>
                                     </Footer>
                                 </items>
@@ -1396,7 +1390,6 @@
                     </branding>
                 </print>
             </view>
-            <autoSaveInfo jcr:primaryType="nt:unstructured"/>
         </guideContainer>
         <parsys2
             jcr:primaryType="nt:unstructured"
@@ -1404,18 +1397,42 @@
             <guidefooter
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="fd/af/components/guidefooter"
-                name="footer1729513366951">
+                name="footer1730815251657">
                 <guidetextdraw1
-                    jcr:lastModified="{Date}2024-10-22T19:03:38.477+01:00"
+                    jcr:lastModified="{Date}2024-11-05T14:23:58.309Z"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="fd/af/components/guidetextdraw"
-                    _value="&lt;p>© 2025&amp;nbsp;Government of Yukon | All rights reserved&lt;/p>&#xd;&#xa;"
+                    _value="&lt;p>© 2024 Yukon | All rights reserved&lt;/p>&#xd;&#xa;"
                     css="footerText"
                     guideNodeClass="guideTextDraw"
                     name="footerText"
                     textIsRich="true"/>
             </guidefooter>
         </parsys2>
+        <image jcr:primaryType="nt:unstructured">
+            <file/>
+        </image>
+        <container2
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="yukon-forms/components/container">
+            <title
+                jcr:created="{Date}2024-11-14T19:56:55.944Z"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2024-11-14T19:59:29.945Z"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                jcr:title="Yukon Health Care Insurance Plan (YHCIP)"
+                sling:resourceType="yukon-forms/components/title"/>
+            <text
+                jcr:created="{Date}2024-11-14T19:59:16.112Z"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2024-11-14T20:00:04.046Z"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="yukon-forms/components/text"
+                text="&lt;p>&lt;b>Notice of Change&lt;/b>&lt;/p>&#xd;&#xa;&lt;p>Adjustments to registered member information&lt;/p>&#xd;&#xa;"
+                textIsRich="true"/>
+        </container2>
     </jcr:content>
 </jcr:root>

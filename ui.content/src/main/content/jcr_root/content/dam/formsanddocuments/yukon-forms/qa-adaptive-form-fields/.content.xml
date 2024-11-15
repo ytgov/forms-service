@@ -3,7 +3,7 @@
     jcr:primaryType="dam:Asset">
     <jcr:content
         cq:conf="\0"
-        jcr:lastModified="{Date}2024-10-31T09:08:17.571+02:00"
+        jcr:lastModified="{Date}2024-11-14T20:00:59.424Z"
         jcr:primaryType="dam:AssetContent"
         sling:resourceType="fd/fm/af/render"
         guide="1"
@@ -20,7 +20,7 @@
             dorType="generate"
             formmodel="none"
             hasCustomThumbnail="{Boolean}false"
-            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-default-theme"
             title="QA Adaptive Form Fields"/>
     </jcr:content>
 </jcr:root>
