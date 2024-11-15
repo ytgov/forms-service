@@ -6,5 +6,5 @@
     jcr:primaryType="sling:OrderedFolder"
     jcr:title="Yukon Forms Fragments"
     sling:configRef="/conf/yukon-forms">
-    <us/>
+    <ca/>
 </jcr:root>

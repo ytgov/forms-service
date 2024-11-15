@@ -4,7 +4,7 @@
     <jcr:content
         cq:allowedTemplates="[/conf/yukon-forms/settings/wcm/templates/(?!xf-).*]"
         cq:conf="/conf/yukon-forms"
-        cq:redirectTarget="/content/yukon-forms/us/en"
+        cq:redirectTarget="/content/yukon-forms/ca/en"
         cq:template="/conf/yukon-forms/settings/wcm/templates/page-content"
         jcr:primaryType="cq:PageContent"
         jcr:title="Yukon Forms"
@@ -16,5 +16,5 @@
             <file/>
         </image>
     </jcr:content>
-    <us/>
+    <ca/>
 </jcr:root>

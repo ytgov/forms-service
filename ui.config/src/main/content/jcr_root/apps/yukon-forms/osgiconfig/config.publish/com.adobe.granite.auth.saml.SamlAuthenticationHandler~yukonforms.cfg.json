@@ -1,0 +1,28 @@
+{
+  "path": [
+    "/content/yukon-forms"
+  ],
+  "idpCertAlias": "$[env:SAML_IDP_CERT_ALIAS]",
+  "identitySyncType": "idp_dynamic_simplified_id",
+  "idpIdentifier": "yukonforms",
+  "idpUrl": "$[env:SAML_IDP_URL]",
+  "handleLogout": false,
+  "logoutUrl": "$[env:SAML_IDP_LOGOUT]",
+  "serviceProviderEntityId": "$[env:SAML_ENTITY_ID]",
+  "useEncryption": false,
+  "createUser": false,
+  "userIntermediatePath": "/",
+  "nameIdFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
+  "synchronizeAttributes": [
+    "emailaddress=profile/email",
+    "givenname=profile/givenName",
+    "name=profile/displayName",
+    "surname=profile/familyName",
+    "nameidentifier=profile/nameidentifier"
+  ],
+  "addGroupMemberships": true,
+  "groupMembershipAttribute": "groups",
+  "defaultGroups": [
+    "yukon-default"
+  ]
+}

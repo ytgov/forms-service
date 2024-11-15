@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workspaceFilter version="1.0">
-    <filter root="/conf/yukon-forms" mode="merge"/>
-    <filter root="/content/yukon-forms" mode="merge"/>
-    <filter root="/content/dam/yukon-forms" mode="merge">
+    <filter root="/conf/yukon-forms" mode="replace"/>
+    <filter root="/content/yukon-forms" mode="replace"/>
+    <filter root="/content/dam/yukon-forms" mode="replace">
         <exclude pattern="/content/dam/yukon-forms(/.*)?"/>
         <include pattern="/content/dam/yukon-forms/jcr:content(/.*)?"/>
     </filter>
-    <filter root="/content/dam/yukon-forms/asset.jpg" mode="merge"/>
-    <filter root="/content/experience-fragments/yukon-forms" mode="merge"/>
-    <filter root="/content/dam/formsanddocuments/yukon-forms" mode="merge"/>
-    <filter root="/content/dam/formsanddocuments/documents-of-record" mode="merge"/>
-    <filter root="/content/dam/formsanddocuments-themes/yukon-forms" mode="merge"/>
-    <filter root="/content/dam/formsanddocuments-fdm/yukon-forms" mode="merge"/>
-    <filter root="/content/dam/yukon-forms/sample_logo.png" mode="merge"/>
-    <filter root="/content/dam/yukon-forms/sample_terms.png" mode="merge"/>
-    <filter root="/content/dam/yukon-forms/wknd_logo.png" mode="merge"/>
-    <filter root="/content/dam/yukon-forms/af_model_sample.json" mode="merge"/>
-    <filter root="/content/dam/yukon-forms/yukon-logo.png" mode="merge"/>
-    <filter root="/content/dam/yukon-forms/Aurora-main.2615cb39.png" mode="merge"/>
-    <filter root="/content/forms/af/yukon-forms/" mode="merge"/>
+    <filter root="/content/dam/yukon-forms/asset.jpg" mode="replace"/>
+    <filter root="/content/experience-fragments/yukon-forms" mode="replace"/>
+    <filter root="/content/dam/formsanddocuments/yukon-forms" mode="replace"/>
+    <filter root="/content/dam/formsanddocuments/documents-of-record" mode="replace"/>
+    <filter root="/content/dam/formsanddocuments-themes/yukon-forms" mode="replace"/>
+    <filter root="/content/dam/formsanddocuments-fdm/yukon-forms" mode="replace"/>
+    <filter root="/content/dam/yukon-forms/sample_logo.png" mode="replace"/>
+    <filter root="/content/dam/yukon-forms/sample_terms.png" mode="replace"/>
+    <filter root="/content/dam/yukon-forms/wknd_logo.png" mode="replace"/>
+    <filter root="/content/dam/yukon-forms/af_model_sample.json" mode="replace"/>
+    <filter root="/content/dam/yukon-forms/yukon-logo.png" mode="replace"/>
+    <filter root="/content/dam/yukon-forms/Aurora-main.2615cb39.png" mode="replace"/>
+    <filter root="/content/forms/af/yukon-forms/" mode="replace"/>
 </workspaceFilter>
