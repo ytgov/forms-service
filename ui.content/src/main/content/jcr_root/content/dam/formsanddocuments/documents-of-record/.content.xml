@@ -7,6 +7,5 @@
         dam:noThumbnail="{Boolean}true"
         jcr:primaryType="nt:unstructured"
         jcr:title="documents-of-record">
-        <folderThumbnail/>
     </jcr:content>
 </jcr:root>

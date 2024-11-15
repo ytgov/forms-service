@@ -1,0 +1,12 @@
+{
+    "alloworigin": [
+        "$[env:CORS_ALLOW_ORIGIN]",
+        "null"
+    ],
+    "allowedpaths": [
+        ".*/saml_login"
+    ],
+    "supportedmethods": [
+        "POST"
+    ]
+}
