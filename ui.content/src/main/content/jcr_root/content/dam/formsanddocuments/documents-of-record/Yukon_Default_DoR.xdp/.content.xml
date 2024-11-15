@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="47d83de6-2258-406d-84fc-9f66dc5970c3">
+    <jcr:content
+        dam:assetState="processed"
+        jcr:lastModified="{Date}2024-11-06T19:18:28.111Z"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        sling:resourceType="fd/fm/xfaforms/render"
+        type="xfaForm"
+        xfaForm="{Long}1">
+        <metadata
+            dam:extracted="{Date}2024-11-06T18:55:09.863Z"
+            dam:sha1="50ae23937001366dc7b6f74b168aecac6124b484"
+            dam:size="{Long}116694"
+            dc:format="application/vnd.adobe.xdp+xml"
+            jcr:lastModified="{Date}2024-11-06T18:55:09.704Z"
+            jcr:lastModifiedBy="admin"
+            jcr:mixinTypes="[mix:created,mix:lastModified]"
+            jcr:primaryType="nt:unstructured"
+            allowedRenderFormat="BOTH"
+            availableInMobileApp="{Boolean}false"
+            hasCustomThumbnail="{Boolean}true"
+            invokeWritebackWorkflow="true"
+            name="Yukon_Default_DoR.xdp"
+            profile="/libs/xfaforms/profiles/default"
+            title="Yukon Default DoR"/>
+    </jcr:content>
+</jcr:root>
