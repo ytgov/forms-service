@@ -1,0 +1,11 @@
+{
+    "allow.empty": true,
+    "allow.hosts.regexp": [ ],
+    "allow.hosts": [
+        "$[env:REFERRER_ALLOW_HOST;default=dev-0tc6bn14.eu.auth0.com]"
+    ],
+    "filter.methods": [
+        "POST"
+    ],
+    "exclude.agents.regexp": [ ]
+}

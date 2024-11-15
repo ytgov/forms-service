@@ -1,0 +1,12 @@
+{
+    "alloworigin": [
+        "$[env:CORS_ALLOW_ORIGIN;default=https://dev-0tc6bn14.eu.auth0.com]",
+        "null"
+    ],
+    "allowedpaths": [
+        ".*/saml_login"
+    ],
+    "supportedmethods": [
+        "POST"
+    ]
+}

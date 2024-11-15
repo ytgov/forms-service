@@ -17,18 +17,18 @@
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="yukon-forms/components/navigation"
                 collectAllPages="false"
-                navigationRoot="/content/yukon-forms/us/en"
+                navigationRoot="/content/yukon-forms/ca/en"
                 skipNavigationRoot="false"
                 structureDepth="1"/>
             <languagenavigation
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="yukon-forms/components/languagenavigation"
-                navigationRoot="/content/yukon-forms/us"
+                navigationRoot="/content/yukon-forms/ca"
                 structureDepth="2"/>
             <search
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="yukon-forms/components/search"
-                searchRoot="/content/yukon-forms/us"/>
+                searchRoot="/content/yukon-forms/ca"/>
         </root>
     </jcr:content>
 </jcr:root>
