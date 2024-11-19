@@ -13,7 +13,7 @@
             <experiencefragment-header
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="yukon-forms/components/experiencefragment"
-                fragmentVariationPath="/content/experience-fragments/yukon-forms/us/en/site/header/master"/>
+                fragmentVariationPath="/content/experience-fragments/yukon-forms/ca/en/site/header/master"/>
             <container
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="yukon-forms/components/container"
@@ -31,7 +31,7 @@
             <experiencefragment-footer
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="yukon-forms/components/experiencefragment"
-                fragmentVariationPath="/content/experience-fragments/yukon-forms/us/en/site/footer/master"/>
+                fragmentVariationPath="/content/experience-fragments/yukon-forms/ca/en/site/footer/master"/>
         </root>
         <cq:responsive jcr:primaryType="nt:unstructured">
             <breakpoints jcr:primaryType="nt:unstructured">
