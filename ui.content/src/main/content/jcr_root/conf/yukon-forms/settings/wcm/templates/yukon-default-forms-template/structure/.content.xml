@@ -14,7 +14,7 @@
             jcr:lastModified="{Date}2024-11-11T14:12:39.389Z"
             jcr:lastModifiedBy="admin"
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="wcm/foundation/components/responsivegrid">
+            sling:resourceType="yukon-forms/components/container">
             <guideheader
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="fd/af/components/guideheader"
@@ -87,7 +87,7 @@
             jcr:lastModified="{Date}2024-11-11T14:12:35.003Z"
             jcr:lastModifiedBy="admin"
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="wcm/foundation/components/responsivegrid">
+            sling:resourceType="yukon-forms/components/container">
             <guidefooter
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="fd/af/components/guidefooter"
