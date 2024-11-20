@@ -1,3 +1,4 @@
-#base=resources/fonts/source-sans-pro
+#base=resources/fonts
+montserrat.css
 source-sans-pro.css
 

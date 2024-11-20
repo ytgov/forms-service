@@ -14,7 +14,7 @@
         pageTitle="Yukon Default Forms Template">
         <container1
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="yukon-forms/components/container">
+            sling:resourceType="wcm/foundation/components/responsivegrid">
             <guideheader
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="fd/af/components/guideheader"
@@ -162,7 +162,7 @@
         </guideContainer>
         <container3
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="yukon-forms/components/container">
+            sling:resourceType="wcm/foundation/components/responsivegrid">
             <guidefooter
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="fd/af/components/guidefooter"
