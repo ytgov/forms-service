@@ -378,7 +378,37 @@
                     components="/apps/yukon-forms/components/adaptiveForm/footer">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </cc-af-footer-policy>
-                </container>
+                <policy_27490978786421
+                    jcr:lastModified="{Date}2024-11-19T17:53:14.031Z"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="yukon-default-forms-template-form-header"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    components="/apps/yukon-forms/components/adaptiveForm/pageheader"
+                    layoutDisabled="false">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_27490978786421>
+                <policy_27490983919270
+                    jcr:lastModified="{Date}2024-11-19T17:53:40.987Z"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="yukon-forms-default-template-form-title-policy"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    components="[/apps/yukon-forms/components/text,/apps/yukon-forms/components/title]"
+                    layoutDisabled="false">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_27490983919270>
+                <policy_27491005805113
+                    jcr:lastModified="{Date}2024-11-19T17:54:33.763Z"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="yukon-default-forms-template-footer-policy"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    components="/apps/yukon-forms/components/adaptiveForm/footer"
+                    layoutDisabled="false">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_27491005805113>
+            </container>
             <teaser jcr:primaryType="nt:unstructured">
                 <policy_1575031387650
                     jcr:description="Sets the title size to H3."
@@ -415,174 +445,179 @@
                 </policy>
             </page>
             <adaptiveForm jcr:primaryType="nt:unstructured">
-              <formcontainer jcr:primaryType="nt:unstructured">
-                <jcr:content
-                  jcr:primaryType="nt:unstructured"
-                  mergeList="{Boolean}true"/>
-                <default
-                  jcr:description="Policy of the Adaptive Form V2 Container"
-                  jcr:primaryType="nt:unstructured"
-                  jcr:title="Simple Adaptive Form V2 Container Policy"
-                  jcr:lastModified="{Date}2023-05-22T15:34:31.056+05:30"
-                  sling:resourceType="wcm/core/components/policy/policy"
-                  components="[group:Yukon Forms - Adaptive Form]">
-                  <cq:authoring jcr:primaryType="nt:unstructured">
-                    <assetToComponentMapping jcr:primaryType="nt:unstructured">
-                      <image
+                <formcontainer jcr:primaryType="nt:unstructured">
+                    <jcr:content
                         jcr:primaryType="nt:unstructured"
-                        assetGroup="media"
-                        assetMimetype="image/*"
-                        droptarget="image"
-                        resourceType="foundation/components/image"
-                        type="Images"/>
-                      <product
+                        mergeList="{Boolean}true"/>
+                    <default
+                        jcr:description="Policy of the Adaptive Form V2 Container"
+                        jcr:lastModified="{Date}2023-05-22T15:34:31.056+05:30"
                         jcr:primaryType="nt:unstructured"
-                        assetGroup="product"
-                        droptarget="product-data-reference"
-                        resourceType="commerce/components/product"
-                        type="Products"/>
-                      <document
+                        jcr:title="Simple Adaptive Form V2 Container Policy"
+                        sling:resourceType="wcm/core/components/policy/policy"
+                        components="[group:Yukon Forms - Adaptive Form]">
+                        <cq:authoring jcr:primaryType="nt:unstructured">
+                            <assetToComponentMapping jcr:primaryType="nt:unstructured">
+                                <image
+                                    jcr:primaryType="nt:unstructured"
+                                    assetGroup="media"
+                                    assetMimetype="image/*"
+                                    droptarget="image"
+                                    resourceType="foundation/components/image"
+                                    type="Images"/>
+                                <product
+                                    jcr:primaryType="nt:unstructured"
+                                    assetGroup="product"
+                                    droptarget="product-data-reference"
+                                    resourceType="commerce/components/product"
+                                    type="Products"/>
+                                <document
+                                    jcr:primaryType="nt:unstructured"
+                                    assetGroup="media"
+                                    assetMimetype="[application/vnd.openxmlformats,application/msword,application/vnd.ms-powerpoint,application/mspowerpoint,application/powerpoint,application/x-mspowerpoint,application/x-msexcel,application/x-excel,application/excel,application/vnd.ms-excel,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document]"
+                                    droptarget="file"
+                                    resourceType="foundation/components/download"
+                                    type="Images"/>
+                                <video
+                                    jcr:primaryType="nt:unstructured"
+                                    assetGroup="media"
+                                    assetMimetype="video/*"
+                                    droptarget="video"
+                                    resourceType="foundation/components/video"
+                                    type="Images"/>
+                                <fragment
+                                    jcr:primaryType="nt:unstructured"
+                                    assetGroup="media"
+                                    assetMimetype="text/html"
+                                    droptarget="fragment"
+                                    resourceType="dam/cfm/components/contentfragment"
+                                    type="Content Fragment"/>
+                                <experiencefragment
+                                    jcr:primaryType="nt:unstructured"
+                                    assetGroup="content"
+                                    assetMimetype="text/html"
+                                    droptarget="experiencefragment"
+                                    resourceType="cq/experience-fragments/editor/components/experiencefragment"
+                                    type="experiencefragment"/>
+                            </assetToComponentMapping>
+                        </cq:authoring>
+                        <jcr:content
+                            jcr:primaryType="nt:unstructured"
+                            mergeList="{Boolean}true"/>
+                    </default>
+                    <policy_32564644276234
+                        jcr:lastModified="{Date}2024-11-19T19:18:11.313Z"
+                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        assetGroup="media"
-                        assetMimetype="[application/vnd.openxmlformats,application/msword,application/vnd.ms-powerpoint,application/mspowerpoint,application/powerpoint,application/x-mspowerpoint,application/x-msexcel,application/x-excel,application/excel,application/vnd.ms-excel,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document]"
-                        droptarget="file"
-                        resourceType="foundation/components/download"
-                        type="Images"/>
-                      <video
+                        jcr:title="yukon-default-template-form-container"
+                        sling:resourceType="wcm/core/components/policy/policy"
+                        components="group:Adaptive Form">
+                        <jcr:content jcr:primaryType="nt:unstructured"/>
+                    </policy_32564644276234>
+                </formcontainer>
+                <numberinput jcr:primaryType="nt:unstructured">
+                    <default
+                        jcr:lastModified="{Date}2022-07-12T11:41:57.902+05:30"
+                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        assetGroup="media"
-                        assetMimetype="video/*"
-                        droptarget="video"
-                        resourceType="foundation/components/video"
-                        type="Images"/>
-                      <fragment
+                        jcr:title="yukon-forms-numberinput-policy"
+                        sling:resourceType="wcm/core/components/policy/policy"
+                        allowedFormat1="No Pattern=#####################.###############"
+                        allowedFormat2="$1,234.21=¤#,##0.00"
+                        allowedFormat3="$1234.21=()¤####0.00"
+                        allowedFormat4="1,234.210=#,###,##0.000"
+                        allowedFormat5="123,421%=#,###,##0%"
+                        allowedFormat6="23421%=####0%"
+                        lang1="German=de-DE"
+                        lang2="English=en-US"
+                        lang3="Spanish=es-ES"
+                        lang4="French=fr-FR"
+                        lang5="Italian=it-IT"
+                        lang6="Japanese=ja-JP"
+                        lang7="Chinese (Simplified)=zh-CN"
+                        lang8="Chinese (Traditional)=zh-TW"
+                        lang9="Korean=ko-KR">
+                        <jcr:content jcr:primaryType="nt:unstructured"/>
+                    </default>
+                </numberinput>
+                <datepicker jcr:primaryType="nt:unstructured">
+                    <default
+                        jcr:lastModified="{Date}2022-07-12T11:41:57.902+05:30"
+                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        assetGroup="media"
-                        assetMimetype="text/html"
-                        droptarget="fragment"
-                        resourceType="dam/cfm/components/contentfragment"
-                        type="Content Fragment"/>
-                      <experiencefragment
+                        jcr:title="yukon-forms-datepicker-policy"
+                        sling:resourceType="wcm/core/components/policy/policy"
+                        allowedFormat1="01 April, 2007=d MMMM, y"
+                        allowedFormat2="April 01, 2007=MMMM d, y"
+                        allowedFormat3="Sunday, 01 April, 2007=EEEE, d MMMM, y"
+                        allowedFormat4="Sunday, April 01, 2007=EEEE, MMMM d, y"
+                        allowedFormat5="1/4/2007=d/M/y"
+                        allowedFormat6="4/1/2007=M/d/y"
+                        lang1="German=de-DE"
+                        lang2="English=en-US"
+                        lang3="Spanish=es-ES"
+                        lang4="French=fr-FR"
+                        lang5="Italian=it-IT"
+                        lang6="Japanese=ja-JP"
+                        lang7="Chinese (Simplified)=zh-CN"
+                        lang8="Chinese (Traditional)=zh-TW"
+                        lang9="Korean=ko-KR">
+                        <jcr:content jcr:primaryType="nt:unstructured"/>
+                    </default>
+                </datepicker>
+                <telephoneinput jcr:primaryType="nt:unstructured">
+                    <default
+                        jcr:lastModified="{Date}2022-07-12T11:41:57.902+05:30"
                         jcr:primaryType="nt:unstructured"
-                        assetGroup="content"
-                        assetMimetype="text/html"
-                        droptarget="experiencefragment"
-                        resourceType="cq/experience-fragments/editor/components/experiencefragment"
-                        type="experiencefragment"/>
-                    </assetToComponentMapping>
-                  </cq:authoring>
-                  <jcr:content
-                    jcr:primaryType="nt:unstructured"
-                    mergeList="{Boolean}true"/>
-                </default>
-              </formcontainer>
-              <numberinput jcr:primaryType="nt:unstructured">
-                <default
-                  jcr:lastModified="{Date}2022-07-12T11:41:57.902+05:30"
-                  jcr:lastModifiedBy="admin"
-                  jcr:primaryType="nt:unstructured"
-                  jcr:title="yukon-forms-numberinput-policy"
-                  sling:resourceType="wcm/core/components/policy/policy"
-                  allowedFormat1="No Pattern=#####################.###############"
-                  allowedFormat2="$1,234.21=¤#,##0.00"
-                  allowedFormat3="$1234.21=()¤####0.00"
-                  allowedFormat4="1,234.210=#,###,##0.000"
-                  allowedFormat5="123,421%=#,###,##0%"
-                  allowedFormat6="23421%=####0%"
-                  lang1="German=de-DE"
-                  lang2="English=en-US"
-                  lang3="Spanish=es-ES"
-                  lang4="French=fr-FR"
-                  lang5="Italian=it-IT"
-                  lang6="Japanese=ja-JP"
-                  lang7="Chinese (Simplified)=zh-CN"
-                  lang8="Chinese (Traditional)=zh-TW"
-                  lang9="Korean=ko-KR">
-                  <jcr:content
-                    jcr:primaryType="nt:unstructured"/>
-                </default>
-              </numberinput>
-              <datepicker jcr:primaryType="nt:unstructured">
-                <default
-                  jcr:lastModified="{Date}2022-07-12T11:41:57.902+05:30"
-                  jcr:lastModifiedBy="admin"
-                  jcr:primaryType="nt:unstructured"
-                  jcr:title="yukon-forms-datepicker-policy"
-                  sling:resourceType="wcm/core/components/policy/policy"
-                  allowedFormat1="01 April, 2007=d MMMM, y"
-                  allowedFormat2="April 01, 2007=MMMM d, y"
-                  allowedFormat3="Sunday, 01 April, 2007=EEEE, d MMMM, y"
-                  allowedFormat4="Sunday, April 01, 2007=EEEE, MMMM d, y"
-                  allowedFormat5="1/4/2007=d/M/y"
-                  allowedFormat6="4/1/2007=M/d/y"
-                  lang1="German=de-DE"
-                  lang2="English=en-US"
-                  lang3="Spanish=es-ES"
-                  lang4="French=fr-FR"
-                  lang5="Italian=it-IT"
-                  lang6="Japanese=ja-JP"
-                  lang7="Chinese (Simplified)=zh-CN"
-                  lang8="Chinese (Traditional)=zh-TW"
-                  lang9="Korean=ko-KR">
-                  <jcr:content
-                    jcr:primaryType="nt:unstructured"/>
-                </default>
-              </datepicker>
-              <telephoneinput jcr:primaryType="nt:unstructured">
-                <default
-                  jcr:lastModified="{Date}2022-07-12T11:41:57.902+05:30"
-                  jcr:primaryType="nt:unstructured"
-                  jcr:title="yukon-forms-telephoneinput-policy"
-                  sling:resourceType="wcm/core/components/policy/policy"
-                  allowedFormat1="International=^[+][0-9]{0,14}$"
-                  allowedFormat2="US Phone Number=^[+]1[0-9]{0,10}$"
-                  allowedFormat3="UK Phone Number=^[+]44[0-9]{0,10}$">
-                  <jcr:content
-                    jcr:primaryType="nt:unstructured"/>
-                </default>
-              </telephoneinput>
-              <panelcontainer jcr:primaryType="nt:unstructured">
-                <default
-                  jcr:lastModified="{Date}2023-03-07T11:41:57.902+05:30"
-                  jcr:lastModifiedBy="admin"
-                  jcr:primaryType="nt:unstructured"
-                  jcr:title="yukon-forms-panelcontainer-policy"
-                  sling:resourceType="wcm/core/components/policy/policy"
-                  layout="responsiveGrid"
-                  layoutDisabled="true">
-                  <jcr:content
-                    jcr:primaryType="nt:unstructured"/>
-                </default>
-              </panelcontainer>
-              <switch jcr:primaryType="nt:unstructured">
-                <default
-                  jcr:lastModified="{Date}2023-10-05T12:36:42.398+05:30"
-                  jcr:lastModifiedBy="admin"
-                  jcr:primaryType="nt:unstructured"
-                  jcr:title="yukon-forms-switch-label-visibility-policy"
-                  cq:styleDefaultClasses="cmp-adaptiveform-switch__hide-labels"
-                  sling:resourceType="wcm/core/components/policy/policy">
-                  <jcr:content jcr:primaryType="nt:unstructured"/>
-                  <cq:styleGroups jcr:primaryType="nt:unstructured">
-                    <item0
-                      cq:styleGroupLabel="Hide labels"
-                      jcr:primaryType="nt:unstructured">
-                      <cq:styles jcr:primaryType="nt:unstructured">
-                        <item0
-                          cq:styleClasses="cmp-adaptiveform-switch__hide-labels"
-                          cq:styleId="1696489484081"
-                          cq:styleLabel="Hide Labels"
-                          jcr:primaryType="nt:unstructured"/>
-                        <item1
-                          cq:styleClasses="cmp-adaptiveform-switch__unhide-labels"
-                          cq:styleId="1696489594671"
-                          cq:styleLabel="Show Labels"
-                          jcr:primaryType="nt:unstructured"/>
-                      </cq:styles>
-                    </item0>
-                  </cq:styleGroups>
-                </default>
-              </switch>
+                        jcr:title="yukon-forms-telephoneinput-policy"
+                        sling:resourceType="wcm/core/components/policy/policy"
+                        allowedFormat1="International=^[+][0-9]{0,14}$"
+                        allowedFormat2="US Phone Number=^[+]1[0-9]{0,10}$"
+                        allowedFormat3="UK Phone Number=^[+]44[0-9]{0,10}$">
+                        <jcr:content jcr:primaryType="nt:unstructured"/>
+                    </default>
+                </telephoneinput>
+                <panelcontainer jcr:primaryType="nt:unstructured">
+                    <default
+                        jcr:lastModified="{Date}2023-03-07T11:41:57.902+05:30"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="yukon-forms-panelcontainer-policy"
+                        sling:resourceType="wcm/core/components/policy/policy"
+                        layout="responsiveGrid"
+                        layoutDisabled="true">
+                        <jcr:content jcr:primaryType="nt:unstructured"/>
+                    </default>
+                </panelcontainer>
+                <switch jcr:primaryType="nt:unstructured">
+                    <default
+                        cq:styleDefaultClasses="cmp-adaptiveform-switch__hide-labels"
+                        jcr:lastModified="{Date}2023-10-05T12:36:42.398+05:30"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="yukon-forms-switch-label-visibility-policy"
+                        sling:resourceType="wcm/core/components/policy/policy">
+                        <jcr:content jcr:primaryType="nt:unstructured"/>
+                        <cq:styleGroups jcr:primaryType="nt:unstructured">
+                            <item0
+                                cq:styleGroupLabel="Hide labels"
+                                jcr:primaryType="nt:unstructured">
+                                <cq:styles jcr:primaryType="nt:unstructured">
+                                    <item0
+                                        cq:styleClasses="cmp-adaptiveform-switch__hide-labels"
+                                        cq:styleId="1696489484081"
+                                        cq:styleLabel="Hide Labels"
+                                        jcr:primaryType="nt:unstructured"/>
+                                    <item1
+                                        cq:styleClasses="cmp-adaptiveform-switch__unhide-labels"
+                                        cq:styleId="1696489594671"
+                                        cq:styleLabel="Show Labels"
+                                        jcr:primaryType="nt:unstructured"/>
+                                </cq:styles>
+                            </item0>
+                        </cq:styleGroups>
+                    </default>
+                </switch>
             </adaptiveForm>
         </components>
     </yukon-forms>
@@ -590,45 +625,62 @@
         <foundation jcr:primaryType="nt:unstructured">
             <components jcr:primaryType="nt:unstructured">
                 <responsivegrid jcr:primaryType="nt:unstructured">
-                            <afpolicy
-                            jcr:description="Policy of the Adaptive Form"
-                            jcr:primaryType="nt:unstructured"
-                            jcr:title="Simple Adaptive Form Policy"
-                            jcr:lastModified="{Date}2022-10-18T16:11:28.605+05:30"
-                            sling:resourceType="wcm/core/components/policy/policy"
-                            components="[group:Yukon Forms - Content,group:Yukon Forms - Structure,/libs/fd/af/components/guideheader,/libs/fd/af/components/guidefooter,/libs/fd/af/components/guideimage,/libs/fd/af/components/guidetextdraw,/libs/fd/af/components/afFormTitle]">
+                    <afpolicy
+                        jcr:description="Policy of the Adaptive Form"
+                        jcr:lastModified="{Date}2022-10-18T16:11:28.605+05:30"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Simple Adaptive Form Policy"
+                        sling:resourceType="wcm/core/components/policy/policy"
+                        components="[group:Yukon Forms - Content,group:Yukon Forms - Structure,/libs/fd/af/components/guideheader,/libs/fd/af/components/guidefooter,/libs/fd/af/components/guideimage,/libs/fd/af/components/guidetextdraw,/libs/fd/af/components/afFormTitle]">
                         <cq:authoring jcr:primaryType="nt:unstructured">
                             <assetToComponentMapping jcr:primaryType="nt:unstructured">
                                 <mapping_1
-                                        jcr:primaryType="nt:unstructured"
-                                        assetGroup="media"
-                                        assetMimetype="image/*"
-                                        droptarget="image"
-                                        resourceType="yukon-forms/components/image"/>
+                                    jcr:primaryType="nt:unstructured"
+                                    assetGroup="media"
+                                    assetMimetype="image/*"
+                                    droptarget="image"
+                                    resourceType="yukon-forms/components/image"/>
                                 <mapping_2
-                                        jcr:primaryType="nt:unstructured"
-                                        assetGroup="content"
-                                        assetMimetype="text/html"
-                                        droptarget="experiencefragment"
-                                        resourceType="yukon-forms/components/experiencefragment"/>
+                                    jcr:primaryType="nt:unstructured"
+                                    assetGroup="content"
+                                    assetMimetype="text/html"
+                                    droptarget="experiencefragment"
+                                    resourceType="yukon-forms/components/experiencefragment"/>
                                 <mapping_3
-                                        jcr:primaryType="nt:unstructured"
-                                        assetGroup="media"
-                                        assetMimetype="[text/html,application/vnd.adobe.contentfragment]"
-                                        droptarget="contentfragment"
-                                        resourceType="yukon-forms/components/contentfragment"/>
+                                    jcr:primaryType="nt:unstructured"
+                                    assetGroup="media"
+                                    assetMimetype="[text/html,application/vnd.adobe.contentfragment]"
+                                    droptarget="contentfragment"
+                                    resourceType="yukon-forms/components/contentfragment"/>
                             </assetToComponentMapping>
                         </cq:authoring>
                         <jcr:content jcr:primaryType="nt:unstructured"/>
                     </afpolicy>
                     <policy_1518118565779
-                            jcr:primaryType="nt:unstructured"
-                            jcr:title="Reference Header Footer Policy"
-                            sling:resourceType="wcm/core/components/policy/policy"
-                            components="[/libs/fd/af/components/guidefooter,/libs/fd/af/components/guideheader,/libs/fd/af/components/guideimage,/libs/fd/af/components/guidetextdraw,/libs/fd/af/components/afFormTitle]">
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Reference Header Footer Policy"
+                        sling:resourceType="wcm/core/components/policy/policy"
+                        components="[/libs/fd/af/components/guidefooter,/libs/fd/af/components/guideheader,/libs/fd/af/components/guideimage,/libs/fd/af/components/guidetextdraw,/libs/fd/af/components/afFormTitle]">
                         <jcr:content jcr:primaryType="nt:unstructured"/>
                     </policy_1518118565779>
-        
+                    <policy_25138521989244
+                        jcr:lastModified="{Date}2024-11-19T17:12:53.412Z"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="yukon-default-forms-template-form-header"
+                        sling:resourceType="wcm/core/components/policy/policy"
+                        components="/apps/yukon-forms/components/adaptiveForm/pageheader">
+                        <jcr:content jcr:primaryType="nt:unstructured"/>
+                    </policy_25138521989244>
+                    <policy_25138561417834
+                        jcr:lastModified="{Date}2024-11-19T17:14:18.728Z"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="yukon-default-forms-template-footer-policy"
+                        sling:resourceType="wcm/core/components/policy/policy"
+                        components="/apps/yukon-forms/components/adaptiveForm/footer">
+                        <jcr:content jcr:primaryType="nt:unstructured"/>
+                    </policy_25138561417834>
                 </responsivegrid>
             </components>
         </foundation>
