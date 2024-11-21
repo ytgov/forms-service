@@ -3,7 +3,7 @@
     jcr:primaryType="dam:Asset">
     <jcr:content
         cq:conf="\0"
-        jcr:lastModified="{Date}2024-11-14T20:00:04.056Z"
+        jcr:lastModified="{Date}2024-11-20T16:10:46.142-08:00"
         jcr:primaryType="dam:AssetContent"
         sling:resourceType="fd/fm/af/render"
         guide="1"
