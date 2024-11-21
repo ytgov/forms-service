@@ -1,6 +1,6 @@
 {
     "scripts": [
-        "create group yukon-default with path /home/groups/yukon",
+        "create group yukon-members with path /home/groups/yukon",
         "create path (sling:OrderedFolder) /content/dam/yukon-forms",
         "create path (sling:OrderedFolder) /content/dam/formsanddocuments/yukon-forms",
         "create path (sling:OrderedFolder) /content/forms/af/yukon-forms",

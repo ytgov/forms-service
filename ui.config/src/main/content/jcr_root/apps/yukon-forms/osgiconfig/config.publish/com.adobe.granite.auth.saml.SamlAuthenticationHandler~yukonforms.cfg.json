@@ -10,8 +10,9 @@
   "logoutUrl": "$[env:SAML_IDP_LOGOUT]",
   "serviceProviderEntityId": "$[env:SAML_ENTITY_ID]",
   "useEncryption": false,
-  "createUser": false,
-  "userIntermediatePath": "/",
+  "userIDAttribute": "",
+  "createUser": true,
+  "userIntermediatePath": "yukon/okta",
   "nameIdFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
   "synchronizeAttributes": [
     "emailaddress=profile/email",
@@ -23,6 +24,6 @@
   "addGroupMemberships": true,
   "groupMembershipAttribute": "groups",
   "defaultGroups": [
-    "yukon-default"
+    "yukon-members"
   ]
 }
