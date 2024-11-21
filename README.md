@@ -160,3 +160,44 @@ A ClientLib will consist of the following files and directories:
 The project comes with the auto-public repository configured. To setup the repository in your Maven settings, refer to:
 
     http://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html
+
+## Tail error.logs on Cloud Manager/AEMaaCS via aio CLI
+```
+❯ node --version
+v20.18.0
+
+❯ npm install -g @adobe/aio-cli
+
+❯ aio --version
+@adobe/aio-cli/10.3.1 darwin-arm64 node-v20.18.0
+
+❯ aio plugins:install @adobe/aio-cli-plugin-cloudmanager
+
+## [Optional], remove existing aio config
+❯ rm -f ~/.config/aio
+
+## [Optional], log out from previous session
+❯ aio logout
+
+## Login, -f is optional
+❯ aio auth login -f
+
+## Select Yukon Org
+❯ aio cloudmanager:org:select
+
+## List Programs
+❯ aio cloudmanager:list-programs
+
+## Set Program
+❯ aio config:set cloudmanager_programid <programId>
+
+## List Environments
+❯ aio cloudmanager:list-environments
+
+## List Available Log Options for DEV
+❯ aio cloudmanager:list-available-log-options <environmentId>
+
+## Tail error log
+❯ aio cloudmanager:tail-log <environmentId> author aemerror
+
+```

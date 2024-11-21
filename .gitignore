@@ -108,3 +108,4 @@ ui.tests.wdio/test-module/assets/form/themes/**/*diff.png
 ui.tests.wdio/test-module/assets/form/themes/**/*current.png
 ui.apps/src/main/content/jcr_root/apps/yukon-forms/clientlibs/clientlib-forms-react
 .DS_Store
+.aio
