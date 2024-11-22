@@ -13,6 +13,7 @@
             fd:version="2.0"
             jcr:primaryType="nt:unstructured"
             author="adobe"
+            baseClientLib="fdtheme.yukon-forms.yukon-default-theme.style"
             clientlibCategory="fdtheme.yukon-forms.yukon-default-theme"
             clientlibRef="/etc/clientlibs/fd/themes/yukon-forms"
             formRef="/content/dam/formsanddocuments/yukon-forms/qa-adaptive-form-fields"
