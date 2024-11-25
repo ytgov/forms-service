@@ -1,11 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-/*
-Set full width to responsivegrid containers of:
-container1 = Header
-container2 = Footer
-*/
-
+/**
+ * Set full width to responsivegrid containers of:
+ * container1 = Header
+ * container2 = Footer
+ */
 div.container1, div.container3 {
     width: 100%;
+}
+
+/**
+ * Center the 'Thank you' submit message
+ */
+div.guideContainer div.tyMessage p {
+    text-align: center;
 }
