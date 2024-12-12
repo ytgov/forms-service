@@ -12,12 +12,12 @@
   "useEncryption": false,
   "userIDAttribute": "",
   "createUser": true,
-  "userIntermediatePath": "yukon/okta",
+  "userIntermediatePath": "yukon/sso",
   "nameIdFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
   "synchronizeAttributes": [
-    "emailaddress=profile/email",
+    "Email=profile/email",
     "givenname=profile/givenName",
-    "name=profile/displayName",
+    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name=profile/displayName",
     "surname=profile/familyName",
     "nameidentifier=profile/nameidentifier"
   ],
