@@ -4,6 +4,5 @@
     <jcr:content
         jcr:lastModifiedBy="admin"
         jcr:mimeType="image/png"
-        jcr:mixinTypes="[]"
         jcr:primaryType="nt:resource"/>
 </jcr:root>
