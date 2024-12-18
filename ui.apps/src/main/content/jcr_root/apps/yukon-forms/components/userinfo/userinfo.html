@@ -1,0 +1,31 @@
+<style>
+    .fifty-fifty {
+        display: flex;
+        flex-wrap: wrap;
+        border: 1px dotted gray;
+    }
+
+    .fifty-fifty > * {
+        flex-grow: 1;
+        flex-basis: 250px;
+    }
+</style>
+
+<div class="fifty-fifty" data-sly-use.template="core/wcm/components/commons/v1/templates.html"
+     data-sly-use.userInfo="ca.yukon.aem.core.models.UserInfoModel">
+    <div>
+        <h3>Session Info</h3>
+        <ul>
+            <li><b>sessionUserId:</b> ${userInfo.sessionUserId}</li>
+            <li><b>userPath:</b> ${userInfo.userPath}</li>
+            <li><b>isLoggedIn:</b> ${userInfo.isLoggedIn}</li>
+        </ul>
+    </div>
+    <div>
+        <h3>User Info</h3>
+        <ul data-sly-list.prop="${userInfo.propsMap.entrySet}">
+            <li><b>${prop.key}:</b> ${prop.value}</li>
+        </ul>
+    </div>
+</div>
+<sly data-sly-call="${template.placeholder @ isEmpty=!prop}">UserInfo Placeholder</sly>

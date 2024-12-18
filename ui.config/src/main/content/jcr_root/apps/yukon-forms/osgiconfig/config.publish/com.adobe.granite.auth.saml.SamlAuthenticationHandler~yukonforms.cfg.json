@@ -12,14 +12,12 @@
   "useEncryption": false,
   "userIDAttribute": "",
   "createUser": true,
-  "userIntermediatePath": "yukon/okta",
+  "userIntermediatePath": "yukon/sso",
   "nameIdFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
   "synchronizeAttributes": [
-    "emailaddress=profile/email",
-    "givenname=profile/givenName",
-    "name=profile/displayName",
-    "surname=profile/familyName",
-    "nameidentifier=profile/nameidentifier"
+    "Email=profile/email",
+    "FirstName=profile/givenName",
+    "LastName=profile/familyName"
   ],
   "addGroupMemberships": true,
   "groupMembershipAttribute": "groups",
