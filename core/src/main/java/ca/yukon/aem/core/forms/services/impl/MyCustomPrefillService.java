@@ -2,10 +2,16 @@ package ca.yukon.aem.core.forms.services.impl;
 
 import com.adobe.forms.common.service.*;
 import com.google.gson.Gson;
+import org.apache.jackrabbit.api.JackrabbitSession;
+import org.apache.jackrabbit.api.security.user.Authorizable;
+import org.apache.jackrabbit.api.security.user.UserManager;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.jcr.Session;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -39,8 +45,28 @@ public class MyCustomPrefillService implements DataProvider {
 
     private InputStream getData(DataOptions dataOptions) throws FormsException {
         try {
+            Resource aemFormContainer = dataOptions.getFormResource();
+            ResourceResolver resolver = aemFormContainer.getResourceResolver();
+            Session session = resolver.adaptTo(Session.class);
+            UserManager um = ((JackrabbitSession) session).getUserManager();
+            Authorizable loggedinUser = um.getAuthorizable(session.getUserID());
+
+            String givenName = "aaaaa";
+            String familyName = "bbbbb";
+            String email = "ccccc";
+
+            if (loggedinUser.hasProperty("profile/givenName")) {
+                givenName = loggedinUser.getProperty("profile/givenName")[0].getString();
+            }
+            if (loggedinUser.hasProperty("profile/familyName")) {
+                familyName = loggedinUser.getProperty("profile/familyName")[0].getString();
+            }
+            if (loggedinUser.hasProperty("profile/email")) {
+                email = loggedinUser.getProperty("profile/email")[0].getString();
+            }
+
             Gson gson = new Gson();
-            String jsonStr = "{\n  \"nelson_test\": {\n    \"Title\": \"aaaaaa\",\n    \"Name\": \"bbbbb\",\n    \"yhcip_no\": \"ccccc\"\n  }\n}";
+            String jsonStr = "{\n  \"nelson_test\": {\n    \"Title\": \"" +givenName+" \",\n    \"Name\": \""+familyName+"\",\n    \"yhcip_no\": \""+email+ "\"\n  }\n}";
             HashMap myPojo = gson.fromJson(jsonStr, HashMap.class);
             String outputStr = gson.toJson(myPojo);
 
