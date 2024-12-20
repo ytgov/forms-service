@@ -31,22 +31,20 @@ public class PrefillAdaptiveForm implements DataXMLProvider {
 
     @Override
     public String getServiceDescription() {
-
         return "Custom AEM Forms PreFill Service";
     }
 
     @Override
     public String getServiceName() {
-
         return "CustomAemFormsPrefillService";
     }
 
     @Override
     public InputStream getDataXMLForDataRef(DataXMLOptions dataXmlOptions) throws FormsException {
-        InputStream xmlDataStream = null;
+        InputStream xmlDataStream;
         Resource aemFormContainer = dataXmlOptions.getFormResource();
         ResourceResolver resolver = aemFormContainer.getResourceResolver();
-        Session session = (Session) resolver.adaptTo(Session.class);
+        Session session = resolver.adaptTo(Session.class);
         try {
             UserManager um = ((JackrabbitSession) session).getUserManager();
             Authorizable loggedinUser = um.getAuthorizable(session.getUserID());
@@ -69,14 +67,13 @@ public class PrefillAdaptiveForm implements DataXMLProvider {
                 lastNameElement.setTextContent(loggedinUser.getProperty("profile/familyName")[0].getString());
                 rootElement.appendChild(lastNameElement);
                 log.debug("Created lastName Element");
-
             }
+
             if (loggedinUser.hasProperty("profile/email")) {
                 Element emailElement = doc.createElement("email");
                 emailElement.setTextContent(loggedinUser.getProperty("profile/email")[0].getString());
                 rootElement.appendChild(emailElement);
                 log.debug("Created email Element");
-
             }
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -94,7 +91,7 @@ public class PrefillAdaptiveForm implements DataXMLProvider {
             xmlDataStream = new ByteArrayInputStream(outputStream.toByteArray());
             return xmlDataStream;
         } catch (Exception e) {
-            log.error("The error message is " + e.getMessage());
+            log.error("The error message is {}", e.getMessage());
         }
         return null;
 

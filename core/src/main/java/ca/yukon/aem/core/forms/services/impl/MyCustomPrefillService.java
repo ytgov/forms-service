@@ -40,7 +40,6 @@ public class MyCustomPrefillService implements DataProvider {
                 return ContentType.XML;
             }
         };
-
     }
 
     private InputStream getData(DataOptions dataOptions) throws FormsException {
@@ -51,9 +50,9 @@ public class MyCustomPrefillService implements DataProvider {
             UserManager um = ((JackrabbitSession) session).getUserManager();
             Authorizable loggedinUser = um.getAuthorizable(session.getUserID());
 
-            String givenName = "aaaaa";
-            String familyName = "bbbbb";
-            String email = "ccccc";
+            String givenName = "Given Name Undefined";
+            String familyName = "Family Name Undefined";
+            String email = "Email Undefined";
 
             if (loggedinUser.hasProperty("profile/givenName")) {
                 givenName = loggedinUser.getProperty("profile/givenName")[0].getString();
@@ -66,7 +65,7 @@ public class MyCustomPrefillService implements DataProvider {
             }
 
             Gson gson = new Gson();
-            String jsonStr = "{\n  \"nelson_test\": {\n    \"Title\": \"" +givenName+" \",\n    \"Name\": \""+familyName+"\",\n    \"yhcip_no\": \""+email+ "\"\n  }\n}";
+            String jsonStr = "{\n  \"simple_submission\": {\n    \"Title\": \"" +familyName+" \",\n    \"Name\": \""+givenName+"\",\n    \"Email\": \""+email+ "\"\n  }\n}";
             HashMap myPojo = gson.fromJson(jsonStr, HashMap.class);
             String outputStr = gson.toJson(myPojo);
 
