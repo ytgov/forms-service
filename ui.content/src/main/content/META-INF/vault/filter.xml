@@ -11,6 +11,7 @@
     <filter root="/content/dam/formsanddocuments/yukon-forms" mode="merge"/>
     <filter root="/content/dam/formsanddocuments/documents-of-record" mode="merge"/>
     <filter root="/content/dam/formsanddocuments-themes/yukon-forms" mode="merge"/>
+    <filter root="/content/dam/formsanddocuments-themes/yukon-forms/abida" mode="merge"/>
     <filter root="/content/dam/formsanddocuments-fdm/yukon-forms" mode="merge"/>
     <filter root="/content/dam/yukon-forms/sample_logo.png" mode="merge"/>
     <filter root="/content/dam/yukon-forms/sample_terms.png" mode="merge"/>
@@ -18,5 +19,6 @@
     <filter root="/content/dam/yukon-forms/af_model_sample.json" mode="merge"/>
     <filter root="/content/dam/yukon-forms/yukon-logo.png" mode="merge"/>
     <filter root="/content/dam/yukon-forms/Aurora-main.2615cb39.png" mode="merge"/>
+    <filter root="/content/dam/yukon-forms/forms-theme-assets/" mode="merge"/>
     <filter root="/content/forms/af/yukon-forms/" mode="merge"/>
 </workspaceFilter>
