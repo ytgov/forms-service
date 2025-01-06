@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:fd="http://www.adobe.com/aemfd/fd/1.0"
+    jcr:primaryType="dam:Asset">
+    <jcr:content
+        cq:conf="/conf/yukon-forms"
+        jcr:lastModified="{Date}2025-01-06T11:43:31.868+02:00"
+        jcr:primaryType="dam:AssetContent"
+        sling:resourceType="fd/fm/theme/render"
+        theme="1"
+        type="theme">
+        <metadata
+            fd:targetVersion="2.0"
+            fd:version="2.0"
+            jcr:primaryType="nt:unstructured"
+            author="Abida.Meerasa@yukon.ca"
+            baseClientLib="fdtheme.yukon-forms.yukon-default-theme.style"
+            clientlibCategory="fdtheme.yukon-forms.abida.testtheme2"
+            clientlibRef="/etc/clientlibs/fd/themes/yukon-forms/abida"
+            formRef="/content/dam/formsanddocuments/yukon-forms/yhcip-v7-copy1"
+            hasCustomThumbnail="{Boolean}false"
+            title="Yukon Default Theme v2">
+            <breakpoints jcr:primaryType="nt:unstructured">
+                <smallScreen
+                    jcr:primaryType="nt:unstructured"
+                    title="Smaller Screen"
+                    width="479"/>
+                <phone
+                    jcr:primaryType="nt:unstructured"
+                    title="Phone"
+                    width="767"/>
+                <tablet
+                    jcr:primaryType="nt:unstructured"
+                    title="Tablet"
+                    width="991"/>
+                <default
+                    jcr:primaryType="nt:unstructured"
+                    title="Default"
+                    width="-1"/>
+            </breakpoints>
+        </metadata>
+    </jcr:content>
+</jcr:root>
