@@ -1,3 +1,4 @@
 #base=js
 
 script.js
+declarationText.js
