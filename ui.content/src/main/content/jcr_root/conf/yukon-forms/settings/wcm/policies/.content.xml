@@ -469,6 +469,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Generic Page"
                     sling:resourceType="wcm/core/components/policy/policy"
+                    appResourcesClientlib="yukon-forms.custom"
                     clientlibs="[yukon-forms.dependencies,yukon-forms.site]"
                     clientlibsJsHead="yukon-forms.dependencies">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
