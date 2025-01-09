@@ -1,0 +1,12 @@
+{
+  "smtp.host": "$[env:AEM_PROXY_HOST;default=proxy.tunnel]",
+  "smtp.port": "$[env:SMTP_PORT;default=30587]",
+  "smtp.user": "$[env:EMAIL_USERNAME;default=myApiKey]",
+  "smtp.password": "$[secret:EMAIL_PASSWORD]",
+  "from.address": "eservices@yukon.ca",
+  "smtp.ssl": false,
+  "smtp.starttls": true,
+  "smtp.requiretls": true,
+  "debug.email": false,
+  "oauth.flow": false
+}
