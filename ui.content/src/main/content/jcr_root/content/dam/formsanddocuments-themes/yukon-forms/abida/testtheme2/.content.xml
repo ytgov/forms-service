@@ -3,7 +3,8 @@
     jcr:primaryType="dam:Asset">
     <jcr:content
         cq:conf="/conf/yukon-forms"
-        jcr:lastModified="{Date}2025-01-06T11:43:31.868+02:00"
+        jcr:lastModified="{Date}2025-01-14T10:47:10.233Z"
+        jcr:mixinTypes="[]"
         jcr:primaryType="dam:AssetContent"
         sling:resourceType="fd/fm/theme/render"
         theme="1"
