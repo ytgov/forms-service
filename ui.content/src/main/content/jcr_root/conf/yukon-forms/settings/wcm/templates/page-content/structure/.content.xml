@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[mobile/groups/responsive]"
+        cq:lastModified="{Date}2025-01-14T12:01:41.510Z"
+        cq:lastModifiedBy="admin"
         cq:template="/conf/yukon-forms/settings/wcm/templates/page-content"
         jcr:primaryType="cq:PageContent"
         sling:resourceType="yukon-forms/components/page">
@@ -11,9 +13,11 @@
             sling:resourceType="yukon-forms/components/container"
             layout="responsiveGrid">
             <experiencefragment-header
+                jcr:lastModified="{Date}2025-01-14T12:01:27.773Z"
+                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="yukon-forms/components/experiencefragment"
-                fragmentVariationPath="/content/experience-fragments/yukon-forms/ca/en/site/header/master"/>
+                fragmentVariationPath="/content/experience-fragments/yukon-forms/ca/en/yukon_page/header/master"/>
             <container
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="yukon-forms/components/container"
@@ -29,9 +33,11 @@
                     layout="responsiveGrid"/>
             </container>
             <experiencefragment-footer
+                jcr:lastModified="{Date}2025-01-14T12:01:41.507Z"
+                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="yukon-forms/components/experiencefragment"
-                fragmentVariationPath="/content/experience-fragments/yukon-forms/ca/en/site/footer/master"/>
+                fragmentVariationPath="/content/experience-fragments/yukon-forms/ca/en/yukon_page/footer/master"/>
         </root>
         <cq:responsive jcr:primaryType="nt:unstructured">
             <breakpoints jcr:primaryType="nt:unstructured">
