@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:primaryType="cq:Template">
+    <jcr:content
+        cq:lastModified="{Date}2025-01-21T16:30:32.772Z"
+        cq:lastModifiedBy="admin"
+        cq:templateType="/conf/yukon-forms/settings/wcm/template-types/af-page"
+        jcr:lastModified="{Date}2021-03-24T18:22:20.809+05:30"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Yukon Blank Adaptive Form"
+        author="adobe"
+        status="enabled"/>
+</jcr:root>
