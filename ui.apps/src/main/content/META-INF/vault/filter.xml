@@ -4,5 +4,6 @@
     <filter root="/apps/yukon-forms/components"/>
     <filter root="/apps/yukon-forms/i18n"/>
     <filter root="/apps/fd/af/themes" mode="merge"/>
+    <filter root="/apps/fd/af/components" mode="merge"/>
     <filter root="/apps/yukon-forms/clientlibs/clientlibs-forms/theme-base-clientlibs/yukon-default-theme" mode="merge"/>
 </workspaceFilter>
