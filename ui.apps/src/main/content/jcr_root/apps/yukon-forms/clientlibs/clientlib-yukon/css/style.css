@@ -1,0 +1,10 @@
+body {
+    background-color: white;
+    height: 100vh;
+}
+
+@media only screen and (max-width: 600px) {
+    a {
+        color: #2020e0;
+    }
+}
