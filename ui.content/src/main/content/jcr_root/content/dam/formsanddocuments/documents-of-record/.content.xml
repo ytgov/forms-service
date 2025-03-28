@@ -6,6 +6,5 @@
     <jcr:content
         dam:noThumbnail="{Boolean}true"
         jcr:primaryType="nt:unstructured"
-        jcr:title="documents-of-record">
-    </jcr:content>
+        jcr:title="documents-of-record"/>
 </jcr:root>
