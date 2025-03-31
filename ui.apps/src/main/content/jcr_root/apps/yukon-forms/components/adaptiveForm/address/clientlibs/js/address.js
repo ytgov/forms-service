@@ -127,10 +127,10 @@
                             var address = response.Items || [];
                             address = !self.isFrench ? address[0] : address[1];
                             self.limit = self.fixedLimit;
-                            $(self.container).find('[data-name="address2"]').val(address.Line2);
-                            $(self.container).find('[data-name="city"]').val(address.City);
-                            $(self.container).find('[data-name="province"]').val(address.ProvinceCode);
-                            $(self.container).find('[data-name="postalCode"]').val(address.PostalCode);
+                            $(self.container).find('[data-name="address2"]').val(address.Line2).trigger('change');
+                            $(self.container).find('[data-name="city"]').val(address.City).trigger('change');
+                            $(self.container).find('[data-name="province"]').val(address.ProvinceCode).trigger('change');
+                            $(self.container).find('[data-name="postalCode"]').val(address.PostalCode).trigger('change');
                             $(self.widget).val(address.Line1);
                             $(self.widget).blur();
                         },

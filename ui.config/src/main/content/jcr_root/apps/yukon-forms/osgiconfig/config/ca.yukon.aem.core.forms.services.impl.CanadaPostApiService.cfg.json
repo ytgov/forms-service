@@ -1,0 +1,4 @@
+{
+  "canada.post.key":"$[env:CANADA_POST_KEY;default=]",
+  "canada.post.host":"$[env:CANADA_POST_HOST;default=https://ws1.postescanada-canadapost.ca]"
+}

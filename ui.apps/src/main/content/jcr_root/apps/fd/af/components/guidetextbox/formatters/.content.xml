@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+    jcr:mixinTypes="[granite:FinalArea]"
+    jcr:primaryType="nt:unstructured"
+    guideComponentType="fd/af/components/formatter/guideTextBox"
+    pattern1="PhoneNumber=text{'('999')' 999-9999}"
+    pattern2="SocialSecurityNumber=text{999-99-9999}"
+    pattern3="Email-alphanumeric=text{OOOOOOOO'@example.com'}"
+    pattern4="ZipCode=text{99999}"/>
