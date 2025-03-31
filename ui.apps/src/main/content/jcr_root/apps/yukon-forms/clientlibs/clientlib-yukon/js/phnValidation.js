@@ -1,6 +1,8 @@
 /**
  * Validates the PHN
  * @name validatePHN YT Personal Health Number Validation
+ * @param {string} YHCIP Nr in Stringformat
+ * @return {boolean}
  */
 
 // Main function
