@@ -41,13 +41,13 @@
         // returns API url
         getUrl(params) {
             let url = this.host + "/addresscomplete/interactive/find/v2.10/json3.ws?";
-                url += "Key=" + this.key;
-                url += "&SearchTerm=" + params.text || "%QUERY";
+                url += "Key=" + this.key || '';
+                url += "&SearchTerm=" + params.text || '';
                 url += "&LastId=" + params.Id || '';
                 url += "&SearchFor=";
                 url += "&Country=";
                 url += "&LanguagePreference=" + this.language;
-                url += "&MaxSuggestions=" + params.limit || this.limit;
+                url += "&MaxSuggestions=" + params.limit || '';
                 url += "&MaxResults=";
                 url += "&Origin=";
                 url += "&Bias=";
