@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:mixinTypes="[granite:InternalArea]"
+    jcr:primaryType="cq:Dialog"
+    height="{Long}600"
+    title="Edit Text box"
+    xtype="dialog">
+    <items jcr:primaryType="cq:TabPanel">
+        <items jcr:primaryType="cq:WidgetCollection">
+            <title
+                jcr:primaryType="nt:unstructured"
+                title="Title"
+                xtype="panel">
+                <items jcr:primaryType="cq:WidgetCollection">
+                    <items
+                        jcr:primaryType="nt:unstructured"
+                        path="/libs/fd/af/components/guidefield/dialog/items/title/items.infinity.json"
+                        xtype="cqinclude"/>
+                    <value
+                        jcr:primaryType="cq:Widget"
+                        fieldLabel="Value"
+                        name="./_value"
+                        xtype="textfield"/>
+                    <multiLine
+                        jcr:primaryType="cq:Widget"
+                        fieldLabel="Allow multiple lines"
+                        name="./multiLine"
+                        type="checkbox"
+                        xtype="selection"/>
+                    <maxChars
+                        jcr:primaryType="cq:Widget"
+                        fieldLabel="Maximum characters allowed"
+                        name="./maxChars"
+                        xtype="numberfield"/>
+                </items>
+            </title>
+            <script
+                jcr:primaryType="nt:unstructured"
+                path="/libs/fd/af/components/guidefield/dialog/items/script.infinity.json"
+                xtype="cqinclude"/>
+            <patterns
+                jcr:primaryType="nt:unstructured"
+                title="Patterns"
+                xtype="panel">
+                <items jcr:primaryType="cq:WidgetCollection">
+                    <displayPatternGroup
+                        jcr:primaryType="cq:Widget"
+                        anchor="100%"
+                        title="Display pattern"
+                        xtype="fieldset">
+                        <items jcr:primaryType="cq:WidgetCollection">
+                            <displayPatternType
+                                jcr:primaryType="cq:Widget"
+                                anchor="96%"
+                                fieldLabel="Type"
+                                options="/libs/fd/af/components/info.json?type=formatters&amp;guideNodeClass=guideTextBox"
+                                type="select"
+                                xtype="selection">
+                                <listeners
+                                    jcr:primaryType="nt:unstructured"
+                                    selectionchanged="function() { var fn = guidelib.author.GuideExtJSDialogUtils.patternSelectedListener('./displayPictureClause'); if(fn) fn.apply(this, arguments); }"/>
+                            </displayPatternType>
+                            <displayPictureClause
+                                jcr:primaryType="nt:unstructured"
+                                path="/libs/fd/af/components/guidefield/dialog/items/patterns/items/displayPictureClause.infinity.json"
+                                xtype="cqinclude"/>
+                        </items>
+                    </displayPatternGroup>
+                    <validationPatternGroup
+                        jcr:primaryType="cq:Widget"
+                        anchor="100%"
+                        title="Validation pattern"
+                        xtype="fieldset">
+                        <items jcr:primaryType="cq:WidgetCollection">
+                            <sameAsDisplayPattern
+                                jcr:primaryType="nt:unstructured"
+                                path="/libs/fd/af/components/guidefield/dialog/items/patterns/items/sameAsDisplayPattern.infinity.json"
+                                xtype="cqinclude"/>
+                            <validationPatternType
+                                jcr:primaryType="cq:Widget"
+                                anchor="96%"
+                                fieldLabel="Type"
+                                options="/libs/fd/af/components/info.json?type=formatters&amp;guideNodeClass=guideTextBox"
+                                type="select"
+                                xtype="selection">
+                                <listeners
+                                    jcr:primaryType="nt:unstructured"
+                                    selectionchanged="function() { var fn = guidelib.author.GuideExtJSDialogUtils.patternSelectedListener('./validatePictureClause'); if(fn) fn.apply(this, arguments); }"/>
+                            </validationPatternType>
+                            <validatePictureClause
+                                jcr:primaryType="nt:unstructured"
+                                path="/libs/fd/af/components/guidefield/dialog/items/patterns/items/validatePictureClause.infinity.json"
+                                xtype="cqinclude"/>
+                            <validatePictureClauseMessage
+                                jcr:primaryType="nt:unstructured"
+                                path="/libs/fd/af/components/guidefield/dialog/items/patterns/items/validatePictureClauseMessage.infinity.json"
+                                xtype="cqinclude"/>
+                        </items>
+                    </validationPatternGroup>
+                </items>
+            </patterns>
+            <styling
+                jcr:primaryType="nt:unstructured"
+                path="/libs/fd/af/components/guidefield/dialog/items/styling.infinity.json"
+                xtype="cqinclude"/>
+            <help
+                jcr:primaryType="nt:unstructured"
+                path="/libs/fd/af/components/guidefield/dialog/items/help.infinity.json"
+                xtype="cqinclude"/>
+            <accessibility
+                jcr:primaryType="nt:unstructured"
+                path="/libs/fd/af/components/guidefield/dialog/items/accessiblity.infinity.json"
+                xtype="cqinclude"/>
+            <excludeFromDor
+                jcr:primaryType="nt:unstructured"
+                path="/libs/fd/af/components/guidefield/dialog/items/dorSettings.infinity.json"
+                xtype="cqinclude"/>
+        </items>
+    </items>
+    <listeners
+        jcr:primaryType="nt:unstructured"
+        path="/libs/fd/af/components/guidefield/dialog/listeners.infinity.json"
+        xtype="cqinclude"/>
+</jcr:root>

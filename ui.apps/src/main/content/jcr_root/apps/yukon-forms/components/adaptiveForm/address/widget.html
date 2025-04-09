@@ -1,0 +1,54 @@
+<sly data-sly-include="/libs/fd/af/components/guidesglobal.jsp"/>
+<sly data-sly-use.guideConstants="com.adobe.aemds.guide.utils.GuideConstants"/>
+<sly data-sly-use.guideField="com.adobe.aemds.guide.common.GuideTextBox"/>
+<sly data-sly-use.canadaPost="ca.yukon.aem.core.models.AddressModel"/>
+
+<div class="${guideConstants.GUIDE_FIELD_WIDGET} textField ${guideField.multiLine ? 'multiline' : ''}
+            ${guideField.allowRichText ? 'richText' : ''} address_container"
+     data-cmp-is="adaptiveFormAddressInput"
+     data-key="${canadaPost.key}"
+     data-host="${canadaPost.host}"
+     data-limit="${canadaPost.limit}"
+     data-language="${currentPage.language}"
+
+     style="${guideField.styles @ context='scriptString'}">
+    <sly data-sly-test="${guideField.allowRichText}">
+        <div id="${guideField.id}_widget"
+             name="${guideField.name}"
+             style="${guideField.widgetInlineStyles @ context='scriptString'}"
+             placeholder="${guideField.placeholderText}">
+
+            <div id="${guideField.id}_widget_richText"
+                 class="richTextWidget"
+                 data-locale="${guideField.locale}"
+                 aria-describedby="${guideField.labelForId}_desc">
+                ${guideField.value @ context='html'}
+            </div>
+        </div>
+    </sly>
+    <sly data-sly-test="${!guideField.allowRichText && guideField.multiLine}">
+            <textarea id="${guideField.id}_widget"
+                      class="cmp-adaptiveform-addressinput__widget"
+                      data-sly-attribute="{maxlength: guideField.html5MaxLength}"
+                      autocomplete="${guideField.autocomplete ? guideField.autofillFieldKeyword : 'off'}"
+                      name="${guideField.name}"
+                      style="${guideField.widgetInlineStyles @ context='scriptString'}"
+                      placeholder="${guideField.placeholderText}"
+                      aria-describedby="${guideField.labelForId}_desc">
+                ${guideField.value @ context='html'}
+            </textarea>
+    </sly>
+    <sly data-sly-test="${!guideField.allowRichText && !guideField.multiLine}">
+        <input type="text"
+               class="cmp-adaptiveform-addressinput__widget"
+               data-sly-attribute="{maxlength: guideField.html5MaxLength}"
+               autocomplete="${guideField.autocomplete ? guideField.autofillFieldKeyword : 'off'}"
+               id="${guideField.id}_widget"
+               name="${guideField.name}"
+               data-language="${currentPage.language}"
+               value="${guideField.value}"
+               style="${guideField.widgetInlineStyles @ context='scriptString'}"
+               placeholder="${guideField.placeholderText}"
+               aria-describedby="${guideField.labelForId}_desc"/>
+    </sly>
+</div>

@@ -1,0 +1,29 @@
+.twitter-typeahead {
+    display: flex !important;
+
+    .tt-menu {
+        background: #fff;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 10px 0;
+
+        .tt-dataset {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 8px 0;
+        }
+
+        .tt-suggestion {
+            &.tt-selectable {
+                cursor: pointer;
+                padding: 8px 10px 6px 10px;
+
+                &:hover {
+                    background: #666;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
