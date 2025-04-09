@@ -1,1 +1,1 @@
-js/script.js
+js/matomoScript.js

@@ -1,5 +1,6 @@
 #base=js
 
+validateDateByDaysPassed.js
 phnValidation.js
-script.js
+matomoScript.js
 generateUniqueId.js
