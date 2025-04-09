@@ -1,6 +1,7 @@
 /**
- * Load Custom Matomo Script
+ * Load Custom Matomo Analytics Script in the page header
  * @name loadCustomMatomoScript Load Custom Matomo Script
+ * @param {Number} siteId in Numeric format
  */
 
 var _paq = window._paq = window._paq || [];

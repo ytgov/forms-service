@@ -1,5 +1,5 @@
 /**
- * Generate unique ID
+ * Generates an unique ID based on timestamp and a random string
  * @name generateUniqueId Generate unique ID
  * @returns {string}
  */
