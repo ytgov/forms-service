@@ -2257,7 +2257,8 @@
                     if (defaultHint || defaultMenu) {
                         $wrapper.css(www.css.wrapper);
                         $input.css(defaultHint ? www.css.input : www.css.inputWithNoHint);
-                        $input.wrap($wrapper).parent().prepend(defaultHint ? $hint : null).append(defaultMenu ? $menu : null);
+                        $wrapper.prepend(defaultHint ? $hint : null).append(defaultMenu ? $menu : null);
+                        $input.parent().append($wrapper)
                     }
                     MenuConstructor = defaultMenu ? DefaultMenu : Menu;
                     eventBus = new EventBus({
