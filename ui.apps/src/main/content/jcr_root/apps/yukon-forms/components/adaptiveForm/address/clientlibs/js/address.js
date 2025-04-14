@@ -12,17 +12,21 @@
             this.container = params.formContainer;
             this.host = $(this.element).data("host");
             this.key = $(this.element).data("key");
-            this.fixedLimit = $(this.element).data("limit");
+            this.fixedLimit = $(this.element).data("limit") || 7;
             this.limit = this.fixedLimit;
-            this.language = $(this.element).data("language");
+            this.language = $(this.element).data("language") || "en";
             this.isFrench = this.language.includes("fr");
             this.language = this.isFrench ? "fr" : "en";
             this.usingRefinedSuggestions = false;
 
+            if (!this.host) {
+                console.error("Invalid Canada Post HOST...")
+                return;
+            }
             // setting initial typeahead objects
             this.addressEngine = new Bloodhound({
                 remote: {
-                    url: this.getUrl({Id: '', text: '%QUERY', limit: this.limit}),
+                    url: this.getUrl(),
                     wildcard: '%QUERY'
                 },
                 datumTokenizer: Bloodhound.tokenizers.whitespace,
@@ -40,14 +44,18 @@
 
         // returns API url
         getUrl(params) {
+            let text = params && params.text;
+            let id = params && params.Id;
+            let limit = params && params.limit;
+
             let url = this.host + "/addresscomplete/interactive/find/v2.10/json3.ws?";
-                url += "Key=" + this.key || '';
-                url += "&SearchTerm=" + params.text || '';
-                url += "&LastId=" + params.Id || '';
+                url += "Key=" + this.key;
+                url += "&SearchTerm=" + (text || '%QUERY');
+                url += "&LastId=" + (id || '');
                 url += "&SearchFor=";
-                url += "&Country=";
-                url += "&LanguagePreference=" + this.language;
-                url += "&MaxSuggestions=" + params.limit || '';
+                url += "&Country=CAN";
+                url += "&LanguagePreference=" + (this.language || 'en');
+                url += "&MaxSuggestions=" + (limit || '');
                 url += "&MaxResults=";
                 url += "&Origin=";
                 url += "&Bias=";
@@ -72,8 +80,9 @@
                     source: sourceEngine,
                     templates: {
                         suggestion: function(data) {
-                            if (data && data.Text) {
-                                return '<div><span>' + data.Text + ' ' + data.Description + '</span></div>';
+                            if (data && (data.Text || data.Description)) {
+                                data.Text = data.Text ? data.Text + ' ' : '';
+                                return '<div><span>' + data.Text + data.Description + '</span></div>';
                             } else {
                                 return '<div><span>' + data.Cause + '</span></div>';
                             }
