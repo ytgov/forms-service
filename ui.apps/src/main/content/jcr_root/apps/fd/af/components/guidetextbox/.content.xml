@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
-    cq:icon="aBC"
-    jcr:description="Add a field to capture text strings."
-    jcr:primaryType="cq:Component"
-    jcr:title="Text Box"
-    sling:resourceSuperType="fd/af/components/guidefield"
-    allowedParents="[*/parsys,*/*layout]"
-    componentGroup="Adaptive Form"/>
