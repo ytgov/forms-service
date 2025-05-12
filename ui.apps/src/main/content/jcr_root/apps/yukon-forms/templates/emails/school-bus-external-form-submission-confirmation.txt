@@ -1,0 +1,50 @@
+<html>
+<body>
+<table style="width: 480px; font-family: Helvetica, Arial, sans-serif; border: 0; padding: 0; vertical-align: top; text-align: left; word-wrap: break-word; margin: 16px auto; color:#323232; border-collapse: collapse;">
+    <tbody style="text-align: left; border-bottom: solid 12px #ffcd57; padding: 20px; font-size: 14px;">
+    <tr>
+        <td style="height: 5px; width: 480px; background-color: #2a4043; font-family: Helvetica, Arial, sans-serif; font-weight: bold; font-size: 30px; padding: 12px; color: #fff;">
+        Yukon
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p style="margin: 0; font-weight: bold; text-align: left; border-left: 6px solid #244402; background-color: #E1EBD7; color: #244402; padding: 10px;">
+                Your application was successfully received.</p>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-left: 16px; padding-top: 16px;"><p><b>What you need to do</b></p></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 16px; font-size: 12px;"><p>You don't need to do anything right now.</p></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 16px; padding-top: 16px;"><p><b>What will happen next</b></p></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 16px; font-size: 12px;"><p>${next_steps_message}</p></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 16px; padding-top: 16px;"><p><b>If you need to contact us</b></p></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 16px; font-size: 12px;"><p>For questions about student transportation options email: <a
+                href="mailto:student.transportation@yukon.ca">student.transportation@yukon.ca</a>
+        </p>
+            <p>If you have questions about bus services, contact Standard Bus Yukon at 867-456-3210.</p></td>
+    </tr>
+    <tr>
+        <td style="padding: 16px;"><a href="https://yukon.ca">Government of Yukon
+            website</a></td>
+    </tr>
+    <tr>
+        <td style="border-top: solid 1px #eff0ed; padding: 16px;">
+            <p><span style="font-size: 12px; font-weight: normal; font-style: italic; color: #919191;">This is an automatically generated email. Please do not reply to this email.</span>
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

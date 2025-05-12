@@ -1,0 +1,22 @@
+<html><body>
+	<table style="width: 480px; font-family: Helvetica, Arial, sans-serif; border: 0; padding: 0; vertical-align: top; text-align: left; word-wrap: break-word; margin: 16px auto; color:#323232; background-color:#FFFCF9; border-collapse: collapse;">
+		<tbody>
+			<tr>
+				<td style="height: 100px; width: 480px; background-color: #2a4043; border-bottom: 3pt solid #f7bd34; font-family: Helvetica, Arial, sans-serif; font-weight: bold; font-size: 20px; line-height: 20px; padding: 12px; color: #fff;">
+					&nbsp;Yukon
+				</td>
+			</tr>
+			<tr>
+				<td style="font-family: Helvetica, Arial, sans-serif; height: auto; background-color: #FFFCF9; padding: 32px 16px 20px 16px; ">
+					<pre style="font-size: 13px; font-family: Helvetica, Arial, sans-serif;  font-weight: normal; color: #323232;">${template_message}</pre>
+				</td>
+			</tr>
+			<tr>
+				<td style="border-top: solid 1px #eff0ed; padding: 16px;">
+					<p><span style="font-size: 12px; font-weight: normal; font-style: italic; color: #919191;">This is an automatically generated email. Please do not reply to this email.</span></p>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
