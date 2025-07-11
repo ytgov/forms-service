@@ -63,21 +63,19 @@ function calculatePug() {
 
     if (location === "Rural") {
       if (isSingle && income < 148900 || isCouple && combinedIncome < 210000) {
-            guideBridge.setFocus("startPanel");
-            guideBridge.setFocus("guide[0].guide1[0].guideRootPanel[0].startPanel[0]");
+         guideBridge.setFocus(startPanel.somExpression);
             return true;
       }
     }
 
     if (location === "Urban") {
        if (isSingle && income < 148900 || isCouple && combinedIncome < 210000) {
-            guideBridge.setFocus("startPanel");
-            guideBridge.setFocus("guide[0].guide1[0].guideRootPanel[0].startPanel[0]");
+            guideBridge.setFocus(startPanel.somExpression);
             return true;
        }
     }
 
-    guideBridge.setFocus(startPanel.somExpression);
+    guideBridge.setFocus(ineligiblePanel.somExpression);
     console.info("[calculatePug] Eligibility conditions not met.");
     return false;
 
