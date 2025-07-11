@@ -71,7 +71,7 @@ function calculatePug() {
        }
     }
 
-    guideBridge.setFocus("ineligiblePanel");
+    guideBridge.setFocus(startPanel.somExpression);
     console.info("[calculatePug] Eligibility conditions not met.");
     return false;
 
