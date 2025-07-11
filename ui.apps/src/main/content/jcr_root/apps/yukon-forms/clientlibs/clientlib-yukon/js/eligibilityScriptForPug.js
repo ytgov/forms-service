@@ -1,3 +1,9 @@
+/**
+ * Calculates the eligibility for pioneer utility grant application
+ * @name calculatePug Calculate PUG Eligibility
+ * @returns {boolean}
+ */
+
 function calculatePug() {
   try {
     var locationNode = guideBridge.resolveNode("location");
