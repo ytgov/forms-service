@@ -30,7 +30,7 @@ public class QueryStringPrefillService implements DataProvider {
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().create();
 
     // Helper Functions
-    // Build the nested JSON structure, "UserDetails.name" → { "UserDetails": { "name": "John" } }
+    // Build the nested JSON structure, "UserDetails.name" > { "UserDetails": { "name": "John" } }
     private static void buildDataStructure(Map<String, Object> root, String path, Object value) {
         String[] parts = path.split("\\."); // split by .
         Map<String, Object> cursor = root;
@@ -73,8 +73,10 @@ public class QueryStringPrefillService implements DataProvider {
                     String key = entry.getKey();
                     if (key == null || key.isBlank() || isIgnorableKey(key)) continue;
 
-                    // Support BOTH dotted and flat keys. If the key contains dots, treat as path.
-                    // If it doesn't, we’ll just put it at root (still works for fields bound by last-segment).
+                    // Support both dotted and flat keys. If the key contains dots, treat as path.
+                    // flat keys: ?name=john&email=john@example.com
+                    // dotted keys: ?userinfo.name=john&userinfo.age=26
+                    // If it doesn't, then put it at root (still works for fields bound by last-segment).
                     if (entry.getValue() instanceof String) {
                         String v = (String) entry.getValue();
                         if (key.contains(".")) buildDataStructure(data, key, v);
