@@ -69,29 +69,68 @@ public class QueryStringPrefillService implements DataProvider {
             Map<String, Object> data = new LinkedHashMap<>();
 
             if (extras != null) {
+                // Resolve url_referrer, if declared in params get that value, otherwise get Header Referer, exposed in extras as "url_referrer"
+                String resolvedReferrer = null;
+                Object p = extras.get("url_referrer");
+                if (p instanceof String && !((String) p).isBlank()) {
+                    resolvedReferrer = (String) p;
+                } else if (p instanceof String[] && ((String[]) p).length > 0 && !((String[]) p)[0].isBlank()) {
+                    resolvedReferrer = ((String[]) p)[0];
+                } else if (p instanceof java.util.Collection && !((java.util.Collection<?>) p).isEmpty()) {
+                    Object first = ((java.util.Collection<?>) p).iterator().next();
+                    if (first != null && !String.valueOf(first).isBlank()) {
+                        resolvedReferrer = String.valueOf(first);
+                    }
+                } else {
+                    // Fallback to HTTP Referer Header value exposed in extras as "referer"
+                    Object h = extras.get("referer");
+                    if (h instanceof String && !((String) h).isBlank()) {
+                        resolvedReferrer = (String) h;
+                    } else if (h instanceof String[] && ((String[]) h).length > 0 && !((String[]) h)[0].isBlank()) {
+                        resolvedReferrer = ((String[]) h)[0];
+                    } else if (h instanceof java.util.Collection && !((java.util.Collection<?>) h).isEmpty()) {
+                        Object firstH = ((java.util.Collection<?>) h).iterator().next();
+                        if (firstH != null && !String.valueOf(firstH).isBlank()) {
+                            resolvedReferrer = String.valueOf(firstH);
+                        }
+                    }
+                }
+
                 for (Map.Entry<String, Object> entry : extras.entrySet()) {
+                    // Skip null, blank and AEM system params from JSON prefill data
                     String key = entry.getKey();
                     if (key == null || key.isBlank() || isIgnorableKey(key)) continue;
+
+                    // Explicitly skip url_referrer and referer to avoid duplicates
+                    String keyLower = key.toLowerCase();
+                    if (keyLower.equals("url_referrer") || keyLower.equals("referer")) continue;
 
                     // Support both dotted and flat keys. If the key contains dots, treat as path.
                     // flat keys: ?name=john&email=john@example.com
                     // dotted keys: ?userinfo.name=john&userinfo.age=26
                     // If it doesn't, then put it at root (still works for fields bound by last-segment).
-                    if (entry.getValue() instanceof String) {
-                        String v = (String) entry.getValue();
+                    Object dataValue = entry.getValue();
+                    if (dataValue instanceof String) {
+                        String v = (String) dataValue;
                         if (key.contains(".")) buildDataStructure(data, key, v);
                         else data.put(key, v);
-                    } else if (entry.getValue() instanceof String[]) {
-                        List<String> list = java.util.Arrays.asList((String[]) entry.getValue());
+                    } else if (dataValue instanceof String[]) {
+                        List<String> list = java.util.Arrays.asList((String[]) dataValue);
                         if (key.contains(".")) buildDataStructure(data, key, list);
                         else data.put(key, list);
-                    } else if (entry.getValue() instanceof java.util.Collection) {
+                    } else if (dataValue instanceof java.util.Collection) {
                         java.util.List<String> list = new java.util.ArrayList<>();
-                        for (Object o : (java.util.Collection<?>) entry.getValue()) if (o != null) list.add(String.valueOf(o));
+                        for (Object o : (java.util.Collection<?>) dataValue) if (o != null) list.add(String.valueOf(o));
                         if (key.contains(".")) buildDataStructure(data, key, list);
                         else data.put(key, list);
                     }
                     // Skip other types silently, ex: skip non-string-ish values
+                }
+
+                // Add the resolved referrer
+                if (resolvedReferrer != null && !resolvedReferrer.isBlank()) {
+                    // Save under "url_referrer"
+                    data.put("url_referrer", resolvedReferrer);
                 }
             }
 
