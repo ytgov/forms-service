@@ -32,7 +32,7 @@ function loadFormWithQueryParams() {
 
         // Get URL Parameters
         var qs = new URLSearchParams(search);
-        var dataStructure = {}; // dotted keys → nested object
+        var dataStructure = {}; // dotted keys -> nested object
         var uniqueKeys = new Set(); // dedupe keys (URLSearchParams iterates per value)
         qs.forEach(function(_, k) {
             if (k) {
@@ -44,11 +44,25 @@ function loadFormWithQueryParams() {
         var resolvedReferrer = "";
         var tmpUrlRef = (qs.get("url_referrer") || "").trim();
         if (tmpUrlRef) {
-            resolvedReferrer = tmpUrlRef;
+            // decode + as space
+            var r1 = tmpUrlRef.replace(/\+/g, " ");
+            try {
+                resolvedReferrer = decodeURIComponent(r1);
+            } catch (e) {
+                resolvedReferrer = r1;
+            }
         } else {
             try {
                 var docRef = (document.referrer || "").trim();
-                if (docRef) resolvedReferrer = docRef;
+                if (docRef) {
+                    // decode + as space
+                    var r2 = docRef.replace(/\+/g, " ");
+                    try {
+                        resolvedReferrer = decodeURIComponent(r2);
+                    } catch (e) {
+                        resolvedReferrer = r2;
+                    }
+                }
             } catch (e) {
                 // nothing
             }
@@ -62,8 +76,13 @@ function loadFormWithQueryParams() {
             if (lk === "url_referrer" || lk === "referer") return; // avoid duplicates
 
             var values = qs.getAll(key)
-                .map(function(v) { return v; })
-                .filter(function(v) { return v != null && String(v).trim() !== ""; });
+                .map(function(v) {
+                    v = (v == null) ? "" : String(v);
+                    // decode and trim
+                    v = v.replace(/\+/g, " ");
+                    return v.trim();
+                })
+                .filter(function(v) { return v != null; });
 
             if (values.length === 0) return;
             var value = (values.length === 1) ? values[0] : values;
@@ -111,7 +130,11 @@ function loadFormWithQueryParams() {
             // Skip AEM system params from JSON prefill data
             if (lk === "wcmmode" || lk === "cq_ck" || lk === "url_referrer" || lk === "referer") return;
 
-            var values = qs.getAll(key);
+            var values = qs.getAll(key).map(function(v){
+                v = (v == null) ? "" : String(v);
+                v = v.replace(/\+/g, " "); // normalize +
+                return v;
+            });
             var val = (values && values.length) ? values[0] : "";
 
             var candidates = [key];
