@@ -71,13 +71,9 @@ public class QueryStringPrefillService implements DataProvider {
 
     @Override
     public PrefillData getPrefillData(DataOptions dataOptions) throws FormsException {
-        log.info("QueryStringPrefillService --------- V4.1 ------- Prefill START extras={}", dataOptions.getExtras());
-
         try {
             // Read query params (via extras)
             // AEM passes request‑context parameters via DataOptions “extras” & copy all of them into the AF prefill structure.
-            log.info("QueryStringPrefillService --------- V4.1 -------  in function");
-
             Map<String, Object> extras = dataOptions.getExtras(); // contains request-scope data like query params
             Map<String, Object> data = new LinkedHashMap<>();
 
@@ -175,7 +171,7 @@ public class QueryStringPrefillService implements DataProvider {
                 }
             }
 
-            log.info("QueryStringPrefillService --------- V4.1 -------  Prefill called with extras: {}", data);
+            log.info("QueryStringPrefillService: Prefill called with extras: {}", data);
 
             // Build Foundation AF prefill JSON: afData.afBoundData.data
             Map<String, Object> payload = Map.of(
@@ -187,12 +183,9 @@ public class QueryStringPrefillService implements DataProvider {
             );
 
             byte[] bytes = GSON.toJson(payload).getBytes(StandardCharsets.UTF_8);
-            log.info("QueryStringPrefillService --------- V4.1 ------- Prefill OK bytes={}", bytes.length);
             return new PrefillData(new ByteArrayInputStream(bytes), ContentType.JSON);
 
         } catch (Exception ex) {
-            log.error("QueryStringPrefillService --------- V4.1 ------- Prefill FAIL", ex);
-
             // Always return a valid (empty) payload to avoid UI hang
             byte[] empty = "{\"afData\":{\"afBoundData\":{\"data\":{}}}}".getBytes(StandardCharsets.UTF_8);
             return new PrefillData(new ByteArrayInputStream(empty), ContentType.JSON);
