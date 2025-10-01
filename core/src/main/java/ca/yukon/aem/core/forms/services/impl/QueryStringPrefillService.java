@@ -59,7 +59,8 @@ public class QueryStringPrefillService implements DataProvider {
 
     // Unicode and non-ASCII Character decoder
     private static String urlDecodeUtf8(String s) {
-        if (s == null || s.isBlank()) return s;
+        if (s == null) return null;
+        if (s.isBlank()) return s;
         try {
             return URLDecoder.decode(s, StandardCharsets.UTF_8);
         } catch (IllegalArgumentException ex) {
@@ -70,12 +71,12 @@ public class QueryStringPrefillService implements DataProvider {
 
     @Override
     public PrefillData getPrefillData(DataOptions dataOptions) throws FormsException {
-        log.info("QueryStringPrefillService --------- V3 ------- Prefill START extras={}", dataOptions.getExtras());
+        log.info("QueryStringPrefillService --------- V4.1 ------- Prefill START extras={}", dataOptions.getExtras());
 
         try {
             // Read query params (via extras)
             // AEM passes request‑context parameters via DataOptions “extras” & copy all of them into the AF prefill structure.
-            log.info("QueryStringPrefillService --------- V3 -------  in function");
+            log.info("QueryStringPrefillService --------- V4.1 -------  in function");
 
             Map<String, Object> extras = dataOptions.getExtras(); // contains request-scope data like query params
             Map<String, Object> data = new LinkedHashMap<>();
@@ -108,43 +109,63 @@ public class QueryStringPrefillService implements DataProvider {
                     }
                 }
 
-                if (resolvedReferrer != null) {
-                    resolvedReferrer = urlDecodeUtf8(resolvedReferrer);
-                }
+                // If the filter (RaqQueryInjectorFilter) injected the raw query, parse it with LAST-WINS
+                Object rq = extras.get("requestQueryString");
+                String rawQuery = (rq instanceof String) ? (String) rq
+                        : (rq instanceof String[] && ((String[]) rq).length > 0 ? ((String[]) rq)[0] : null);
 
-                for (Map.Entry<String, Object> entry : extras.entrySet()) {
-                    // Skip null, blank and AEM system params from JSON prefill data
-                    String key = entry.getKey();
-                    if (key == null || key.isBlank() || isIgnorableKey(key)) continue;
+                if (rawQuery != null && !rawQuery.isBlank()) {
+                    // Parse left→right and overwrite per key (last wins). Ignore wcmmode/cq_ck and referrer keys.
+                    String q = rawQuery.startsWith("?") ? rawQuery.substring(1) : rawQuery;
+                    Map<String, String> last = new LinkedHashMap<>();
 
-                    // Explicitly skip url_referrer and referer to avoid duplicates
-                    // Locale.ROOT = Make sure param values behave consistently regardless of locale
-                    String keyLower = key.toLowerCase(Locale.ROOT);
-                    if (keyLower.equals("url_referrer") || keyLower.equals("referer")) continue;
-
-                    // Support both dotted and flat keys. If the key contains dots, treat as path.
-                    // flat keys: ?name=john&email=john@example.com
-                    // dotted keys: ?userinfo.name=john&userinfo.age=26
-                    // If it doesn't, then put it at root (still works for fields bound by last-segment).
-                    Object dataValue = entry.getValue();
-                    if (dataValue instanceof String) {
-                        String v = urlDecodeUtf8((String) dataValue);
-                        if (key.contains(".")) buildDataStructure(data, key, v);
-                        else data.put(key, v);
-                    } else if (dataValue instanceof String[]) {
-                        List<String> decoded = new ArrayList<>();
-                        for (String s : (String[]) dataValue) decoded.add(urlDecodeUtf8(s));
-                        if (key.contains(".")) buildDataStructure(data, key, decoded);
-                        else data.put(key, decoded);
-                    } else if (dataValue instanceof java.util.Collection) {
-                        List<String> decoded = new ArrayList<>();
-                        for (Object o : (java.util.Collection<?>) dataValue) {
-                            if (o != null) decoded.add(urlDecodeUtf8(String.valueOf(o)));
-                        }
-                        if (key.contains(".")) buildDataStructure(data, key, decoded);
-                        else data.put(key, decoded);
+                    for (String pair : q.split("&")) {
+                        if (pair.isEmpty()) continue;
+                        int idx = pair.indexOf('=');
+                        String k = urlDecodeUtf8(idx >= 0 ? pair.substring(0, idx) : pair);
+                        String v = urlDecodeUtf8(idx >= 0 ? pair.substring(idx + 1) : "");
+                        if (k == null || k.isBlank()) continue;
+                        String lk = k.toLowerCase(Locale.ROOT);
+                        if (isIgnorableKey(k) || "url_referrer".equals(lk) || "referer".equals(lk)) continue;
+                        last.put(k, v); // overwrite → last wins
                     }
-                    // Skip other types silently, ex: skip non-string-ish values
+
+                    for (Map.Entry<String, String> entry : last.entrySet()) {
+                        // Skip null, blank and AEM system params from JSON prefill data
+                        String key = entry.getKey();
+                        String value = entry.getValue();
+
+                        // Support both dotted and flat keys. If the key contains dots, treat as path.
+                        // flat keys: ?name=john&email=john@example.com
+                        // dotted keys: ?userinfo.name=john&userinfo.age=26
+                        if (key.contains(".")) buildDataStructure(data, key, value);
+                        else data.put(key, value);
+                    }
+                } else {
+                    // fallback
+                    for (Map.Entry<String, Object> entry : extras.entrySet()) {
+                        String key = entry.getKey();
+                        if (key == null || key.isBlank() || isIgnorableKey(key)) continue;
+
+                        String keyLower = key.toLowerCase(Locale.ROOT); // small robustness tweak
+                        if (keyLower.equals("url_referrer") || keyLower.equals("referer")) continue;
+
+                        Object dataValue = entry.getValue();
+                        if (dataValue instanceof String) {
+                            String v = (String) dataValue;
+                            if (key.contains(".")) buildDataStructure(data, key, v);
+                            else data.put(key, v);
+                        } else if (dataValue instanceof String[]) {
+                            List<String> list = Arrays.asList((String[]) dataValue);
+                            if (key.contains(".")) buildDataStructure(data, key, list);
+                            else data.put(key, list);
+                        } else if (dataValue instanceof java.util.Collection) {
+                            List<String> list = new ArrayList<>();
+                            for (Object o : (java.util.Collection<?>) dataValue) if (o != null) list.add(String.valueOf(o));
+                            if (key.contains(".")) buildDataStructure(data, key, list);
+                            else data.put(key, list);
+                        }
+                    }
                 }
 
                 // Add the resolved referrer
@@ -154,7 +175,7 @@ public class QueryStringPrefillService implements DataProvider {
                 }
             }
 
-            log.info("QueryStringPrefillService --------- V3 -------  Prefill called with extras: {}", extras);
+            log.info("QueryStringPrefillService --------- V4.1 -------  Prefill called with extras: {}", data);
 
             // Build Foundation AF prefill JSON: afData.afBoundData.data
             Map<String, Object> payload = Map.of(
@@ -166,17 +187,16 @@ public class QueryStringPrefillService implements DataProvider {
             );
 
             byte[] bytes = GSON.toJson(payload).getBytes(StandardCharsets.UTF_8);
-            log.info("QueryStringPrefillService --------- V3 ------- Prefill OK bytes={}", bytes.length);
+            log.info("QueryStringPrefillService --------- V4.1 ------- Prefill OK bytes={}", bytes.length);
             return new PrefillData(new ByteArrayInputStream(bytes), ContentType.JSON);
 
         } catch (Exception ex) {
-            log.error("QueryStringPrefillService --------- V3 ------- Prefill FAIL", ex);
+            log.error("QueryStringPrefillService --------- V4.1 ------- Prefill FAIL", ex);
 
             // Always return a valid (empty) payload to avoid UI hang
             byte[] empty = "{\"afData\":{\"afBoundData\":{\"data\":{}}}}".getBytes(StandardCharsets.UTF_8);
             return new PrefillData(new ByteArrayInputStream(empty), ContentType.JSON);
         }
-
     }
 
     @Override

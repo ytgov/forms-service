@@ -1,7 +1,7 @@
 /**
  * To be used on guideRootPanel is initialized event
  * @name loadFormWithQueryParams Load Form with Query Params
- * @returns {string}
+ * @returns {void}
  */
 
 function loadFormWithQueryParams() {
@@ -32,35 +32,25 @@ function loadFormWithQueryParams() {
 
         // Get URL Parameters
         var qs = new URLSearchParams(search);
-        var dataStructure = {}; // dotted keys -> nested object
-        var uniqueKeys = new Set(); // dedupe keys (URLSearchParams iterates per value)
-        qs.forEach(function(_, k) {
-            if (k) {
-                uniqueKeys.add(k);
-            }
-        });
+        var dataStructure = Object.create(null); // dotted keys -> nested object
+        var lastValues = Object.create(null); // dedupe keys (URLSearchParams iterates per value), store the last occurrence of a key-value pair
 
         // Resolve url_referrer: param first, then document.referrer (browser analogue of HTTP Referer)
         var resolvedReferrer = "";
-        var tmpUrlRef = (qs.get("url_referrer") || "").trim();
+        var allUrlRef = qs.getAll("url_referrer");
+        var tmpUrlRef = allUrlRef.length ? allUrlRef[allUrlRef.length - 1] : "";
+        tmpUrlRef = (tmpUrlRef || "").trim();
         if (tmpUrlRef) {
-            // decode + as space
-            var r1 = tmpUrlRef.replace(/\+/g, " ");
-            try {
-                resolvedReferrer = decodeURIComponent(r1);
-            } catch (e) {
-                resolvedReferrer = r1;
-            }
+            // decode '+' as space
+            resolvedReferrer = tmpUrlRef.replace(/\+/g, " ");
         } else {
             try {
                 var docRef = (document.referrer || "").trim();
                 if (docRef) {
-                    // decode + as space
-                    var r2 = docRef.replace(/\+/g, " ");
                     try {
-                        resolvedReferrer = decodeURIComponent(r2);
+                        resolvedReferrer = decodeURI(docRef);
                     } catch (e) {
-                        resolvedReferrer = r2;
+                        resolvedReferrer = docRef;
                     }
                 }
             } catch (e) {
@@ -68,24 +58,24 @@ function loadFormWithQueryParams() {
             }
         }
 
-        // Build the nested JSON structure for dotted keys, userinfo.name=john > {userinfo:{name:"john"}})
-        uniqueKeys.forEach(function (key) {
+        // Collect the last value per key (overwrites earlier ones)
+        qs.forEach(function (value, key) {
             if (!key) return;
             var lk = key.toLowerCase();
-            if (lk === "wcmmode" || lk === "cq_ck") return; // ignore AEM tech params
-            if (lk === "url_referrer" || lk === "referer") return; // avoid duplicates
+            // Ignore AEM tech params and avoid duplicates for referrer keys
+            if (lk === "wcmmode" || lk === "cq_ck" || lk === "url_referrer" || lk === "referer") return; // ignore tech/dup keys
 
-            var values = qs.getAll(key)
-                .map(function(v) {
-                    v = (v == null) ? "" : String(v);
-                    // decode and trim
-                    v = v.replace(/\+/g, " ");
-                    return v.trim();
-                })
-                .filter(function(v) { return v != null; });
+            // URLSearchParams decodes %xx; normalize '+' -> space and trim
+            var v = (value == null) ? "" : String(value);
+            v = v.replace(/\+/g, " ").trim();
+            if (v !== "") {
+                lastValues[key] = v; // later duplicates overwrite earlier ones
+            }
+        });
 
-            if (values.length === 0) return;
-            var value = (values.length === 1) ? values[0] : values;
+        // Build the nested JSON structure for dotted keys, userinfo.name=john > {userinfo:{name:"john"}})
+        Object.keys(lastValues).forEach(function (key) {
+            var value = lastValues[key];
 
             if (key.indexOf(".") > -1) {
                 // inline buildDataStructure(root=data, path=key, value=value)
@@ -94,16 +84,22 @@ function loadFormWithQueryParams() {
                 for (var i = 0; i < parts.length; i++) {
                     var last = (i === parts.length - 1);
                     var p = parts[i];
+
+                    // Guard against prototype pollution & empty segments
+                    if (!p || p === "__proto__" || p === "constructor" || p === "prototype") continue;
+
                     if (last) {
                         cursor[p] = value;
                     } else {
                         if (typeof cursor[p] !== "object" || cursor[p] === null || Array.isArray(cursor[p])) {
-                            cursor[p] = {};
+                            cursor[p] = Object.create(null);
                         }
                         cursor = cursor[p];
                     }
                 }
             } else {
+                // Guard against prototype pollution at root
+                if (key === "__proto__" || key === "constructor" || key === "prototype") return;
                 dataStructure[key] = value;
             }
         });
@@ -123,22 +119,15 @@ function loadFormWithQueryParams() {
         // Set values field-by-field (covers flat keys and dotted-last-segment fallbacks)
         // flat keys: ?name=john&email=john@example.com
         // dotted keys: ?userinfo.name=john&userinfo.age=26
-        uniqueKeys.forEach(function (key) {
-            if (!key) return;
+        Object.keys(lastValues).forEach(function (key) {
             var lk = String(key).toLowerCase();
 
             // Skip AEM system params from JSON prefill data
             if (lk === "wcmmode" || lk === "cq_ck" || lk === "url_referrer" || lk === "referer") return;
 
-            var values = qs.getAll(key).map(function(v){
-                v = (v == null) ? "" : String(v);
-                v = v.replace(/\+/g, " "); // normalize +
-                return v;
-            });
-            var val = (values && values.length) ? values[0] : "";
-
+            var val = lastValues[key];
             var candidates = [key];
-            if (key.indexOf(".") > -1) candidates.push(key.split(".").pop()); // userinfo.name → name
+            if (key.indexOf(".") > -1) candidates.push(key.split(".").pop()); // userinfo.name -> name
 
             for (var i = 0; i < candidates.length; i++) {
                 try {
@@ -174,4 +163,3 @@ function loadFormWithQueryParams() {
         }
     });
 }
-
