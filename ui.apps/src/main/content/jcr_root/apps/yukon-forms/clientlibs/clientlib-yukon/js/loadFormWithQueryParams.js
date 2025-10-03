@@ -86,7 +86,7 @@ function loadFormWithQueryParams() {
                     var p = parts[i];
 
                     // Guard against prototype pollution & empty segments
-                    if (!p || p === "__proto__" || p === "constructor" || p === "prototype") continue;
+                    if (!p || p === "__proto__" || p === "constructor" || p === "prototype") return;
 
                     if (last) {
                         cursor[p] = value;
