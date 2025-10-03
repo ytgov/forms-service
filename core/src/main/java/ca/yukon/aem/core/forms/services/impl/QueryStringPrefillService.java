@@ -32,11 +32,23 @@ public class QueryStringPrefillService implements DataProvider {
 
     // Helper Functions
     // Build the nested JSON structure, "UserDetails.name" > { "UserDetails": { "name": "John" } }
+    // Add Validation against prototype pollution attacks in the nested key path
     private static void buildDataStructure(Map<String, Object> root, String path, Object value) {
         String[] parts = path.split("\\."); // split by .
         Map<String, Object> cursor = root;
         for (int i = 0; i < parts.length; i++) {
-            String key = parts[i];
+            String raw = parts[i];
+            String key = (raw == null) ? "" : raw.trim();
+
+            // Validate against prototype pollution
+            if (key.isEmpty()
+                    || "__proto__".equalsIgnoreCase(key)
+                    || "constructor".equalsIgnoreCase(key)
+                    || "prototype".equalsIgnoreCase(key)) {
+                // Drop the whole path if any segment is dangerous/empty
+                return;
+            }
+
             boolean last = (i == parts.length - 1);
             if (last) {
                 cursor.put(key, value);
@@ -64,8 +76,8 @@ public class QueryStringPrefillService implements DataProvider {
         try {
             return URLDecoder.decode(s, StandardCharsets.UTF_8);
         } catch (IllegalArgumentException ex) {
-            // If malformed % sequence, then keep original to avoid data loss
-            return s;
+            log.warn("Failed to decode URL parameter, rejecting: {}", s);
+            return "";
         }
     }
 
@@ -171,8 +183,6 @@ public class QueryStringPrefillService implements DataProvider {
                 }
             }
 
-            log.info("QueryStringPrefillService: Prefill called with extras: {}", data);
-
             // Build Foundation AF prefill JSON: afData.afBoundData.data
             Map<String, Object> payload = Map.of(
                     "afData", Map.of(
@@ -186,6 +196,7 @@ public class QueryStringPrefillService implements DataProvider {
             return new PrefillData(new ByteArrayInputStream(bytes), ContentType.JSON);
 
         } catch (Exception ex) {
+            log.error("Error in QueryStringPrefillService, returning empty payload", ex);
             // Always return a valid (empty) payload to avoid UI hang
             byte[] empty = "{\"afData\":{\"afBoundData\":{\"data\":{}}}}".getBytes(StandardCharsets.UTF_8);
             return new PrefillData(new ByteArrayInputStream(empty), ContentType.JSON);
