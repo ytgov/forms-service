@@ -26,8 +26,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 @Component
-public class PrefillAdaptiveForm implements DataXMLProvider {
-    private static final Logger log = LoggerFactory.getLogger(PrefillAdaptiveForm.class);
+public class PrefillLoggedinUserAdaptiveForm implements DataXMLProvider {
+    private static final Logger log = LoggerFactory.getLogger(PrefillLoggedinUserAdaptiveForm.class);
 
     @Override
     public String getServiceDescription() {

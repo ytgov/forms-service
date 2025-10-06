@@ -1,7 +1,8 @@
 #base=js
 
-validateDateByDaysPassed.js
-phnValidation.js
-matomoScript.js
-generateUniqueId.js
 eligibilityScriptForPug.js
+generateUniqueId.js
+loadFormWithQueryParams.js
+matomoScript.js
+phnValidation.js
+validateDateByDaysPassed.js
