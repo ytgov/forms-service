@@ -21,4 +21,6 @@
     <filter root="/content/dam/yukon-forms/Aurora-main.2615cb39.png" mode="merge"/>
     <filter root="/content/dam/yukon-forms/forms-theme-assets/" mode="merge"/>
     <filter root="/content/forms/af/yukon-forms/" mode="merge"/>
+	<filter root="/etc/clientlibs/en-ca" mode="merge"/>
+	<filter root="/etc/clientlibs/fr-ca" mode="merge"/>
 </workspaceFilter>

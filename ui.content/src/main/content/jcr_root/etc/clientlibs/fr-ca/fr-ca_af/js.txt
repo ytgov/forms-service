@@ -1,0 +1,2 @@
+javascript/i18n.js
+javascript/LogMessages.js
