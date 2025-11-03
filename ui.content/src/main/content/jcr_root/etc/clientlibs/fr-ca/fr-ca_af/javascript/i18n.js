@@ -15,15 +15,13 @@
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe Systems Incorporated.
+ *
+ * Copied from: /libs/fd/af/runtime/clientlibs/I18N/fr/javascript/i18n.js
+ *
  **************************************************************************/
 
 (function (guidelib) {
-    "use strict";
-
-    guidelib.i18n = guidelib.i18n || {};
-
-    // Define all locale-specific formatting, symbols, calendar strings, etc.
-    guidelib.i18n["fr-CA"] = {
+    guidelib.i18n = {
         "calendarSymbols": {
             "monthNames": [
                 "janvier",
@@ -88,45 +86,38 @@
             "more": "plus",
             "less": "moins"
         },
-
         "datePatterns": {
-            "full":  "EEEE D MMMM YYYY",
-            "long":  "D MMMM YYYY",
-            "med":   "D MMM YY",
+            "full": "EEEE D MMMM YYYY",
+            "long": "D MMMM YYYY",
+            "med": "D MMM YY",
             "short": "DD/MM/YY"
         },
-
         "timePatterns": {
-            "full":  "HH' h 'MM Z",
-            "long":  "HH:MM:SS Z",
-            "med":   "HH:MM:SS",
+            "full": "HH' h 'MM Z",
+            "long": "HH:MM:SS Z",
+            "med": "HH:MM:SS",
             "short": "HH:MM"
         },
-
         "dateTimeSymbols": "GaMjkHmsSEDFwWxhKzZ",
-
         "numberPatterns": {
-            "numeric":  "z,zz9.zzz",
+            "numeric": "z,zz9.zzz",
             "currency": "z,zz9.99 $",
-            "percent":  "z,zz9%"
+            "percent": "z,zz9%"
         },
-
         "numberSymbols": {
-            "decimal":  ",",
+            "decimal": ",",
             "grouping": " ",
-            "percent":  "%",
-            "minus":    "-",
-            "zero":     "0"
+            "percent": "%",
+            "minus": "-",
+            "zero": "0"
         },
-
-        // TODO: UPDATE AFTER TESTING
         "currencySymbols": {
-            "CAD": "&",
-            "USD": "&",
-            "EUR": "&"
+            "symbol": "€",
+            "isoname": "EUR",
+            "decimal": ","
         },
-
         "typefaces": {}
-    };
 
-}(window.guidelib = window.guidelib || {}));
+
+    };
+}(guidelib));

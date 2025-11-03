@@ -14,18 +14,14 @@
  *  Dissemination of this information or reproduction of this material
  *  is strictly forbidden unless prior written permission is obtained
  *  from Adobe Systems Incorporated.
+ *
+ *  Copied from: /libs/fd/xfaforms/clientlibs/I18N/fr_FR/I18N.js
+ *
  ******************************************************************************/
 
-(function (xfalib) {
-    "use strict";
-
-    window.xfalib = window.xfalib || {};
-    xfalib = window.xfalib;
-
-    xfalib.locale = xfalib.locale || {};
-    xfalib.locale.Strings = xfalib.locale.Strings || {};
-
-    xfalib.locale.Strings["fr-CA"] = {
+(function(xfalib){
+    xfalib.locale.Strings =
+        {
             "pleaseTapText"         :       "Appuyez ici pour signer.",
             "pleaseClickText"       :       "Cliquez ici pour signer.",
             "clearSignature"        :       "Effacer la confirmation de signature",
@@ -61,4 +57,4 @@
             "typeYourSignatureHere" :       "Tapez votre signature ici",
             "typeYourName"          :       "Tapez votre nom"
         }
-})(window.xfalib);
+})(xfalib);

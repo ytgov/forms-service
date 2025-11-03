@@ -1,2 +1,3 @@
-javascript/i18n.js
-javascript/LogMessages.js
+#base=javascript
+i18n.js
+LogMessages.js

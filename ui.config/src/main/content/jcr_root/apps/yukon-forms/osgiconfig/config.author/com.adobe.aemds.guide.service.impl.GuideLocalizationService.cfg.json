@@ -1,8 +1,6 @@
 {
   "supportedLocales": [
     "en",
-    "en-CA",
-    "fr",
     "fr-CA"
   ],
   "localizableProperties": [
