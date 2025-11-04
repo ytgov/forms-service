@@ -112,8 +112,8 @@
             "zero": "0"
         },
         "currencySymbols": {
-            "symbol": "€",
-            "isoname": "EUR",
+            "symbol": "$",
+            "isoname": "CAD",
             "decimal": ","
         },
         "typefaces": {}
