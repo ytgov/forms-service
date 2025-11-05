@@ -1,0 +1,3 @@
+#base=javascript
+i18n.js
+LogMessages.js
