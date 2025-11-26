@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// Kept as an example reference for future development
+
 @Model(adaptables = Resource.class)
 public class UserInfoModel {
 
