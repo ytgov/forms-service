@@ -3,7 +3,6 @@
     jcr:primaryType="sling:OrderedFolder">
     <sample_logo.png/>
     <sample_terms.png/>
-    <wknd_logo.png/>
     <af_model_sample.json/>
     <jcr:content
         cq:conf="/conf/yukon-forms"
