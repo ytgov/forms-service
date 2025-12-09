@@ -6,3 +6,5 @@ loadFormWithQueryParams.js
 matomoScript.js
 phnValidation.js
 validateDateByDaysPassed.js
+setFeedbackLinkParameters.js
+
