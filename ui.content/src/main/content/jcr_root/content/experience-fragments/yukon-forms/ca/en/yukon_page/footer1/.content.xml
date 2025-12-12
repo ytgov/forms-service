@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:isDelivered="{Boolean}false"
+        cq:lastModified="{Date}2025-11-26T19:15:50.742Z"
+        cq:lastModifiedBy="Amelia.haslbeck@yukon.ca"
+        cq:lastReplicated="{Date}2025-11-26T19:23:44.319Z"
+        cq:lastReplicated_publish="{Date}2025-11-26T19:23:44.319Z"
+        cq:lastReplicatedBy="Amelia.haslbeck@yukon.ca"
+        cq:lastReplicatedBy_publish="Amelia.haslbeck@yukon.ca"
+        cq:lastReplicationAction="Activate"
+        cq:lastReplicationAction_publish="Activate"
+        cq:tags="[]"
+        cq:template="/libs/cq/experience-fragments/components/experiencefragment/template"
+        jcr:isCheckedOut="{Boolean}true"
+        jcr:mixinTypes="[cq:ReplicationStatus2,mix:versionable]"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Footer"
+        jcr:uuid="70e0d92b-8ae0-49d2-a516-a0672666c1d2"
+        sling:resourceType="cq/experience-fragments/components/experiencefragment"/>
+    <master/>
+</jcr:root>

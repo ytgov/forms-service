@@ -5,4 +5,5 @@
     <jcr:content jcr:primaryType="nt:unstructured"/>
     <header/>
     <footer/>
+    <footer1/>
 </jcr:root>

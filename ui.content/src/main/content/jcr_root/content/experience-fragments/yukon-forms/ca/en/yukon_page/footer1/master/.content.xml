@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:isDelivered="{Boolean}false"
+        cq:lastModified="{Date}2025-12-11T16:09:25.374-08:00"
+        cq:lastModifiedBy="admin"
+        cq:lastReplicated="{Date}2025-12-03T17:10:12.817Z"
+        cq:lastReplicated_publish="{Date}2025-12-03T17:10:12.817Z"
+        cq:lastReplicatedBy="anai@ensemble.com"
+        cq:lastReplicatedBy_publish="anai@ensemble.com"
+        cq:lastReplicationAction="Activate"
+        cq:lastReplicationAction_publish="Activate"
+        cq:tags="[experience-fragments:variation/web]"
+        cq:template="/conf/yukon-forms/settings/wcm/templates/xf-web-variation"
+        cq:xfVariantType="web"
+        jcr:isCheckedOut="{Boolean}true"
+        jcr:mixinTypes="[cq:ReplicationStatus2,mix:versionable]"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Footer with feedback link for Yukon Page"
+        jcr:uuid="e047cc06-ecf3-42f0-9cc3-93f041334c9b"
+        sling:resourceType="yukon-forms/components/xfpage">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="yukon-forms/components/container"
+            layout="responsiveGrid">
+            <embed
+                jcr:created="{Date}2025-11-26T19:21:26.560Z"
+                jcr:createdBy="Amelia.haslbeck@yukon.ca"
+                jcr:lastModified="{Date}2025-12-11T16:09:25.335-08:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="yukon-forms/components/embed"
+                html="&lt;a target=&quot;_blank&quot; class=&quot;yg-submit-feedback-link&quot; &#xd;&#xa;  href=&quot;https://forms2.service.yukon.ca/content/yukon-forms/ca/en/hpw/submit-feedback-about-your-digital-service-experience.html&quot;>&#xd;&#xa;  Submit feedback about this service testing jo&#xd;&#xa;&lt;/a>&#xd;&#xa;&#xd;&#xa;"
+                type="html"/>
+            <text
+                jcr:created="{Date}2025-01-14T11:55:08.632Z"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2025-11-26T19:16:55.671Z"
+                jcr:lastModifiedBy="Amelia.haslbeck@yukon.ca"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="yukon-forms/components/text"
+                text="&lt;p>©&amp;nbsp;2025, Government of Yukon | All rights reserved&lt;/p>&#xd;&#xa;"
+                textIsRich="true"/>
+        </root>
+        <cq:metadata
+            jcr:primaryType="nt:unstructured"
+            max-cols="1"
+            min-cols="1"/>
+    </jcr:content>
+</jcr:root>
