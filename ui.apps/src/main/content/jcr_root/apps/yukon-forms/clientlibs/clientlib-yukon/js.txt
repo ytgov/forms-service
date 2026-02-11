@@ -7,4 +7,5 @@ matomoScript.js
 phnValidation.js
 validateDateByDaysPassed.js
 setFeedbackLinkParameters.js
+triggerPerPanelValidation.js
 
