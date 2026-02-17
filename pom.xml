@@ -555,18 +555,6 @@ Bundle-DocURL:
         <artifactId>core-forms-components-af-core</artifactId>
         <version>${core.forms.components.af.version}</version>
       </dependency>
-      <dependency>
-        <groupId>com.adobe.aem</groupId>
-        <artifactId>core-forms-components-examples-apps</artifactId>
-        <type>zip</type>
-        <version>${core.forms.components.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.adobe.aem</groupId>
-        <artifactId>core-forms-components-examples-content</artifactId>
-        <type>zip</type>
-        <version>${core.forms.components.version}</version>
-      </dependency>
       <!-- Testing -->
       <dependency>
         <groupId>org.junit</groupId>
