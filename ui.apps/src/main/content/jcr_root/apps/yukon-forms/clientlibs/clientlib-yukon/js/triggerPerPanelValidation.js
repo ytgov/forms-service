@@ -20,10 +20,9 @@ const flattenItems = (parentNode) => {
 window.addEventListener('bridgeInitializeStart', (e) => {
 	const guide = e.detail.guideBridge;
 	guide.on('elementButtonClicked', (_e, payload) => {
-		const componentSOM = payload.target.somExpression;
-		const nextButtonSOM = 'guide[0].guide1[0].guideRootPanel[0].toolbar[0].nextitemnav[0]';
+		const componentType = payload.target?.jsonModel?.type;
 
-		if (componentSOM === nextButtonSOM) {
+		if (componentType === 'moveNext') {
 			console.debug('Clicked on "Next" toolbar button');
 			const hasNavigated = guide.setFocus(null, 'prevItemDeep');
 			if (window.formState) {
@@ -48,15 +47,18 @@ document.addEventListener('DOMContentLoaded', () => {
 			const activePanel = window.guideBridge.resolveNode(activePanelSOM);
 			if (window.formState) {
 				if (!window.formState.wasOnStartPage) {
-					// Checks if the user has completed any fields (with the exception of those that are defined by custom rules)
+					// Checks if the user has completed any fields (with the exception of those that are defined by custom rules), or if any of the fields has already been marked as invalid
 					const activePanelFieldsCompleted = flattenItems(activePanel).filter((item) => {
-						return item?.visible
-							&& item?.enabled
-							&& !item?.jsonModel?.calcExp
-							&& !(item?.jsonModel?.['{default}'] && item?.value === item?.jsonModel?.['{default}'])
-							&& item?.value !== null
-							&& item?.value !== undefined
-							&& item?.value !== '';
+						return item?.isValid === false
+							|| (item?.visible
+								&& item?.enabled
+								&& item?.jsonModel?.defaultToCurrentDate !== 'true'
+								&& !item?.jsonModel?.calcExp
+								&& !(item?.jsonModel?.['{default}'] && item?.value === item?.jsonModel?.['{default}'])
+								&& item?.value !== null
+								&& item?.value !== undefined
+								&& item?.value !== ''
+							);
 					});
 					// If the user has not entered any data, skip validation and proceed to the next panel
 					if (activePanelFieldsCompleted.length === 0) {
