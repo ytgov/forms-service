@@ -20,6 +20,73 @@ var flattenItems = function flattenItems(parentNode) {
 };
 
 /**
+ * Finds the first fillable field of a panel
+ */
+var getFirstFillableField = function getFirstFillableField(parentPanel) {
+	if (parentPanel === null || parentPanel === undefined) {
+		console.debug('No parent panel found.');
+		return null;
+	}
+	var firstFillableField = null;
+	parentPanel.visit(function (cmp) {
+		if (cmp.className !== 'guidePanel'
+			&& cmp.className !== 'guideInstanceManager'
+			&& cmp.className !== 'guideTextDraw'
+			&& cmp.className !== 'guideButton'
+			&& cmp.enabled === true
+			&& cmp.visible
+		) {
+			if (firstFillableField === null) {
+				console.debug('Found first fillable field.');
+				firstFillableField = cmp.somExpression;
+				return;
+			}
+			console.debug('First fillable field already found.');
+			return;
+		}
+	});
+	return firstFillableField;
+};
+
+/**
+ * Scrolls to the top of the page and looks for a fillable field. 
+ */
+var setFocusToFirstFillableField = function setFocusToFirstFillableField(guide, panel) {
+	window.scrollTo(0, 0);
+	var firstFillableField = getFirstFillableField(panel);
+	if (firstFillableField) {
+		guide.setFocus(firstFillableField);
+		return true;
+	}
+	return false;
+};
+
+/**
+ * Wraps toolbar navigation to ensure that the first fillable field is on focus.
+ */
+var navigatePanels = function navigatePanels(guide, isForward) {
+	if (guide === null || guide === undefined) {
+		console.debug('No guide bridge found.');
+	}
+	var activePanelSOM = guide.getFocus({
+		'focusOption': 'navigablePanel'
+	});
+	var activePanel = guide.resolveNode(activePanelSOM);
+	if (!activePanel) {
+		console.debug('Failed to find active panel');
+		return;
+	}
+	var rootPanel = activePanel.parent;
+	if (!rootPanel || !rootPanel.navigationContext) {
+		console.debug('Failed to find navigation context');
+	}
+	var destination = isForward ? rootPanel.navigationContext.nextItem : rootPanel.navigationContext.prevItem;
+	if (!(setFocusToFirstFillableField(guide, destination))) {
+		guide.setFocus(destination)
+	}
+};
+
+/**
  * Navigates to the previous panel when the 'Next' toolbar button is clicked. A workaround, as preventing event propagation does not work.
  */
 
