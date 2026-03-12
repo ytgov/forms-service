@@ -82,7 +82,7 @@ var navigatePanels = function navigatePanels(guide, isForward) {
 		console.debug('Failed to find navigation context');
 	}
 	var destination = isForward ? rootPanel.navigationContext.nextItem : rootPanel.navigationContext.prevItem;
-	if (!(setFocusToFirstFillableField(guide, destination)) {
+	if (!(setFocusToFirstFillableField(guide, destination))) {
 		guide.setFocus(destination)
 	}
 };
