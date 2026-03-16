@@ -165,3 +165,25 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	});
 });
+
+/**
+ * Ensures that focus is set to the first fillable field (if it exists) when the 'Previous' toolbar button is clicked.
+ */
+document.addEventListener('DOMContentLoaded', function() {
+	var prevButton = document.querySelector('button.movePrev');
+	if (prevButton === null || prevButton === undefined) {
+		return;
+	}
+	prevButton.addEventListener('click', function(e) {
+		if (!window.formState.wasOnFinishPage) {
+			navigatePanels(window.guideBridge, false);
+		} else {
+			var activePanelSOM = window.guideBridge.getFocus({
+				'focusOption': 'navigablePanel'
+			});
+			var activePanel = window.guideBridge.resolveNode(activePanelSOM);
+			setFocusToFirstFillableField(window.guideBridge, activePanel);
+		}
+	});
+});
+
