@@ -186,6 +186,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (!window.formState.wasOnFinishPage) {
 			navigatePanels(window.guideBridge, false);
 		} else {
+			var activePanelSOM = window.guideBridge.getFocus({
+				'focusOption': 'navigablePanel'
+			});
+			var activePanel = window.guideBridge.resolveNode(activePanelSOM);
 			setFocusToFirstFillableField(window.guideBridge, activePanel);
 		}
 	});
