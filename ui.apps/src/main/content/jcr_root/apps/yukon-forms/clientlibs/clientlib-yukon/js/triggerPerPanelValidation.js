@@ -1,5 +1,6 @@
 window.formState = {
-	wasOnStartPage: true
+	wasOnStartPage: true,
+	wasOnFinishPage: false
 };
 
 /**
@@ -89,7 +90,6 @@ var navigatePanels = function navigatePanels(guide, isForward) {
 /**
  * Navigates to the previous panel when the 'Next' toolbar button is clicked. A workaround, as preventing event propagation does not work.
  */
-
 window.addEventListener('bridgeInitializeStart', function(e) {
 	var guide = e.detail.guideBridge;
 	guide.on('elementButtonClicked', function(_e, payload) {
@@ -107,13 +107,19 @@ window.addEventListener('bridgeInitializeStart', function(e) {
 				window.formState.wasOnStartPage = !hasNavigated;
 			}
 		}
+		if (componentType === 'movePrev') {
+			console.debug('Clicked on "Previous" toolbar button');
+			var hasNavigated = guide.setFocus(null, 'nextItemDeep');
+			if (window.formState) {
+				window.formState.wasOnFinishPage = !hasNavigated;
+			}
+		}
 	});
 });
 
 /**
  * Triggers validation of the active panel when the 'Next' toolbar button is clicked. If validation is successful, navigates to the next panel.
  */
-
 document.addEventListener('DOMContentLoaded', function() {
 	var nextButton = document.querySelector('button.moveNext');
 	if (nextButton === null || nextButton === undefined) {
@@ -147,17 +153,19 @@ document.addEventListener('DOMContentLoaded', function() {
 					// If the user has not entered any data, skip validation and proceed to the next panel
 					if (activePanelFieldsCompleted.length === 0) {
 						console.debug('No data entered in the panel. Skipping validation.');
-						window.guideBridge.setFocus(null, 'nextItemDeep');
+						navigatePanels(window.guideBridge, true);
 						return;
 					}
 					var validation = window.guideBridge.validate([], activePanelSOM);
 					if (validation) {
 						console.debug(
 							'Panel successfully validated. Proceeding to next panel.');
-						window.guideBridge.setFocus(null, 'nextItemDeep');
+						navigatePanels(window.guideBridge, true);
 					} else {
 						console.debug('Validation errors encountered.');
 					}
+				} else {	
+					setFocusToFirstFillableField(window.guideBridge, activePanel);
 				}
 			}
 		} catch (e) {
