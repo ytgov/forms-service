@@ -7,5 +7,17 @@ main.container {
 
 footer + .link {
     padding: 0 1em .5em;
+
+    a {
+      color: #005a65;
+      
+      &:hover {
+        color: #008392;
+      }
+
+      &:visited {
+        color: #643f5d;
+      }
+    }
 }
 
