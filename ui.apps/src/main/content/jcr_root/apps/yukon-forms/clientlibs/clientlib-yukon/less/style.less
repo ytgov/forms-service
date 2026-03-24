@@ -1,5 +1,7 @@
-@text-color: #323232;
-@link-text-color: #2020e0;
+@text-color: #000000;
+@link-text-color: #005a65;
+@link-text-color-hover: #008392;
+@link-text-color-visited: #643f5d;
 
 body {
     background-color: white;
@@ -12,4 +14,12 @@ p, label, h1, h2, h3, h4, h5, h6 {
 
 a {
     color: @link-text-color;
+
+    &:hover {
+        color: @link-text-color-hover;
+    }
+
+    &:visited {
+        color: @link-text-color-visited;
+    }
 }
