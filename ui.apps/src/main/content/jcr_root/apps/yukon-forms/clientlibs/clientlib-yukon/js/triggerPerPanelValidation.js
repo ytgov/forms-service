@@ -32,7 +32,8 @@ var getFirstFillableField = function getFirstFillableField(parentPanel) {
 	parentPanel.visit(function (cmp) {
 		if (cmp.className !== 'guidePanel'
 			&& cmp.className !== 'guideInstanceManager'
-			&& cmp.className !== 'guideTextDraw'
+			// note: can add this back when viewport math with cmp elements doesn't cause errors 
+			// && cmp.className !== 'guideTextDraw'
 			&& cmp.className !== 'guideButton'
 			&& cmp.enabled === true
 			&& cmp.visible
