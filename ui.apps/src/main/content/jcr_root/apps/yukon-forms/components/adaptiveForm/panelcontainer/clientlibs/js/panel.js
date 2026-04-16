@@ -49,3 +49,37 @@ document.addEventListener('click', (e) => {
     sibling = sibling.nextElementSibling;
   }
 });
+
+// Replace AEM's built-in panel header functionality to work with our expand/collapse all
+document.addEventListener('click', (e) => {
+  const toggle = e.target.closest('[data-guide-toggle="accordion-tab"]');
+  if (!toggle) return;
+
+  // Stop AEM's listener from firing
+  e.stopPropagation();
+  e.preventDefault();
+
+  // Find the panel this header belongs to
+  const panel = toggle.closest('[data-guide-parent-id]');
+  if (!panel) return;
+
+  const btn = panel.querySelector('[aria-expanded]');
+  const content = panel.querySelector('.afAccordionPanel');
+  const isExpanded = btn?.getAttribute('aria-expanded') === 'true';
+
+  if (isExpanded) {
+    panel.classList.remove('active');
+    if (btn) {
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-pressed', 'false');
+    }
+    if (content) content.style.display = 'none';
+  } else {
+    panel.classList.add('active');
+    if (btn) {
+      btn.setAttribute('aria-expanded', 'true');
+      btn.setAttribute('aria-pressed', 'true');
+    }
+    if (content) content.style.display = '';
+  }
+}, true);
