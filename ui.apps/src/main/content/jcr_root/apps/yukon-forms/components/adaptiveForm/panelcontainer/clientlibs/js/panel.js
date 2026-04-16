@@ -1,22 +1,51 @@
-function setAllAccordions(expand) {
-  document.querySelectorAll('.accordion').forEach(accordion => {
-    console.debug('in function, accordion:', accordion)
-    accordion.querySelectorAll('[aria-expanded]').forEach(btn => {
-      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
-      if (expand && !isExpanded) btn.click();
-      if (!expand && isExpanded) btn.click();
-    });
+function setAccordion(accordionEl, expand) {
+  // Get all child panels
+  const panels = accordionEl.querySelectorAll('[data-guide-parent-id]');
+
+  panels.forEach(panel => {
+    const btn = panel.querySelector('[aria-expanded]');
+    const content = panel.querySelector('.afAccordionPanel');
+
+    if (expand) {
+      panel.classList.add('active');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'true');
+        btn.setAttribute('aria-pressed', 'true');
+      }
+      if (content) content.style.display = '';
+    } 
+    else {
+      panel.classList.remove('active');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-pressed', 'false');
+      }
+      if (content) content.style.display = 'none';
+    }
   });
 }
 
-// TODO: fix click mechanism
 document.addEventListener('click', (e) => {
-  if (e.target.closest('[name="expandAllBtn"]')) {
-    console.debug('set to true');
-    setAllAccordions(true);
+  const expandBtn = e.target.closest('[aria-label="Expand All"]');
+  const collapseBtn = e.target.closest('[aria-label="Collapse All"]');
+  
+  const clicked = expandBtn || collapseBtn;
+  if (!clicked) return;
+
+  const expand = !!expandBtn;
+
+  // Walk up to the outermost guide-item wrapper
+  const buttonWrapper = clicked.closest('[data-guide-parent-id]');
+  if (!buttonWrapper) return;
+
+  // The accordion is in a sibling div, find the next sibling that contains .accordion-navigators
+  let sibling = buttonWrapper.nextElementSibling;
+  while (sibling) {
+    const accordion = sibling.querySelector('.accordion-navigators');
+    if (accordion) {
+      setAccordion(accordion, expand);
+      return;
+    }
+    sibling = sibling.nextElementSibling;
   }
-  if (e.target.closest('[name="collapseAllBtn"]')) {
-    console.debug('set to false');
-    setAllAccordions(false);
-  }
-})
+});
