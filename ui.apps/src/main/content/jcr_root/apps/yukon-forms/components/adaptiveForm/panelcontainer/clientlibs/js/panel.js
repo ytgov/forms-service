@@ -26,8 +26,8 @@ function setAccordion(accordionEl, expand) {
 }
 
 document.addEventListener('click', (e) => {
-  const expandBtn = e.target.closest('[aria-label="Expand All"]') || e.target.closest('[aria-label="Tout afficher"]');
-  const collapseBtn = e.target.closest('[aria-label="Collapse All"]') || e.target.closest('[aria-label="Masquer"]');
+  const expandBtn = e.target.closest('.expandAllPanelsButton');
+  const collapseBtn = e.target.closest('.collapseAllPanelsButton');
   
   const clicked = expandBtn || collapseBtn;
   if (!clicked) return;
@@ -65,8 +65,8 @@ document.addEventListener('click', (e) => {
 
   // Check if a sibling expand/collapse button exists
   const hasManagedButton = accordionWrapper.parentElement?.querySelector(
-    '[aria-label="Expand All"], [aria-label="Collapse All"], ' +
-    '[aria-label="Tout afficher"], [aria-label="Masquer"]'
+    '.expandAllPanelsButton, ' +
+    '.collapseAllPanelsButton'
   );
 
   // If no expand/collapse button nearby, let AEM handle it normally
