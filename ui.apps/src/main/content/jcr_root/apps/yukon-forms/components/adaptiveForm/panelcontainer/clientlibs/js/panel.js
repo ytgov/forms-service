@@ -1,6 +1,6 @@
 function setAccordion(accordionEl, expand) {
   // Get all child panels
-  const panels = accordionEl.querySelectorAll('[data-guide-parent-id]');
+  const panels = accordionEl.querySelectorAll(':scope > [data-guide-parent-id]');
 
   panels.forEach(panel => {
     const btn = panel.querySelector('[aria-expanded]');
@@ -26,8 +26,8 @@ function setAccordion(accordionEl, expand) {
 }
 
 document.addEventListener('click', (e) => {
-  const expandBtn = e.target.closest('[aria-label="Expand All"]');
-  const collapseBtn = e.target.closest('[aria-label="Collapse All"]');
+  const expandBtn = e.target.closest('[aria-label="Expand All"]') || e.target.closest('[aria-label="Tout afficher"]');
+  const collapseBtn = e.target.closest('[aria-label="Collapse All"]') || e.target.closest('[aria-label="Masquer"]');
   
   const clicked = expandBtn || collapseBtn;
   if (!clicked) return;
@@ -55,11 +55,27 @@ document.addEventListener('click', (e) => {
   const toggle = e.target.closest('[data-guide-toggle="accordion-tab"]');
   if (!toggle) return;
 
-  // Stop AEM's listener from firing
+  // Find the .accordion-navigators this toggle belongs to
+  const accordionNav = toggle.closest('.accordion-navigators');
+  if (!accordionNav) return;
+
+  // Walk up to the outermost guide-item wrapper that contains this accordion
+  const accordionWrapper = accordionNav.closest('[data-guide-parent-id]');
+  if (!accordionWrapper) return;
+
+  // Check if a sibling expand/collapse button exists
+  const hasManagedButton = accordionWrapper.parentElement?.querySelector(
+    '[aria-label="Expand All"], [aria-label="Collapse All"], ' +
+    '[aria-label="Tout afficher"], [aria-label="Masquer"]'
+  );
+
+  // If no expand/collapse button nearby, let AEM handle it normally
+  if (!hasManagedButton) return;
+
+  // Otherwise, stop AEM's listener from firing
   e.stopPropagation();
   e.preventDefault();
 
-  // Find the panel this header belongs to
   const panel = toggle.closest('[data-guide-parent-id]');
   if (!panel) return;
 
