@@ -52,6 +52,9 @@ document.addEventListener('click', function(e) {
 
 // Replace AEM's built-in panel header functionality to work with our expand/collapse all
 document.addEventListener('click', function(e) {
+  // Allow the remove button to work normally
+  if (e.target.closest('[data-guide-addremove="remove"]')) return;
+
   var toggle = e.target.closest('[data-guide-toggle="accordion-tab"]');
   if (!toggle) return;
 
