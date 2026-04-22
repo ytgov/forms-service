@@ -1,0 +1,39 @@
+<html>
+<body>
+<table style="width: 480px; font-family: Helvetica, Arial, sans-serif; border: 0; padding: 0; vertical-align: top; text-align: left; word-wrap: break-word; margin: 16px auto; color:#323232; border-collapse: collapse;">
+    <tbody style="text-align: left; border-bottom: solid 1px #202020; padding: 20px; font-size: 14px;">
+    <tr>
+        <td>
+            <p style="margin: 0; font-weight: normal; text-align: left; border-left: 6px solid #244402; background-color: #E1EBD7; color: #244402; padding: 10px;">
+                Your Petition was successfully generated.</p>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-left: 16px; padding-top: 16px;"><p><b>What you need to do</b></p></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 16px; font-size: 12px;"><p>You do not need to do anything right now. A copy of your petition is attached to this email. Use it to file your request in the Court Registry Information System.</p></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 16px; padding-top: 16px;"><p><b>What will happen next</b></p></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 16px; font-size: 12px;"><p>Lorem, ipsum, dolor sit amet.</p></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 16px; padding-top: 16px;"><p><b>If you need help</b></p></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 16px; font-size: 12px;"><p>Email xxx@yukon.ca or phone xxx-xxx-xxxx if you need assistance. Refer to confirmation "ABC123".</p></td>
+    </tr>
+    <tr>
+        <td style="border-top: solid 1px #eff0ed; padding: 16px;">
+            <p><span style="font-size: 12px; font-weight: normal; font-style: italic; color: #919191;">This is an automatically generated email. Please do not reply to this email.</span>
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
+
