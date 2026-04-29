@@ -204,6 +204,7 @@ function getFilteredFormattedData(containerName, repeatableName, fieldNamesCsv, 
     return formatData(data, itemTemplate, separator);
 };
 
+// TODO: look into making the destination more general, i.e. a param
 // pre-populate destination field with data from a repeatable panel
 function runPrePopulate() {
     var data = getDataFromRepeatablePanel(
@@ -225,7 +226,7 @@ function runPrePopulate() {
     );
 
     var root = guideBridge._guide && guideBridge._guide.rootPanel;
-    var destField = _findByName(root, "outsideYukonIndividualNames"); // destination component name
+    var destField = _findByName(root, "outsideYukonIndividualNames"); // destination component name, TODO: change to 'endorsementDoR'
     if (destField) {
         destField.value = result;
         console.debug("[nav] populated:", result);
