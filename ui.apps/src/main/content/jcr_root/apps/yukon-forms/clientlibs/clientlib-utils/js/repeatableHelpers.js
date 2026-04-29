@@ -23,7 +23,6 @@ function _findByName(node, name, visited) {
 // TODO: rendering repeatable panels from replicated data causes form to freeze
 // // Renders an item using either a single template string or a {discriminator -> template} map.
 // function _renderItem(item, templateOrMap, discriminatorField) {
-//     console.debug('_renderItem running')
 //     var template;
 //     if (typeof templateOrMap === "string") {
 //         template = templateOrMap;
@@ -46,7 +45,6 @@ one per instance, with the fields you requested.
 @return {string} JSON string of the extracted data (array of objects)
  */
 function getDataFromRepeatablePanel(containerName, repeatableName, fieldNamesCsv) {
-    console.debug("[getDataFromRepeatablePanel] called with:", { containerName: containerName, repeatableName: repeatableName, fieldNamesCsv: fieldNamesCsv });
 
     var fieldNames = fieldNamesCsv.split(",").map(function (s) { return s.trim(); });
     var root = guideBridge._guide && guideBridge._guide.rootPanel;
@@ -64,7 +62,6 @@ function getDataFromRepeatablePanel(containerName, repeatableName, fieldNamesCsv
     if (!repeatable || !repeatable.instanceManager) { console.warn("no instanceManager on:", repeatableName); return "[]"; }
 
     var instances = repeatable.instanceManager.instances;
-    console.debug("[getDataFromRepeatablePanel] instance count:", instances.length);
 
     var results = instances.map(function (inst, idx) {
         var item = { _index: idx };
@@ -73,11 +70,9 @@ function getDataFromRepeatablePanel(containerName, repeatableName, fieldNamesCsv
             var field = _findByName(inst, fieldName);
             item[fieldName] = field ? field.value : "";
         });
-        console.debug("[getDataFromRepeatablePanel] instance " + idx + ":", item);
         return item;
     });
 
-    console.debug("[getDataFromRepeatablePanel] returning:", results);
     return JSON.stringify(results);
 };
 
@@ -92,7 +87,6 @@ Filters an array of objects by whether a given field matches (or doesn't match) 
 @return {string} JSON string of filtered data
  */
 function filterData(dataJson, fieldName, operator, value) {
-    console.debug("[filterData] called with:", { fieldName: fieldName, operator: operator, value: value });
 
     var data;
     try { data = JSON.parse(dataJson); }
@@ -103,7 +97,6 @@ function filterData(dataJson, fieldName, operator, value) {
         return operator === "notEquals" ? actual !== value : actual === value;
     });
 
-    console.debug("[filterData] filtered count:", filtered.length, "of", data.length);
     return JSON.stringify(filtered);
 };
 
@@ -116,7 +109,6 @@ function filterData(dataJson, fieldName, operator, value) {
 @return {string}
  */
 function formatData(dataJson, itemTemplate, separator) {
-    console.debug("[formatData] called with:", { itemTemplate: itemTemplate, separator: separator });
 
     var data;
     try { data = JSON.parse(dataJson); }
@@ -129,7 +121,6 @@ function formatData(dataJson, itemTemplate, separator) {
     }).filter(Boolean);
 
     var output = lines.join(separator !== "," ? separator : ", ");
-    console.debug("[formatData] returning:", output);
     return output;
 };
 
@@ -144,11 +135,6 @@ Formats data with conditional templates based on a discriminator field.
 @return {string}
  */
 function formatDataConditional(dataJson, discriminatorField, templateMapJson, separator) {
-    console.debug("[formatDataConditional] called with:", {
-        discriminatorField: discriminatorField,
-        templateMapJson: templateMapJson,
-        separator: separator
-    });
 
     var data, templateMap;
     try {
@@ -168,7 +154,6 @@ function formatDataConditional(dataJson, discriminatorField, templateMapJson, se
     }).filter(Boolean);
 
     var output = lines.join(separator || ", ");
-    console.debug("[formatDataConditional] returning:", output);
     return output;
 }
 
@@ -187,16 +172,7 @@ Convenience function that gets, filters, and formats repeatable panel data in on
 @return {string}
  */
 function getFilteredFormattedData(containerName, repeatableName, fieldNamesCsv, filterField, filterOperator, filterValue, itemTemplate, separator) {
-    console.debug("[getFilteredFormatted] called with:", {
-        containerName: containerName,
-        repeatableName: repeatableName,
-        fieldNamesCsv: fieldNamesCsv,
-        filterField: filterField,
-        filterOperator: filterOperator,
-        filterValue: filterValue,
-        itemTemplate: itemTemplate,
-        separator: separator
-    });
+
     var data = getDataFromRepeatablePanel(containerName, repeatableName, fieldNamesCsv);
     if (filterField) {
         data = filterData(data, filterField, filterOperator, filterValue);
@@ -229,7 +205,6 @@ function runPrePopulate() {
     var destField = _findByName(root, "outsideYukonIndividualNames"); // destination component name, TODO: change to 'endorsementDoR'
     if (destField) {
         destField.value = result;
-        console.debug("[nav] populated:", result);
     }
 };
 
@@ -254,25 +229,11 @@ function runPrePopulate() {
 // function populatePanelsFromData(sourceContainerName, sourceRepeatableName, fieldNamesCsv,
 //                                        filterField, filterOperator, filterValue,
 //                                        targetContainerName, targetRepeatableName, targetFieldName, itemTemplate, discriminatorField) {
-//     console.debug("[populatePanelsFromData] called with:", {
-//         sourceContainerName: sourceContainerName, 
-//         sourceRepeatableName: sourceRepeatableName, 
-//         fieldNamesCsv: fieldNamesCsv,
-//         filterField: filterField, 
-//         filterOperator: filterOperator, 
-//         filterValue: filterValue,
-//         targetContainerName: targetContainerName, 
-//         targetRepeatableName: targetRepeatableName, 
-//         targetFieldName: targetFieldName, 
-//         itemTemplate: itemTemplate,
-//         discriminatorField: discriminatorField
-//     });
 
 //     // 1. Get + filter source data
 //     var dataJson = getDataFromRepeatablePanel(sourceContainerName, sourceRepeatableName, fieldNamesCsv);
 //     if (filterField) dataJson = filterData(dataJson, filterField, filterOperator, filterValue);
 //     var data = JSON.parse(dataJson);
-//     console.debug("[populatePanelsFromData] filtered data:", data);
 
 //     // 2. Find target repeatable
 //     var root = guideBridge._guide && guideBridge._guide.rootPanel;
@@ -287,7 +248,6 @@ function runPrePopulate() {
 //     if (!targetRepeatable || !targetRepeatable.instanceManager) { console.warn("target repeatable not found"); return "Error"; }
 
 //     var im = targetRepeatable.instanceManager;
-//     console.debug("[populatePanelsFromData] current target instances:", im.instances.length, "| needed:", data.length);
 
 //     // 3. Adjust instance count
 //     var minOccur = im.minOccur || 0;
@@ -311,7 +271,6 @@ function runPrePopulate() {
 
 //             var rendered = _renderItem(item, itemTemplate, discriminatorField);
 //             field.value = rendered;
-//             console.debug("[populatePanelsFromData] set instance " + idx + " field to:", rendered);
 //         });
 //     }, 100);
 
@@ -341,29 +300,36 @@ function runPrePopulate() {
 
 // listener for nav to destination panel for where to replicate data to
 (function () {
+    var MAX_RETRIES = 50;
+    var RETRY_INTERVAL = 200;
+    var retryCount = 0;
+
     function setupNavigationListener() {
         if (typeof guideBridge === "undefined" || !guideBridge.on) {
-            setTimeout(setupNavigationListener, 200);
+            retryCount++;
+            if (retryCount >= MAX_RETRIES) {
+                console.warn("[setupNavigationListener] guideBridge not ready after " + 
+                    (MAX_RETRIES * RETRY_INTERVAL / 1000) + 
+                    " seconds. Navigation listener will not be registered.");
+                return;
+            }
+            setTimeout(setupNavigationListener, RETRY_INTERVAL);
             return;
         }
 
         guideBridge.on("elementNavigationChanged", function (event, payload) {
             var targetName = payload && payload.target && payload.target.name;
-            console.debug("[nav] arrived at:", targetName);
 
             if (targetName === "serviceOutsideYukon") {
-                console.debug("[nav] running pre-populate (text field)");
                 runPrePopulate();
             }
 
             // TODO: uncomment when dynamic panel replication is fixed
             // if (targetName === "serviceOutsideYukon") {
-            //     console.debug("[nav] running pre-populate (panels)");
             //     runPrePopulatePanels();
             // }
         });
 
-        console.debug("[nav] listener registered");
     }
 
     setupNavigationListener();
