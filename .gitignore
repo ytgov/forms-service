@@ -80,6 +80,8 @@ buildNumber.properties
 .idea/
 *.iml
 
+### vscode ###
+.vscode/
 
 ### Node.js ###
 
