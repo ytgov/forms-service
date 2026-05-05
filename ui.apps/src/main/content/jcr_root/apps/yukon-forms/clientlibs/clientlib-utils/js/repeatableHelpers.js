@@ -174,7 +174,7 @@ Convenience function that gets, filters, and formats repeatable panel data in on
 function getFilteredFormattedData(containerName, repeatableName, fieldNamesCsv, filterField, filterOperator, filterValue, itemTemplate, separator) {
 
     var data = getDataFromRepeatablePanel(containerName, repeatableName, fieldNamesCsv);
-    if (filterField) {
+    if (filterField.trim()) {
         data = filterData(data, filterField, filterOperator, filterValue);
     }
     return formatData(data, itemTemplate, separator);
