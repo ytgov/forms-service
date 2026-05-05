@@ -20,21 +20,6 @@ function _findByName(node, name, visited) {
     return null;
 };
 
-// TODO: rendering repeatable panels from replicated data causes form to freeze
-// // Renders an item using either a single template string or a {discriminator -> template} map.
-// function _renderItem(item, templateOrMap, discriminatorField) {
-//     var template;
-//     if (typeof templateOrMap === "string") {
-//         template = templateOrMap;
-//     } else {
-//         var key = item[discriminatorField];
-//         template = templateOrMap[key] || templateOrMap["_default"] || "";
-//     }
-//     return template.replace(/\{(\w+)\}/g, function (_, k) {
-//         return item[k] == null ? "" : item[k];
-//     }).trim();
-// }
-
 /** Generic getter for a repeatable panel. Returns an array of objects,
 one per instance, with the fields you requested.
  *
@@ -208,95 +193,84 @@ function runPrePopulate() {
     }
 };
 
-// TODO: fix rendering portion of logic, causing form to freeze
-// /** Adjusts a destination repeatable panel to match the number of filtered respondents,
-// then populates each instance's target field with formatted text.
-//  *
-// @name populatePanelsFromData Populate a repeatable panel with data from another repeatable
-// @param {string} sourceContainerName Name of the source wrapper panel
-// @param {string} sourceRepeatableName Name of the source repeatable
-// @param {string} fieldNamesCsv Fields to pull from source
-// @param {string} filterField Field to filter by (empty string to skip)
-// @param {string} filterOperator "equals" or "notEquals"
-// @param {string} filterValue Value to compare against
-// @param {string} targetContainerName Name of the destination wrapper panel
-// @param {string} targetRepeatableName Name of the destination repeatable
-// @param {string} targetFieldName Name of the field inside each destination instance to populate
-// @param {string} itemTemplate Template to render for each item, e.g. "{personServedFirstName} {personServedLastName}"
-// @param {string} discriminatorField Optional. Field name whose value selects which template from the map. Required if itemTemplate is a map
-// @return {string}
-//  */
-// function populatePanelsFromData(sourceContainerName, sourceRepeatableName, fieldNamesCsv,
-//                                        filterField, filterOperator, filterValue,
-//                                        targetContainerName, targetRepeatableName, targetFieldName, itemTemplate, discriminatorField) {
+/** Adds instances to a destination repeatable panel matching the count of source instances.
+Destination panels are expected to contain only blank fields — no population is done.
+ *
+@name addPanelsFromData Add instances to a repeatable panel matching the count from another repeatable panel
+@param {string} sourceContainerName Name of the source wrapper panel
+@param {string} sourceRepeatableName Name of the source repeatable panel
+@param {string} targetContainerName Name of the destination wrapper panel
+@param {string} targetRepeatableName Name of the destination repeatable panel
+@return {void} 
+ */
+function addPanelsFromData(sourceContainerName, sourceRepeatableName,
+                           targetContainerName, targetRepeatableName) {
 
-//     // 1. Get + filter source data
-//     var dataJson = getDataFromRepeatablePanel(sourceContainerName, sourceRepeatableName, fieldNamesCsv);
-//     if (filterField) dataJson = filterData(dataJson, filterField, filterOperator, filterValue);
-//     var data = JSON.parse(dataJson);
+    var root = guideBridge._guide && guideBridge._guide.rootPanel;
+    if (!root) { console.warn("[addPanelsFromData] no rootPanel"); return "Error"; }
 
-//     // 2. Find target repeatable
-//     var root = guideBridge._guide && guideBridge._guide.rootPanel;
-//     var targetContainer = _findByName(root, targetContainerName);
-//     if (!targetContainer) { console.warn("target container not found"); return "Error"; }
+    // Helper: locate a repeatable inside a container, handling the case where
+    // the container itself is wrapped in an instanceManager.
+    function findRepeatable(containerName, repeatableName) {
+        var container = _findByName(root, containerName);
+        if (!container) { console.warn("[addPanelsFromData] container not found:", containerName); return null; }
 
-//     var searchIn = targetContainer;
-//     if (targetContainer.instanceManager && targetContainer.instanceManager.instances[0]) {
-//         searchIn = targetContainer.instanceManager.instances[0];
-//     }
-//     var targetRepeatable = (searchIn.children || []).find(function (c) { return c && c.name === targetRepeatableName; });
-//     if (!targetRepeatable || !targetRepeatable.instanceManager) { console.warn("target repeatable not found"); return "Error"; }
+        var searchIn = container;
+        if (container.instanceManager && container.instanceManager.instances[0]) {
+            searchIn = container.instanceManager.instances[0];
+        }
+        var repeatable = (searchIn.children || []).find(function (c) { return c && c.name === repeatableName; });
+        if (!repeatable || !repeatable.instanceManager) {
+            console.warn("[addPanelsFromData] repeatable not found:", repeatableName);
+            return null;
+        }
+        return repeatable;
+    }
 
-//     var im = targetRepeatable.instanceManager;
+    // 1. Get source count
+    var sourceRepeatable = findRepeatable(sourceContainerName, sourceRepeatableName);
+    if (!sourceRepeatable) return "Error";
+    var sourceCount = sourceRepeatable.instanceManager.instances.length;
 
-//     // 3. Adjust instance count
-//     var minOccur = im.minOccur || 0;
-//     while (im.instances.length > Math.max(minOccur, data.length)) {
-//         im.removeInstance(im.instances.length - 1);
-//     }
-//     while (im.instances.length < data.length) {
-//         im.addInstance();
-//     }
+    // 2. Find target repeatable
+    var targetRepeatable = findRepeatable(targetContainerName, targetRepeatableName);
+    if (!targetRepeatable) return "Error";
+    var im = targetRepeatable.instanceManager;
 
-//     // TODO: fix this part, causing form to freeze
-//     // 4. Populate each instance's target field
-//     // Small delay to let AEM render newly-added instances
-//     setTimeout(function () {
-//         data.forEach(function (item, idx) {
-//             var instance = im.instances[idx];
-//             if (!instance) { console.warn("no instance at index", idx); return; }
+    // 3. Adjust instance count
+    var minOccur = im.minOccur || 0;
+    var targetLength = Math.max(minOccur, sourceCount);
 
-//             var field = _findByName(instance, targetFieldName);
-//             if (!field) { console.warn("target field not found in instance", idx); return; }
+    var toRemove = im.instances.length - targetLength;
+    for (var j = 0; j < toRemove; j++) {
+        im.removeInstance(im.instances.length - 1);
+    }
+    
+    var toAdd = targetLength - im.instances.length;
+    for (var i = 0; i < toAdd; i++) {
+        im.addInstance();
+    }
 
-//             var rendered = _renderItem(item, itemTemplate, discriminatorField);
-//             field.value = rendered;
-//         });
-//     }, 100);
+    // 4. Find all Sign Block wrappers and hide any that aren't already hidden
+    // setTimeout to let the panels finish rendering
+    setTimeout(function () {
+        document.querySelectorAll('[id$="-adobesignblock___guide-item"]').forEach(function (el) {
+            el.classList.add('hidden');
+        });
+    }, 200);
 
-//     return "Populated " + data.length + " instances";
-// };
+    return;
+};
 
-// TODO: dynamically creating repeatable panels causes form to freeze
-// pre-populate destination repeatable panel with filtered data from source repeatable
-// function runPrePopulatePanels() {
-//     populatePanelsFromData(
-//         "personsServedContainer",
-//         "personToBeServed",
-//         "personServedFirstName,personServedLastName,personServedOrganizationName,personServedIsIndividualOrOrganization,personServedMailingProvince",
-//         "personServedMailingProvince",
-//         "notEquals",
-//         "YT",
-//         "outsideYukonRespondentsContainer",   // destination wrapper panel name
-//         "outsideYukonRespondent",             // destination repeatable name
-//         "respondentName",                     // text field inside each destination instance
-//         {
-//             "Individual": "{personServedFirstName} {personServedLastName}",
-//             "Organization": "{personServedOrganizationName}"
-//         },
-//         "personServedIsIndividualOrOrganization"
-//     );
-// }
+// Add same # of instances to destination repeatable panel as source repeatable panel
+function runAddSignBlocks() {
+    addPanelsFromData(
+        "petitionersRepeatableContainer",       // source wrapper
+        "petitioner",                           // source repeatable
+        "petitionSignatures",                   // destination wrapper
+        "petitionSignatureFields"               // destination repeatable
+    );
+};
 
 // listener for nav to destination panel for where to replicate data to
 (function () {
@@ -320,14 +294,15 @@ function runPrePopulate() {
         guideBridge.on("elementNavigationChanged", function (event, payload) {
             var targetName = payload && payload.target && payload.target.name;
 
+            // on serviceOutsideYukon page, pull outside yukon respondents names & pre-populate
             if (targetName === "serviceOutsideYukon") {
                 runPrePopulate();
             }
 
-            // TODO: uncomment when dynamic panel replication is fixed
-            // if (targetName === "serviceOutsideYukon") {
-            //     runPrePopulatePanels();
-            // }
+            // on signaturePanel, add instances to repeatable signature panel matching # of petitioners
+            if (targetName === "signaturePanel") {
+                runAddSignBlocks();
+            }
         });
 
     }
