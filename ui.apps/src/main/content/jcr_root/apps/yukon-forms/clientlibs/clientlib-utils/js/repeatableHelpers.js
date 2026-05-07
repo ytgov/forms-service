@@ -252,12 +252,12 @@ function addPanelsFromData(sourceContainerName, sourceRepeatableName,
     }
 
     // 4. Find all Sign Block wrappers and hide any that aren't already hidden
-    // setTimeout to let the panels finish rendering
+    // setTimeout to let the panels finish rendering, 500ms in case of slower devices
     setTimeout(function () {
         document.querySelectorAll('[id$="-adobesignblock___guide-item"]').forEach(function (el) {
             el.classList.add('hidden');
         });
-    }, 200);
+    }, 500);
 
     return;
 };
