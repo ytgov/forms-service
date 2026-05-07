@@ -52,14 +52,28 @@ document.addEventListener('click', function(e) {
 
 // Replace AEM's built-in panel header functionality to work with our expand/collapse all
 document.addEventListener('click', function(e) {
-  // Allow the remove button to work normally
-  if (e.target.closest('[data-guide-addremove="remove"]')) return;
 
   var toggle = e.target.closest('[data-guide-toggle="accordion-tab"]');
   if (!toggle) return;
 
+  var tab = e.target.closest('.accordion-navigators > div');
+  if (!tab) return;
+
+  // Allow the remove button to work normally
+  if (e.target.closest('[data-guide-addremove="remove"]')) {
+    // Check for a control button, in which case, use that instead of the default remove button
+    var removeControl = tab.querySelector('.removeAccordionControl button');
+    if (!removeControl) {
+      return;
+    }
+    e.stopPropagation();
+    e.preventDefault();
+    removeControl.click();
+    return;
+  }
+
   // Find the .accordion-navigators this toggle belongs to
-  var accordionNav = toggle.closest('.accordion-navigators');
+  var accordionNav = tab.closest('.accordion-navigators');
   if (!accordionNav) return;
 
   // Walk up to the outermost guide-item wrapper that contains this accordion
