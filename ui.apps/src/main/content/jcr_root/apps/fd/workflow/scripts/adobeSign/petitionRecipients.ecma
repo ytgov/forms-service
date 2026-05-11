@@ -1,0 +1,74 @@
+function getAdobeSignRecipients() {
+    var recipientSetInfos = new Packages.java.util.ArrayList();
+
+    try {
+        // Get the workflow payload (path to the submission data in JCR)
+        var workflowData = graniteWorkItem.getWorkflowData();
+        var payloadPath = workflowData.getPayload().toString();
+        log.info("[petitionRecipients] payload path: " + payloadPath);
+
+        // Resolve the submitted data XML
+        // might need to adjust this path
+        var resourceResolver = graniteWorkflowSession.adaptTo(
+            Packages.org.apache.sling.api.resource.ResourceResolver
+        );
+        var dataResource = resourceResolver.getResource(payloadPath + "/data.xml/jcr:content");
+        if (dataResource === null) {
+            log.error("[petitionRecipients] data.xml not found at " + payloadPath + "/data.xml");
+            return recipientSetInfos;
+        }
+
+        var inputStream = dataResource.adaptTo(Packages.java.io.InputStream);
+        if (inputStream === null) {
+            log.error("[petitionRecipients] could not open input stream for data.xml");
+            return recipientSetInfos;
+        }
+
+        // Parse the XML
+        var factory = Packages.javax.xml.parsers.DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(false);
+        var builder = factory.newDocumentBuilder();
+        var doc = builder.parse(inputStream);
+
+        // Extract all petitionerSignEmail values
+        var xpath = Packages.javax.xml.xpath.XPathFactory.newInstance().newXPath();
+        var emailNodes = xpath.evaluate(
+            "//petitionerSignEmail",
+            doc,
+            Packages.javax.xml.xpath.XPathConstants.NODESET
+        );
+
+        log.info("[petitionRecipients] found " + emailNodes.getLength() + " email nodes");
+
+        // Build a RecipientSetInfo for each non-empty email
+        for (var i = 0; i < emailNodes.getLength(); i++) {
+            var emailRaw = emailNodes.item(i).getTextContent();
+            if (emailRaw === null) continue;
+
+            var email = String(emailRaw).trim();
+            if (email === "") {
+                log.warn("[petitionRecipients] skipping empty email at index " + i);
+                continue;
+            }
+
+            var recipientInfoSet = new com.adobe.aem.adobesign.recipient.RecipientSetInfo();
+            var recipientInfoList = new Packages.java.util.ArrayList();
+            var recipientInfo = new com.adobe.aem.adobesign.recipient.RecipientInfo();
+
+            recipientInfo.setEmail(email);
+
+            recipientInfoList.add(recipientInfo);
+            recipientInfoSet.setMemberInfos(recipientInfoList);
+            recipientSetInfos.add(recipientInfoSet);
+
+            log.info("[petitionRecipients] added recipient: " + email);
+        }
+
+        log.info("[petitionRecipients] resolved " + recipientSetInfos.size() + " recipient sets");
+
+    } catch (e) {
+        log.error("[petitionRecipients] error resolving recipients: " + e);
+    }
+
+    return recipientSetInfos;
+}
