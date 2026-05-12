@@ -32,8 +32,7 @@ var getFirstFillableField = function getFirstFillableField(parentPanel) {
 	parentPanel.visit(function (cmp) {
 		if (cmp.className !== 'guidePanel'
 			&& cmp.className !== 'guideInstanceManager'
-			// note: can add this back when viewport math with cmp elements doesn't cause errors 
-			// && cmp.className !== 'guideTextDraw'
+			&& cmp.className !== 'guideTextDraw'
 			&& cmp.className !== 'guideButton'
 			&& cmp.enabled === true
 			&& cmp.visible
@@ -54,12 +53,13 @@ var getFirstFillableField = function getFirstFillableField(parentPanel) {
  * Scrolls to the top of the page and looks for a fillable field. 
  */
 var setFocusToFirstFillableField = function setFocusToFirstFillableField(guide, panel) {
-	window.scrollTo(0, 0);
 	var firstFillableField = getFirstFillableField(panel);
 	if (firstFillableField) {
 		guide.setFocus(firstFillableField);
+		window.scrollTo(0, 0);
 		return true;
 	}
+	window.scrollTo(0, 0);
 	return false;
 };
 
