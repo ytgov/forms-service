@@ -20,18 +20,8 @@ function _findByName(node, name, visited) {
     return null;
 };
 
-/** Generic getter for a repeatable panel. Returns an array of objects,
-one per instance, with the fields you requested.
- *
-@name getDataFromRepeatablePanel Get specified fields from all instances of a repeatable panel
-@param {string} containerName Name of the wrapper panel containing the repeatable
-@param {string} repeatableName Name of the repeatable child panel
-@param {string} fieldNamesCsv Comma-separated list of field names to pull from each instance. Example: "personServedFirstName,personServedLastName"
-@return {string} JSON string of the extracted data (array of objects)
- */
-function getDataFromRepeatablePanel(containerName, repeatableName, fieldNamesCsv) {
+function _getInstanceManager(containerName, repeatableName) {
 
-    var fieldNames = fieldNamesCsv.split(",").map(function (s) { return s.trim(); });
     var root = guideBridge._guide && guideBridge._guide.rootPanel;
     if (!root) { console.warn("no rootPanel"); return "[]"; }
 
@@ -46,7 +36,31 @@ function getDataFromRepeatablePanel(containerName, repeatableName, fieldNamesCsv
     var repeatable = (searchIn.children || []).find(function (c) { return c && c.name === repeatableName; });
     if (!repeatable || !repeatable.instanceManager) { console.warn("no instanceManager on:", repeatableName); return "[]"; }
 
-    var instances = repeatable.instanceManager.instances;
+    return repeatable.instanceManager;
+}
+
+function _findRepeatableInstances(containerName, repeatableName) {
+    var instanceManager = _getInstanceManager(containerName, repeatableName);
+    if (instanceManager === "[]") {
+        return "[]";
+    }
+    return instanceManager.instances;
+}
+
+/** Generic getter for a repeatable panel. Returns an array of objects,
+one per instance, with the fields you requested.
+ *
+@name getDataFromRepeatablePanel Get specified fields from all instances of a repeatable panel
+@param {string} containerName Name of the wrapper panel containing the repeatable
+@param {string} repeatableName Name of the repeatable child panel
+@param {string} fieldNamesCsv Comma-separated list of field names to pull from each instance. Example: "personServedFirstName,personServedLastName"
+@return {string} JSON string of the extracted data (array of objects)
+ */
+function getDataFromRepeatablePanel(containerName, repeatableName, fieldNamesCsv) {
+
+    var fieldNames = fieldNamesCsv.split(",").map(function (s) { return s.trim(); });
+
+    var instances = _findRepeatableInstances(containerName, repeatableName);
 
     var results = instances.map(function (inst, idx) {
         var item = { _index: idx };
@@ -193,6 +207,65 @@ function runPrePopulate() {
     }
 };
 
+/**
+ * @name copyFieldValueToDestinationPanel
+ * @param {string} sourceContainerName - Source repeatable panel container name
+ * @param {string} sourceRepeatableName - Source repeatable panel name
+ * @param {string} sourceFieldName - The source field object name
+ * @param {string} destinationContainerName - Destination repeatable panel container name
+ * @param {string} destinationRepeatableName - Destination repeatable panel name
+ * @param {string} destinationFieldName - Name of the field in the destination panel
+ * @param {number} index - The index of the repeatable panel instance
+ */
+function copyFieldValueToDestinationPanel(sourceContainerName, sourceRepeatableName, sourceFieldName, destinationContainerName, destinationRepeatableName, destinationFieldName, index) {
+    try {
+	var sourceData = getDataFromRepeatablePanel(sourceContainerName, sourceRepeatableName, sourceFieldName);
+	
+	try { sourceData = JSON.parse(sourceData); }
+    	catch (e) { console.error("invalid source dataJson", e); return ; }
+	
+	var sourcePanel = sourceData.filter((item) => item._index === index);
+	if (sourcePanel.length === 0) {
+	    console.error("Source panel with index not found");
+	    return;
+	}
+	sourcePanel = sourcePanel[0];
+	var sourceValue = sourcePanel[sourceFieldName];
+	
+	var destinationInstances = _findRepeatableInstances(destinationContainerName, destinationRepeatableName);
+	if (destinationInstances.length <= index) {
+	    console.error("Destination panel with index not found");
+	    return;
+	}
+	var destinationField = _findByName(destinationInstances[index], destinationFieldName);
+	destinationField.value = sourceValue;
+    } catch (error) {
+        console.error("An error occurred while copying field value: ", error);
+    }
+}
+
+/**
+ * @name removeRepeatablePanelInstanceByIndex
+ * @param {string} containerName - Repeatable panel container name
+ * @param {string} repeatableName - Repeatable panel name
+ * @param {number} index - The index of the instance to remove
+ */
+function removeRepeatablePanelInstanceByIndex(containerName, repeatableName, index) {
+    try {
+	var instanceManager = _getInstanceManager(containerName, repeatableName);
+	if (instanceManager === "[]") {
+	    return;
+	}
+	if (instanceManager.instances.length <= index) {
+	    console.error("Panel with index not found");
+	    return;
+	}
+	instanceManager.removeInstance(index);
+    } catch (error) {
+	console.error("An error occurred while removing instance: ", error);
+    }
+}
+
 /** Adds instances to a destination repeatable panel matching the count of source instances.
 Destination panels are expected to contain only blank fields — no population is done.
  *
@@ -262,16 +335,6 @@ function addPanelsFromData(sourceContainerName, sourceRepeatableName,
     return;
 };
 
-// Add same # of instances to destination repeatable panel as source repeatable panel
-function runAddSignBlocks() {
-    addPanelsFromData(
-        "petitionersRepeatableContainer",       // source wrapper
-        "petitioner",                           // source repeatable
-        "petitionSignatures",                   // destination wrapper
-        "petitionSignatureFields"               // destination repeatable
-    );
-};
-
 // listener for nav to destination panel for where to replicate data to
 (function () {
     var MAX_RETRIES = 50;
@@ -297,11 +360,6 @@ function runAddSignBlocks() {
             // on serviceOutsideYukon page, pull outside yukon respondents names & pre-populate
             if (targetName === "serviceOutsideYukon") {
                 runPrePopulate();
-            }
-
-            // on signaturePanel, add instances to repeatable signature panel matching # of petitioners
-            if (targetName === "signaturePanel") {
-                runAddSignBlocks();
             }
         });
 
