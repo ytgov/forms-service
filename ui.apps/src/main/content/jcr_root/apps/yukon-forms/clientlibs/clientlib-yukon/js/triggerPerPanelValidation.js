@@ -52,12 +52,43 @@ var getFirstFillableField = function getFirstFillableField(parentPanel) {
 };
 
 /**
+ * Finds the first text draw element of a panel
+ */
+var getFirstTextDraw = function getFirstTextDraw(parentPanel) {
+	if (parentPanel === null || parentPanel === undefined) {
+		console.debug('No parent panel found.');
+		return null;
+	}
+	var firstTextDraw = null;
+	parentPanel.visit(function (cmp) {
+		if (cmp.className === 'guideTextDraw'
+			&& cmp.visible
+		) {
+			if (firstTextDraw === null) {
+				console.debug('Found first text draw.');
+				firstTextDraw = cmp.somExpression;
+				return;
+			}
+			console.debug('First text draw already found.');
+			return;
+		}
+	});
+	return firstTextDraw;
+};
+
+/**
  * Scrolls to the top of the page and looks for a fillable field. 
  */
 var setFocusToFirstFillableField = function setFocusToFirstFillableField(guide, panel) {
 	var firstFillableField = getFirstFillableField(panel);
 	if (firstFillableField) {
 		guide.setFocus(firstFillableField);
+		window.scrollTo(0, 0);
+		return true;
+	}
+	var firstTextDraw = getFirstTextDraw(panel);
+	if (firstTextDraw) {
+		guide.setFocus(firstTextDraw);
 		window.scrollTo(0, 0);
 		return true;
 	}
