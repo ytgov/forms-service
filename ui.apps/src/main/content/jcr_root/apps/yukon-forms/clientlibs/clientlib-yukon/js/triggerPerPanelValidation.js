@@ -1,6 +1,8 @@
 window.formState = {
 	wasOnStartPage: true,
-	wasOnFinishPage: false
+	wasOnFinishPage: false,
+	// toolbar buttons have their own focus logic, so we ignore focusing when the navigation changes
+	ignoreRefocus: true,
 };
 
 /**
@@ -173,6 +175,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.error("Error while resolving active panel: ".concat(e.message));
 		}
 	});
+
+	// Set focus to first fillable field for tabs
+	window.guideBridge.on("elementNavigationChanged", function(_e, payload) {
+		if (window.formState && !window.formState.ignoreRefocus) {
+			setFocusToFirstFillableField(window.guideBridge, payload.target);
+			window.formState.ignoreRefocus = true;
+		}
+	});
 });
 
 /**
@@ -194,5 +204,19 @@ document.addEventListener('DOMContentLoaded', function() {
 			setFocusToFirstFillableField(window.guideBridge, activePanel);
 		}
 	});
+});
+
+/**
+ * Enables refocus for tabs.
+ */
+document.addEventListener('DOMContentLoaded', function() {
+	var tabs = document.querySelectorAll('a.guideLeftNavIcon');
+	for (var i = 0; i < tabs.length; i++) {
+		tabs[i].addEventListener('click', function(e) {
+			if (window.formState) {
+				window.formState.ignoreRefocus = false;
+			}
+		});
+	}
 });
 
