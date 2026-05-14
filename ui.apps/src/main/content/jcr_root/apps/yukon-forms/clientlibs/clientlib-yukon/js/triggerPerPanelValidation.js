@@ -1,6 +1,8 @@
 window.formState = {
 	wasOnStartPage: true,
-	wasOnFinishPage: false
+	wasOnFinishPage: false,
+	// toolbar buttons have their own focus logic, so we ignore focusing when the navigation changes
+	ignoreRefocus: true,
 };
 
 /**
@@ -50,12 +52,43 @@ var getFirstFillableField = function getFirstFillableField(parentPanel) {
 };
 
 /**
+ * Finds the first text draw element of a panel
+ */
+var getFirstTextDraw = function getFirstTextDraw(parentPanel) {
+	if (parentPanel === null || parentPanel === undefined) {
+		console.debug('No parent panel found.');
+		return null;
+	}
+	var firstTextDraw = null;
+	parentPanel.visit(function (cmp) {
+		if (cmp.className === 'guideTextDraw'
+			&& cmp.visible
+		) {
+			if (firstTextDraw === null) {
+				console.debug('Found first text draw.');
+				firstTextDraw = cmp.somExpression;
+				return;
+			}
+			console.debug('First text draw already found.');
+			return;
+		}
+	});
+	return firstTextDraw;
+};
+
+/**
  * Scrolls to the top of the page and looks for a fillable field. 
  */
 var setFocusToFirstFillableField = function setFocusToFirstFillableField(guide, panel) {
 	var firstFillableField = getFirstFillableField(panel);
 	if (firstFillableField) {
 		guide.setFocus(firstFillableField);
+		window.scrollTo(0, 0);
+		return true;
+	}
+	var firstTextDraw = getFirstTextDraw(panel);
+	if (firstTextDraw) {
+		guide.setFocus(firstTextDraw);
 		window.scrollTo(0, 0);
 		return true;
 	}
@@ -173,6 +206,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.error("Error while resolving active panel: ".concat(e.message));
 		}
 	});
+
+	// Set focus to first fillable field for tabs
+	window.guideBridge.on("elementNavigationChanged", function(_e, payload) {
+		if (window.formState && !window.formState.ignoreRefocus) {
+			setFocusToFirstFillableField(window.guideBridge, payload.target);
+			window.formState.ignoreRefocus = true;
+		}
+	});
 });
 
 /**
@@ -196,3 +237,34 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 });
 
+/**
+ * Enables refocus for tabs.
+ */
+document.addEventListener('DOMContentLoaded', function() {
+	var tabs = document.querySelectorAll('ul.tab-navigators-vertical > li');
+	for (var i = 0; i < tabs.length; i++) {
+		tabs[i].addEventListener('click', function(e) {
+			if (window.formState) {
+				window.formState.ignoreRefocus = false;
+			}
+		});
+
+		tabs[i].addEventListener('keydown', function(e) {
+			if (e.code === "Space") {
+				window.formState.ignoreRefocus = false;
+			}
+		}, true);
+	}
+});
+
+/**
+ * Ensures that focus is set to the next item when the user uses the scribble signature field.
+ */
+document.addEventListener('DOMContentLoaded', function() {
+        window.guideBridge.on("elementValueChanged", function(event, payload) {
+                if (payload.target.className === "guideScribble") {
+                        console.debug("Target was a scribble signature field. Setting focus to next item in the panel.");
+                        window.guideBridge.setFocus(payload.target.parent.navigationContext.nextItem);
+                }
+        });
+});
