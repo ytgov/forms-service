@@ -241,13 +241,19 @@ document.addEventListener('DOMContentLoaded', function() {
  * Enables refocus for tabs.
  */
 document.addEventListener('DOMContentLoaded', function() {
-	var tabs = document.querySelectorAll('a.guideLeftNavIcon');
+	var tabs = document.querySelectorAll('ul.tab-navigators-vertical > li');
 	for (var i = 0; i < tabs.length; i++) {
 		tabs[i].addEventListener('click', function(e) {
 			if (window.formState) {
 				window.formState.ignoreRefocus = false;
 			}
 		});
+
+		tabs[i].addEventListener('keydown', function(e) {
+			if (e.code === "Space") {
+				window.formState.ignoreRefocus = false;
+			}
+		}, true);
 	}
 });
 
