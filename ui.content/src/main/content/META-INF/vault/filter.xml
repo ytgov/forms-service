@@ -23,4 +23,6 @@
     <filter root="/content/forms/af/yukon-forms/" mode="merge"/>
 	<filter root="/etc/clientlibs/fr-ca"/>
 	<filter root="/etc/languages"/>
+    <filter root="/var/workflow/models/yukon-petition-dynamic-signatures" mode="merge"/>
+    <filter root="/conf/global/settings/workflow/models/yukon-petition-dynamic-signatures" mode="merge"/>
 </workspaceFilter>
