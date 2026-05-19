@@ -4,14 +4,11 @@ import ca.yukon.aem.core.forms.model.Signer;
 import ca.yukon.aem.core.forms.services.AdobeSignService;
 import com.adobe.granite.crypto.CryptoException;
 import com.adobe.granite.crypto.CryptoSupport;
+import com.google.gson.Gson;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +22,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -81,7 +80,6 @@ public class AdobeSignServiceImpl implements AdobeSignService {
     private static final String[] CLOUD_REFRESH_TOKEN_KEYS = {"refresh_token", "refreshToken"};
     private static final String[] CLOUD_TOKEN_URI_KEYS     = {"access_token_uri", "accessTokenUri", "tokenEndpoint"};
     private static final String[] CLOUD_BASEURL_KEYS       = {"api_access_point", "apiAccessPoint", "baseUrl", "baseURL"};
-    private static final String[] CLOUD_SENDER_KEYS        = {"senderEmail", "sender_email", "userEmail"};
 
     @Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)
     private volatile CryptoSupport cryptoSupport;
@@ -93,6 +91,11 @@ public class AdobeSignServiceImpl implements AdobeSignService {
     protected void activate() {
         LOG.info("AdobeSignService activated. Credentials are resolved per-call from " +
                 "an AEM Adobe Sign Cloud Service config (cloudConfigPath workflow arg).");
+    }
+
+    @Deactivate
+    protected void deactivate() {
+        tokenCache.clear();
     }
 
     @Override
@@ -410,7 +413,7 @@ public class AdobeSignServiceImpl implements AdobeSignService {
 
     private static String urlEncode(String s) {
         try {
-            return URLEncoder.encode(s, "UTF-8");
+            return URLEncoder.encode(s, StandardCharsets.UTF_8);
         } catch (Exception e) {
             return s;
         }
@@ -422,63 +425,58 @@ public class AdobeSignServiceImpl implements AdobeSignService {
 
     String buildAgreementPayload(String agreementName, String transientDocId,
                                  List<Signer> signers, String message) {
-        StringBuilder sb = new StringBuilder(1024);
-        sb.append('{');
+        AgreementPayload payload = new AgreementPayload();
+        payload.fileInfos = Collections.singletonList(new FileInfo(transientDocId));
+        payload.name = agreementName;
+        payload.signatureType = "ESIGN";
+        payload.state = "IN_PROCESS";
+        payload.message = (message != null && !message.isEmpty()) ? message : null;
+        payload.participantSetsInfo = buildParticipantSets(signers);
+        payload.formFieldLayerTemplates = Collections.emptyList();
+        payload.formFields = buildFormFields(signers);
+        return new Gson().toJson(payload);
+    }
 
-        sb.append("\"fileInfos\":[{\"transientDocumentId\":\"")
-                .append(jsonEscape(transientDocId)).append("\"}],");
+    private List<ParticipantSet> buildParticipantSets(List<Signer> signers) {
+        List<ParticipantSet> sets = new ArrayList<>();
+        for (Signer s : signers) {
+            MemberInfo member = new MemberInfo();
+            member.email = s.getEmail();
+            member.name = (s.getName() != null && !s.getName().isEmpty()) ? s.getName() : null;
 
-        sb.append("\"name\":\"").append(jsonEscape(agreementName)).append("\",");
-        sb.append("\"signatureType\":\"ESIGN\",");
-        sb.append("\"state\":\"IN_PROCESS\",");
-
-        if (message != null && !message.isEmpty()) {
-            sb.append("\"message\":\"").append(jsonEscape(message)).append("\",");
+            ParticipantSet set = new ParticipantSet();
+            set.memberInfos = Collections.singletonList(member);
+            set.order = 1;
+            set.role = s.getRole();
+            sets.add(set);
         }
+        return sets;
+    }
 
-        // Parallel signing: same order (1) for all participantSets.
-        sb.append("\"participantSetsInfo\":[");
+    private List<FormField> buildFormFields(List<Signer> signers) {
+        List<FormField> fields = new ArrayList<>();
         for (int i = 0; i < signers.size(); i++) {
             Signer s = signers.get(i);
-            if (i > 0) sb.append(',');
-            sb.append('{');
-            sb.append("\"memberInfos\":[{\"email\":\"").append(jsonEscape(s.getEmail())).append("\"");
-            if (s.getName() != null && !s.getName().isEmpty()) {
-                sb.append(",\"name\":\"").append(jsonEscape(s.getName())).append("\"");
-            }
-            sb.append("}],");
-            sb.append("\"order\":1,");
-            sb.append("\"role\":\"").append(jsonEscape(s.getRole())).append("\"");
-            sb.append('}');
-        }
-        sb.append("],");
 
-        // One signature field per signer.
-        sb.append("\"formFieldLayerTemplates\":[],");
-        sb.append("\"formFields\":[");
-        for (int i = 0; i < signers.size(); i++) {
-            Signer s = signers.get(i);
-            if (i > 0) sb.append(',');
-            int page = s.getSignaturePage() != null ? s.getSignaturePage() : DEFAULT_SIGNATURE_PAGE;
-            int x = s.getSignatureX() != null ? s.getSignatureX() : DEFAULT_SIGNATURE_X;
-            int y = s.getSignatureY() != null ? s.getSignatureY()
-                    : DEFAULT_SIGNATURE_Y_START + i * DEFAULT_SIGNATURE_Y_STEP;
-            sb.append('{');
-            sb.append("\"name\":\"sig_").append(i + 1).append("\",");
-            sb.append("\"contentType\":\"SIGNATURE\",");
-            sb.append("\"assignee\":{\"index\":").append(i + 1).append("},");
-            sb.append("\"locations\":[{");
-            sb.append("\"pageNumber\":").append(page).append(',');
-            sb.append("\"left\":").append(x).append(',');
-            sb.append("\"top\":").append(y).append(',');
-            sb.append("\"width\":").append(DEFAULT_SIGNATURE_WIDTH).append(',');
-            sb.append("\"height\":").append(DEFAULT_SIGNATURE_HEIGHT);
-            sb.append("}]}");
-        }
-        sb.append("]");
+            Assignee assignee = new Assignee();
+            assignee.index = i + 1;
 
-        sb.append('}');
-        return sb.toString();
+            Location loc = new Location();
+            loc.pageNumber = s.getSignaturePage() != null ? s.getSignaturePage() : DEFAULT_SIGNATURE_PAGE;
+            loc.left      = s.getSignatureX() != null ? s.getSignatureX() : DEFAULT_SIGNATURE_X;
+            loc.top       = s.getSignatureY() != null ? s.getSignatureY()
+                                : DEFAULT_SIGNATURE_Y_START + i * DEFAULT_SIGNATURE_Y_STEP;
+            loc.width  = DEFAULT_SIGNATURE_WIDTH;
+            loc.height = DEFAULT_SIGNATURE_HEIGHT;
+
+            FormField field = new FormField();
+            field.name        = "sig_" + (i + 1);
+            field.contentType = "SIGNATURE";
+            field.assignee    = assignee;
+            field.locations   = Collections.singletonList(loc);
+            fields.add(field);
+        }
+        return fields;
     }
 
     // ------------------------------------------------------------------
@@ -576,27 +574,53 @@ public class AdobeSignServiceImpl implements AdobeSignService {
         }
     }
 
-    static String jsonEscape(String s) {
-        if (s == null) return "";
-        StringBuilder sb = new StringBuilder(s.length() + 8);
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            switch (c) {
-                case '"':  sb.append("\\\""); break;
-                case '\\': sb.append("\\\\"); break;
-                case '\b': sb.append("\\b"); break;
-                case '\f': sb.append("\\f"); break;
-                case '\n': sb.append("\\n"); break;
-                case '\r': sb.append("\\r"); break;
-                case '\t': sb.append("\\t"); break;
-                default:
-                    if (c < 0x20) {
-                        sb.append(String.format("\\u%04x", (int) c));
-                    } else {
-                        sb.append(c);
-                    }
-            }
-        }
-        return sb.toString();
+    // ------------------------------------------------------------------
+    // Adobe Sign agreement payload DTOs
+    // ------------------------------------------------------------------
+
+    private static class AgreementPayload {
+        List<FileInfo>       fileInfos;
+        String               name;
+        String               signatureType;
+        String               state;
+        String               message;            // omitted by Gson when null
+        List<ParticipantSet> participantSetsInfo;
+        List<?>              formFieldLayerTemplates;
+        List<FormField>      formFields;
+    }
+
+    private static class FileInfo {
+        String transientDocumentId;
+        FileInfo(String id) { this.transientDocumentId = id; }
+    }
+
+    private static class ParticipantSet {
+        List<MemberInfo> memberInfos;
+        int              order;
+        String           role;
+    }
+
+    private static class MemberInfo {
+        String email;
+        String name;                             // omitted by Gson when null
+    }
+
+    private static class FormField {
+        String         name;
+        String         contentType;
+        Assignee       assignee;
+        List<Location> locations;
+    }
+
+    private static class Assignee {
+        int index;
+    }
+
+    private static class Location {
+        int pageNumber;
+        int left;
+        int top;
+        int width;
+        int height;
     }
 }
