@@ -2,6 +2,6 @@
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
     jcr:description="Yukon Form Address component"
     jcr:primaryType="cq:Component"
-    jcr:title="Canada API Address component"
+    jcr:title="Canada Post API Address"
     sling:resourceSuperType="fd/af/components/guidetextbox"
     componentGroup="Adaptive Form"/>

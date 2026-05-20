@@ -2,6 +2,10 @@
 <sly data-sly-use.guideConstants="com.adobe.aemds.guide.utils.GuideConstants"/>
 <sly data-sly-use.guideField="com.adobe.aemds.guide.common.GuideTextBox"/>
 <sly data-sly-use.canadaPost="ca.yukon.aem.core.models.AddressModel"/>
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
+     data-sly-call="${clientlib.css @ categories='yukon-forms.components'}"/>
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
+     data-sly-call="${clientlib.js @ categories='yukon-forms.components'}"/>
 
 <div class="${guideConstants.GUIDE_FIELD_WIDGET} textField ${guideField.multiLine ? 'multiline' : ''}
             ${guideField.allowRichText ? 'richText' : ''} address_container"
@@ -10,6 +14,11 @@
      data-host="${canadaPost.host}"
      data-limit="${canadaPost.limit}"
      data-language="${currentPage.language}"
+     data-field-line1="${canadaPost.fieldLine1}"
+     data-field-line2="${canadaPost.fieldLine2}"
+     data-field-city="${canadaPost.fieldCity}"
+     data-field-province="${canadaPost.fieldProvince}"
+     data-field-postal-code="${canadaPost.fieldPostalCode}"
 
      style="${guideField.styles @ context='scriptString'}">
     <sly data-sly-test="${guideField.allowRichText}">
