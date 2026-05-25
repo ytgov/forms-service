@@ -25,11 +25,9 @@
             this.host = this.element.data("host");
             this.key = this.element.data("key");
             this.fixedLimit = this.element.data("limit") || 7;
-            this.limit = this.fixedLimit;
             this.language = this.element.data("language") || "en";
             this.isFrench = this.language.includes("fr");
             this.language = this.isFrench ? "fr" : "en";
-            this.usingRefinedSuggestions = false;
             this.fieldLine1    = this.element.data('field-line1')    || 'addressLine1';
             this.fieldLine2    = this.element.data('field-line2')    || 'addressLine2';
             this.fieldCity     = this.element.data('field-city')     || 'city';
@@ -40,17 +38,8 @@
                 console.error("Invalid Canada Post HOST...")
                 return;
             }
-            // setting initial typeahead objects
-            this.addressEngine = new Bloodhound({
-                remote: {
-                    url: this.getUrl(),
-                    wildcard: '%QUERY'
-                },
-                datumTokenizer: Bloodhound.tokenizers.whitespace,
-                queryTokenizer: Bloodhound.tokenizers.whitespace
-            });
             this.widget = $(input);
-            this.initTypeahead(this.addressEngine);
+            this.initTypeahead(this._buildSource());
             this.addEventListeners();
         }
 
@@ -88,7 +77,7 @@
                 {
                     name: 'address-suggestions',
                     display: 'Text',
-                    limit: this.limit,
+                    limit: 100,
                     source: sourceEngine,
                     templates: {
                         suggestion: function(data) {
@@ -116,29 +105,7 @@
                     return;
                 }
 
-                // when user selects on dropdown with multiple address
-                if (suggestion.Next === "Find") {
-                    let url = self.getUrl({Id: suggestion.Id, text: suggestion.Text, limit: 200})
-                    $.ajax({
-                        url: url,
-                        dataType: 'json',
-                        success: function(newResponse) {
-                            const newSuggestions = newResponse.Items || [];
-                            self.limit = newSuggestions.length;
-                            self.initTypeahead(function(query, syncResults, asyncResults) {
-                                syncResults(newSuggestions);
-                            });
-                            self.widget.typeahead('val', suggestion.Text);
-                            self.widget.focus();
-                            self.usingRefinedSuggestions = true;
-                        },
-                        error: function() {
-                            console.log('Unable to find following address...');
-                        }
-                    });
-                } else {
-                    // for single address selection
-                    $.ajax({
+                $.ajax({
                         url: self.host + '/addresscomplete/interactive/retrieve/v2.11/json3.ws',
                         data: {
                             Key: self.key,
@@ -156,7 +123,6 @@
                             if (!address && items.length > 0) {
                                 address = items[0];
                             }
-                            self.limit = self.fixedLimit;
                             self.container.find('.' + CSS.escape(self.fieldLine1)).find('input').val(address.Line1).blur();
                             self.container.find('.' + CSS.escape(self.fieldLine2)).find('input').val(address.Line2).blur();
                             self.container.find('.' + CSS.escape(self.fieldCity)).find('input').val(address.City).blur();
@@ -169,17 +135,47 @@
                             console.log('Unable to find selected address...');
                         }
                     });
-                }
             });
+        }
 
-            // resets typeahead source after drilling into a multi-address result
-            this.widget.on('blur', function() {
-                if (self.usingRefinedSuggestions) {
-                    self.usingRefinedSuggestions = false;
-                    self.limit = self.fixedLimit;
-                    self.initTypeahead(self.addressEngine);
-                }
-            });
+        _buildSource() {
+            const self = this;
+            return function(query, syncResults, asyncResults) {
+                $.ajax({
+                    url: self.getUrl({ text: query, limit: self.fixedLimit }),
+                    dataType: 'json',
+                    success: function(response) {
+                        const items = response.Items || [];
+                        const findItems = items.filter(function(i) { return i.Next === 'Find'; });
+                        const directItems = items.filter(function(i) { return i.Next !== 'Find'; });
+
+                        if (findItems.length === 0) {
+                            asyncResults(directItems);
+                            return;
+                        }
+
+                        let pending = findItems.length;
+                        let allItems = directItems.slice();
+
+                        findItems.forEach(function(item) {
+                            $.ajax({
+                                url: self.getUrl({ Id: item.Id, text: item.Text, limit: 200 }),
+                                dataType: 'json',
+                                success: function(sub) {
+                                    allItems = allItems.concat(sub.Items || []);
+                                    if (--pending === 0) asyncResults(allItems);
+                                },
+                                error: function() {
+                                    if (--pending === 0) asyncResults(allItems);
+                                }
+                            });
+                        });
+                    },
+                    error: function() {
+                        asyncResults([]);
+                    }
+                });
+            };
         }
     }
 
