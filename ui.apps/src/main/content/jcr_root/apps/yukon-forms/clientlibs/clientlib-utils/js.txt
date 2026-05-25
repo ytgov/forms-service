@@ -1,3 +1,5 @@
 #base=js
 
 repeatableHelpers.js
+choiceFieldHelpers.js
+dateFieldHelpers.js
