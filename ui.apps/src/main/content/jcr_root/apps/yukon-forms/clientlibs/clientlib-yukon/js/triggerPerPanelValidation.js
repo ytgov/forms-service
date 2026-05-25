@@ -258,13 +258,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * Ensures that focus is set to the next item when the user uses the scribble signature field.
+ * Ensures that focus stays on the scribble signature field when the user uses it.
  */
 document.addEventListener('DOMContentLoaded', function() {
         window.guideBridge.on("elementValueChanged", function(event, payload) {
                 if (payload.target.className === "guideScribble") {
-                        console.debug("Target was a scribble signature field. Setting focus to next item in the panel.");
-                        window.guideBridge.setFocus(payload.target.parent.navigationContext.nextItem);
+                        console.debug("Target was a scribble signature field. Setting focus to it again.");
+                        window.guideBridge.setFocus(payload.target);
                 }
         });
 });
