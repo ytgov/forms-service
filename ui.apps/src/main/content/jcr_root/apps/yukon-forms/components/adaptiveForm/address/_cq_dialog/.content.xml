@@ -28,15 +28,50 @@
                         jcr:title="Canada Post"
                         sling:resourceType="granite/ui/components/coral/foundation/container">
                         <items jcr:primaryType="nt:unstructured">
-                            <value
+                            <searchLimit
                                 granite:class="plainTextValue"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
                                 defaultValue="7"
-                                fieldLabel="Search Limits"
+                                fieldLabel="Search Limit"
                                 max="10"
                                 min="0"
                                 name="./limit"/>
+                            <fieldLine1
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Field Name Of Address Line 1"
+                                fieldDescription="CSS class of the panel containing the address line 1 input."
+                                defaultValue="addressLine1"
+                                name="./fieldLine1"/>
+                            <fieldLine2
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Field Name Of Address Line 2"
+                                fieldDescription="CSS class of the panel containing the address line 2 input."
+                                defaultValue="addressLine2"
+                                name="./fieldLine2"/>
+                            <fieldCity
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Field Name Of City"
+                                fieldDescription="CSS class of the panel containing the city input."
+                                defaultValue="city"
+                                name="./fieldCity"/>
+                            <fieldProvince
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Field Name Of Province"
+                                fieldDescription="CSS class of the panel containing the province input."
+                                defaultValue="province"
+                                name="./fieldProvince"/>
+                            <fieldPostalCode
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Field Name Of Postal Code"
+                                fieldDescription="CSS class of the panel containing the postal code input."
+                                defaultValue="postalCode"
+                                name="./fieldPostalCode"/>
                         </items>
                     </address>
                 </items>
