@@ -126,7 +126,7 @@
                             self.container.find('.' + CSS.escape(self.fieldLine1)).find('input').val(address.Line1).blur();
                             self.container.find('.' + CSS.escape(self.fieldLine2)).find('input').val(address.Line2).blur();
                             self.container.find('.' + CSS.escape(self.fieldCity)).find('input').val(address.City).blur();
-                            self.container.find('.' + CSS.escape(self.fieldProvince)).find('input').val(address.ProvinceCode).blur();
+                            self.container.find('.' + CSS.escape(self.fieldProvince)).find('input').val(address.ProvinceName).blur();
                             self.container.find('.' + CSS.escape(self.fieldPostalCode)).find('input').val(address.PostalCode).blur();
                             self.widget.val(address.Line1);
                             self.widget.blur();
