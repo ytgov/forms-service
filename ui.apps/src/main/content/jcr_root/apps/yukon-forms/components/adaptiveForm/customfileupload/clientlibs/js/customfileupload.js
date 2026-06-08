@@ -83,7 +83,7 @@
           }
           if (showErrorMessage) {
             errorMessageContainer.css("visibility", message ? "visible" : "hidden");
-            errorMessageContainer.html(message);
+            errorMessageContainer.text(message);
           } else {
             alert(message);
           }

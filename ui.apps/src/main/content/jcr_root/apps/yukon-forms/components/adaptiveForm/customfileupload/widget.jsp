@@ -32,9 +32,9 @@
      style="${guide:encodeForHtmlAttr(guideField.styles,xssAPI)}">
     <input id="${guide:encodeForHtmlAttr(guideid,xssAPI)}${'_widget'}"  name="${guide:encodeForHtmlAttr(guideField.name,xssAPI)}" type="file" 
            accept="${guide:encodeForHtmlAttr(guideField.mimeType,xssAPI)}" tabindex="-1" style="" aria-describedby="${guide:encodeForHtmlAttr(guideField.labelForId,xssAPI)}_desc"
-           data-file-name-pattern="${guideField.fileNamePattern}"
-           data-file-name-pattern-message="${guideField.fileNamePatternMessage}"
-           data-show-alert-message="${guideField.showAlertMessage}"
+           data-file-name-pattern="${guide:encodeForHtmlAttr(guideField.fileNamePattern,xssAPI)}"
+           data-file-name-pattern-message="${guide:encodeForHtmlAttr(guideField.fileNamePatternMessage,xssAPI)}"
+           data-show-alert-message="${guide:encodeForHtmlAttr(guideField.showAlertMessage,xssAPI)}"
            <c:if test="${guideField.multiSelection}"> multiple</c:if>/>
     <button class="button-default button-medium guide-fu-attach-button" type="button" style="${guide:encodeForHtmlAttr(guideField.widgetInlineStyles,xssAPI)}" 
             aria-labelledby="${guide:encodeForHtmlAttr(guideField.labelForId,xssAPI)}_desc">${guide:encodeForHtmlAttr(guideField.buttonText,xssAPI)}</button>
