@@ -1,45 +1,46 @@
 (function() {
     "use strict";
-    class AddressInput {
-        static bemBlock = 'cmp-adaptiveform-addressinput';
-        static selectors = {
-            widget: `.${AddressInput.bemBlock}__widget`
-        };
 
+    const INIT_KEY = 'addressInputInitialized';
+
+    function initAll(root) {
+        (root || document).querySelectorAll(
+            '[data-cmp-is="adaptiveFormAddressInput"] .cmp-adaptiveform-addressinput__widget'
+        ).forEach(function(input) {
+            new AddressInput(input);
+        });
+    }
+
+    class AddressInput {
         // initializing input field with canada post api
-        constructor(params) {
-            this.element = params.element;
-            this.container = params.formContainer;
-            this.host = $(this.element).data("host");
-            this.key = $(this.element).data("key");
-            this.fixedLimit = $(this.element).data("limit") || 7;
-            this.limit = this.fixedLimit;
-            this.language = $(this.element).data("language") || "en";
+        constructor(input) {
+            if ($(input).data(INIT_KEY)) return;
+            $(input).data(INIT_KEY, true);
+
+            this.element = $(input).closest('.address_container');
+            this.container = this.element.closest('.panel');
+            if (this.container.length === 0) {
+                this.container = this.element.closest('.rootPanel');
+            }
+            this.host = this.element.data("host");
+            this.key = this.element.data("key");
+            this.fixedLimit = this.element.data("limit") || 7;
+            this.language = this.element.data("language") || "en";
             this.isFrench = this.language.includes("fr");
             this.language = this.isFrench ? "fr" : "en";
-            this.usingRefinedSuggestions = false;
+            this.fieldLine1    = this.element.data('field-line1')    || 'addressLine1';
+            this.fieldLine2    = this.element.data('field-line2')    || 'addressLine2';
+            this.fieldCity     = this.element.data('field-city')     || 'city';
+            this.fieldProvince = this.element.data('field-province') || 'province';
+            this.fieldPostalCode = this.element.data('field-postal-code') || 'postalCode';
 
             if (!this.host) {
                 console.error("Invalid Canada Post HOST...")
                 return;
             }
-            // setting initial typeahead objects
-            this.addressEngine = new Bloodhound({
-                remote: {
-                    url: this.getUrl(),
-                    wildcard: '%QUERY'
-                },
-                datumTokenizer: Bloodhound.tokenizers.whitespace,
-                queryTokenizer: Bloodhound.tokenizers.whitespace
-            });
-            this.widget = this.getWidget();
-            this.initTypeahead(this.addressEngine);
+            this.widget = $(input);
+            this.initTypeahead(this._buildSource());
             this.addEventListeners();
-        }
-
-        // returns input field
-        getWidget() {
-            return $(this.element).find(AddressInput.selectors.widget).get(0);
         }
 
         // returns API url
@@ -49,25 +50,25 @@
             let limit = params && params.limit;
 
             let url = this.host + "/addresscomplete/interactive/find/v2.10/json3.ws?";
-                url += "Key=" + this.key;
-                url += "&SearchTerm=" + (text || '%QUERY');
-                url += "&LastId=" + (id || '');
-                url += "&SearchFor=";
-                url += "&Country=CAN";
-                url += "&LanguagePreference=" + (this.language || 'en');
-                url += "&MaxSuggestions=" + (limit || '');
-                url += "&MaxResults=";
-                url += "&Origin=";
-                url += "&Bias=";
-                url += "&Filter=";
-                url += "&GeoFence=";
+            url += "Key=" + this.key;
+            url += "&SearchTerm=" + (text || '%QUERY');
+            url += "&LastId=" + (id || '');
+            url += "&SearchFor=";
+            url += "&Country=CAN";
+            url += "&LanguagePreference=" + (this.language || 'en');
+            url += "&MaxSuggestions=" + (limit || '');
+            url += "&MaxResults=";
+            url += "&Origin=";
+            url += "&Bias=";
+            url += "&Filter=";
+            url += "&GeoFence=";
             return url;
         }
 
         // instantiating typeahead library with configuration
         initTypeahead(sourceEngine) {
-            $(this.widget).typeahead('destroy');
-            $(this.widget).typeahead(
+            this.widget.typeahead('destroy');
+            this.widget.typeahead(
                 {
                     hint: false,
                     highlight: true,
@@ -76,7 +77,7 @@
                 {
                     name: 'address-suggestions',
                     display: 'Text',
-                    limit: this.limit,
+                    limit: 100,
                     source: sourceEngine,
                     templates: {
                         suggestion: function(data) {
@@ -96,7 +97,7 @@
         addEventListeners() {
             const self = this;
 
-            $(this.widget).on('typeahead:select', function(e, suggestion) {
+            this.widget.on('typeahead:select', function(e, suggestion) {
                 e.stopPropagation();
                 e.stopImmediatePropagation();
 
@@ -104,29 +105,7 @@
                     return;
                 }
 
-                // when user selects on dropdown with multiple address
-                if (suggestion.Next === "Find") {
-                    let url = self.getUrl({Id: suggestion.Id, text: suggestion.Text, limit: 200})
-                    $.ajax({
-                        url: url,
-                        dataType: 'json',
-                        success: function(newResponse) {
-                            const newSuggestions = newResponse.Items || [];
-                            self.limit = newSuggestions.length;
-                            self.initTypeahead(function(query, syncResults, asyncResults) {
-                                syncResults(newSuggestions);
-                            });
-                            $(self.widget).typeahead('val', suggestion.Text);
-                            $(self.widget).focus();
-                            self.usingRefinedSuggestions = true;
-                        },
-                        error: function() {
-                            console.log('Unable to find following address...');
-                        }
-                    });
-                } else {
-                    // for single address selection
-                    $.ajax({
+                $.ajax({
                         url: self.host + '/addresscomplete/interactive/retrieve/v2.11/json3.ws',
                         data: {
                             Key: self.key,
@@ -144,37 +123,79 @@
                             if (!address && items.length > 0) {
                                 address = items[0];
                             }
-                            self.limit = self.fixedLimit;
-                            $(self.container).find('[data-name="address2"]').val(address.Line2).blur();
-                            $(self.container).find('[data-name="city"]').val(address.City).blur();
-                            $(self.container).find('[data-name="province"]').val(address.ProvinceCode).blur();
-                            $(self.container).find('[data-name="postalCode"]').val(address.PostalCode).blur();
-                            $(self.widget).val(address.Line1);
-                            $(self.widget).blur();
+                            self.container.find('.' + CSS.escape(self.fieldLine1)).find('input').val(address.Line1).blur();
+                            self.container.find('.' + CSS.escape(self.fieldLine2)).find('input').val(address.Line2).blur();
+                            self.container.find('.' + CSS.escape(self.fieldCity)).find('input').val(address.City).blur();
+                            self.container.find('.' + CSS.escape(self.fieldProvince)).find('input').val(address.ProvinceName).blur();
+                            self.container.find('.' + CSS.escape(self.fieldPostalCode)).find('input').val(address.PostalCode).blur();
+                            self.widget.val(address.Line1);
+                            self.widget.blur();
                         },
                         error: function() {
                             console.log('Unable to find selected address...');
                         }
                     });
-                }
             });
+        }
 
-            // resets input fields when interaction is completed
-            $(this.widget).on('blur', function() {
-                if (self.usingRefinedSuggestions) {
-                    self.usingRefinedSuggestions = false;
-                    self.limit = self.fixedLimit;
-                    self.initTypeahead(self.addressEngine);
-                }
-            });
+        _buildSource() {
+            const self = this;
+            return function(query, syncResults, asyncResults) {
+                $.ajax({
+                    url: self.getUrl({ text: query, limit: self.fixedLimit }),
+                    dataType: 'json',
+                    success: function(response) {
+                        const items = response.Items || [];
+                        const findItems = items.filter(function(i) { return i.Next === 'Find'; });
+                        const directItems = items.filter(function(i) { return i.Next !== 'Find'; });
+
+                        if (findItems.length === 0) {
+                            asyncResults(directItems);
+                            return;
+                        }
+
+                        let pending = findItems.length;
+                        let allItems = directItems.slice();
+
+                        findItems.forEach(function(item) {
+                            $.ajax({
+                                url: self.getUrl({ Id: item.Id, text: item.Text, limit: 200 }),
+                                dataType: 'json',
+                                success: function(sub) {
+                                    allItems = allItems.concat(sub.Items || []);
+                                    if (--pending === 0) asyncResults(allItems);
+                                },
+                                error: function() {
+                                    if (--pending === 0) asyncResults(allItems);
+                                }
+                            });
+                        });
+                    },
+                    error: function() {
+                        asyncResults([]);
+                    }
+                });
+            };
         }
     }
 
-    $(document).ready(function() {
-        $("[data-cmp-is='adaptiveFormAddressInput']").each(function() {
-            let $element = $(this);
-            let formContainer = $element.closest('.panel').get(0) || $element.closest('.rootPanel').get(0) || null;
-            new AddressInput({ element: $element.get(0), formContainer: formContainer });
+    window.AddressInput = AddressInput;
+
+    // Initialize inputs already in the DOM.
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() { initAll(); });
+    } else {
+        initAll();
+    }
+
+    // Re-initialize whenever a new panel instance is added to a repeatable panel.
+    new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    initAll(node);
+                }
+            });
         });
-    });
+    }).observe(document.body, { childList: true, subtree: true });
 })();
