@@ -2,6 +2,7 @@ package ca.yukon.aem.core.models;
 
 import ca.yukon.aem.core.forms.services.impl.CanadaPostApiService;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
@@ -28,6 +29,21 @@ public class AddressModel {
         }
     }
 
+    @ValueMapValue @Default(values = "addressLine1")
+    private String fieldLine1;
+
+    @ValueMapValue @Default(values = "addressLine2")
+    private String fieldLine2;
+
+    @ValueMapValue @Default(values = "city")
+    private String fieldCity;
+
+    @ValueMapValue @Default(values = "province")
+    private String fieldProvince;
+
+    @ValueMapValue @Default(values = "postalCode")
+    private String fieldPostalCode;
+
     public String getHost() {
         return this.host;
     }
@@ -39,4 +55,9 @@ public class AddressModel {
     public int getLimit() {
         return this.limit;
     }
+    public String getFieldLine1()  { return fieldLine1; }
+    public String getFieldLine2()  { return fieldLine2; }
+    public String getFieldCity()   { return fieldCity; }
+    public String getFieldProvince()   { return fieldProvince; }
+    public String getFieldPostalCode() { return fieldPostalCode; }
 }
