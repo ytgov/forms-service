@@ -34,7 +34,7 @@
     var raw     = field.value;
     var display = field.displayValue;
     if (raw === null || raw === undefined || raw === "") return null;
-    if (field.className === "guideTextBox" && field.options && field.options.jsonModel && field.options.jsonModel.options) {
+    if (field.className === "guideCheckBox" && field.options && field.options.jsonModel && field.options.jsonModel.options) {
       var value = null;
       field.options.jsonModel.options.forEach(item => {
         var nameValues = item.split('=');
@@ -80,29 +80,33 @@
       .replace(/"/g, "&quot;");
   }
 
-  function toJsTreeNodes(container) {
-    return container.items.map(function (item) {
+  function toJsTreeNodes(container, excludedFields) {
+    var nodes = [];
+    container.items.forEach(function (item) {
       if (item.type === "panel") {
+        if (excludedFields.indexOf(item.node.panel.name) >= 0) return;
         var title = item.node.panel.title || item.node.panel.name || "Section";
-        return {
+        nodes.push({
           text: escapeHtml(title),
           state: { opened: true },
-          children: toJsTreeNodes(item.node),
+          children: toJsTreeNodes(item.node, excludedFields),
           li_attr: {
             "class": "rs-panel-node",
             "data-rs-panel": item.node.panel.name,
             "data-rs-panel-som": item.node.panel.somExpression || item.node.panel.name
           }
-        };
+        });
+      } else {
+        nodes.push({
+          text: "<span class='rs-label'>" + escapeHtml(item.label) + "</span>"
+              + "<span class='rs-value'>" + escapeHtml(item.value) + "</span>",
+          icon: false,
+          children: false,
+          li_attr: { "class": "rs-field-node" }
+        });
       }
-      return {
-        text: "<span class='rs-label'>" + escapeHtml(item.label) + "</span>"
-            + "<span class='rs-value'>" + escapeHtml(item.value) + "</span>",
-        icon: false,
-        children: false,
-        li_attr: { "class": "rs-field-node" }
-      };
     });
+    return nodes;
   }
 
   // ─── Core renderer ────────────────────────────────────────────────────────
@@ -169,7 +173,7 @@
     }
     root.innerHTML = "";
 
-    var jsData = toJsTreeNodes(treeRoot);
+    var jsData = toJsTreeNodes(treeRoot, excludedFields);
 
     if (!jsData.length) {
       var empty = document.createElement("p");
