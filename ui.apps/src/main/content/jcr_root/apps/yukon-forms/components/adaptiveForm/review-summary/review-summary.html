@@ -8,13 +8,11 @@
   Authoring dialog properties (set on the component node):
     - excludedFields  : String[] — field names to suppress (e.g. hidden tokens)
     - showEditLinks   : Boolean  — whether to render "Edit" nav links per section
-    - sectionHeadingTag : String — h2 | h3 | h4 (default: h3)
 -->
 <div data-sly-use.model="ca.yukon.aem.core.models.ReviewSummaryModel"
      class="review-summary"
      data-excluded-fields="${model.excludedFieldsJson}"
-     data-show-edit-links="${model.showEditLinks}"
-     data-section-heading-tag="${model.sectionHeadingTag}"
+     data-show-edit-links="${model.showEditLinks ? 'true' : 'false'}"
      id="review-summary-root">
 
   <!--

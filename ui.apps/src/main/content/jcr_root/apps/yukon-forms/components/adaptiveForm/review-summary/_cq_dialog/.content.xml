@@ -40,19 +40,6 @@
                                 checked="{Boolean}true"
                                 value="{Boolean}true"
                                 uncheckedValue="{Boolean}false" />
-
-                            <!-- Section heading tag -->
-                            <sectionHeadingTag
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                fieldLabel="Section Heading Level"
-                                name="./sectionHeadingTag">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <h2 jcr:primaryType="nt:unstructured" text="H2" value="h2" />
-                                    <h3 jcr:primaryType="nt:unstructured" text="H3 (default)" value="h3" selected="{Boolean}true" />
-                                    <h4 jcr:primaryType="nt:unstructured" text="H4" value="h4" />
-                                </items>
-                            </sectionHeadingTag>
                         </items>
                     </address>
                 </items>
