@@ -109,7 +109,7 @@
 
           var pattern = $(this).data("fileNamePattern");
           var message = $(this).data("fileNamePatternMessage");
-          var showErrorMessageInline = $(this).data("showAlertMessage") !== "true";
+          var showErrorMessageInline = !$(this).data("showAlertMessage");
 
           if (pattern || message || showErrorMessageInline) {
             patchInstance(widget, pattern, message, showErrorMessageInline, $(this).closest('.guideFileUpload').find('.guideFieldError'));
