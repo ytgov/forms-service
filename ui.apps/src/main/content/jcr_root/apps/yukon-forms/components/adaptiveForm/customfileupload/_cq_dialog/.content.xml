@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="\0"
+          sling:resourceType="cq/gui/components/authoring/dialog">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <accordion
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/accordion">
+                <items jcr:primaryType="nt:unstructured">
+                    <basic
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Basic"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"/>
+                    <help
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Help Content"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"/>
+                    <accessibility jcr:primaryType="nt:unstructured"/>
+                    <patterns
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"/>
+                    <validation
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Validation"
+                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <fileNamePattern
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Invalid Characters Pattern"
+                                fieldDescription="Regex pattern matching characters that are NOT allowed in file names. Leave blank to use the default pattern which blocks: &lt; &gt; : &quot; / \ | ? * and control characters."
+                                name="./fileNamePattern"
+                                emptyText='e.g. [&lt;&gt;:"/\\|?*]'/>
+                            <fileNamePatternMessage
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Validation Error Message"
+                                fieldDescription="Message shown when a file name fails validation. Leave blank to use the default message which lists the offending file names."
+                                name="./fileNamePatternMessage"
+                                emptyText="e.g. File name contains unsupported characters."/>
+                            <showAlertMessage
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                text="Show Alert Message"
+                                fieldDescription="When enabled, displays a browser alert when a file name fails validation. Disable if you prefer to suppress the alert and handle feedback through other means."
+                                name="./showAlertMessage"
+                                value="{Boolean}true"
+                                uncheckedValue="{Boolean}false"/>
+                        </items>
+                    </validation>
+                </items>
+            </accordion>
+        </items>
+    </content>
+</jcr:root>
