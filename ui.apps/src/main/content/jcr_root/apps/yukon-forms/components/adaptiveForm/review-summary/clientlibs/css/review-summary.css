@@ -1,0 +1,127 @@
+/*
+ * review-summary.css
+ *
+ * Overrides and extensions for the jsTree-rendered Review Summary component.
+ * jsTree's own styles come from clientlib-jstree; these rules extend them.
+ */
+
+/* ── Design tokens ── */
+.review-summary {
+  --rs-label-color:     #6b7280;
+  --rs-value-color:     #111827;
+  --rs-panel-color:     #1f2937;
+  --rs-divider-color:   #e5e7eb;
+  --rs-edit-color:      #2563eb;
+  --rs-font-size-sm:    0.875rem;
+  --rs-font-size-base:  1rem;
+  --rs-font-size-panel: 1rem;
+}
+
+/* ── Loading state ── */
+.review-summary__loading {
+  color: var(--rs-label-color);
+  font-size: var(--rs-font-size-sm);
+  padding: 1rem 0;
+}
+
+/* ── Empty state ── */
+.review-summary__empty {
+  color: var(--rs-label-color);
+  font-style: italic;
+}
+
+/* ── jsTree: replace sprite-image arrows with CSS-only triangles ──────────
+   jsTree's default theme uses 32px.png for expand/collapse indicators.
+   Those relative image paths break in AEM clientlibs, so we override them. */
+.jstree-default .jstree-icon {
+  background-image: none !important;
+}
+
+.jstree-default .jstree-ocl {
+  position: relative;
+  width: 18px;
+}
+
+.jstree-default .jstree-open > .jstree-ocl::before,
+.jstree-default .jstree-closed > .jstree-ocl::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-style: solid;
+}
+
+.jstree-default .jstree-open > .jstree-ocl::before {
+  border-width: 5px 4px 0;
+  border-color: #555 transparent transparent;
+}
+
+.jstree-default .jstree-closed > .jstree-ocl::before {
+  border-width: 4px 0 4px 6px;
+  border-color: transparent transparent transparent #555;
+}
+
+.jstree-default .jstree-leaf > .jstree-ocl {
+  display: none;
+}
+/* ── End jsTree image overrides ── */
+
+/* ── Panel nodes (branch nodes) ── */
+li.rs-panel-node > .jstree-anchor {
+  color: var(--rs-panel-color);
+  font-weight: 600;
+  font-size: var(--rs-font-size-panel);
+}
+
+/* Edit link sits as a sibling after the anchor inside each panel li */
+.rs-edit-btn {
+  color: var(--rs-edit-color);
+  font-size: var(--rs-font-size-sm);
+  text-decoration: none;
+  padding: 0 0.25rem;
+  vertical-align: middle;
+}
+
+.rs-edit-btn:hover,
+.rs-edit-btn:focus-visible {
+  text-decoration: underline;
+}
+
+/* ── Field nodes (leaf nodes) ── */
+li.rs-field-node > .jstree-anchor {
+  display: flex;
+  gap: 0.75rem;
+  cursor: default;
+  color: inherit;
+}
+
+li.rs-field-node > .jstree-anchor:hover {
+  background: transparent;
+}
+
+.rs-label {
+  flex: 0 0 auto;
+  min-width: 10rem;
+  color: var(--rs-label-color);
+  font-size: var(--rs-font-size-sm);
+}
+
+.rs-value {
+  flex: 1;
+  color: var(--rs-value-color);
+  font-size: var(--rs-font-size-base);
+  word-break: break-word;
+}
+
+/* ── Responsive: stack label above value on small screens ── */
+@media (max-width: 480px) {
+  li.rs-field-node > .jstree-anchor {
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .rs-label {
+    min-width: 0;
+  }
+}

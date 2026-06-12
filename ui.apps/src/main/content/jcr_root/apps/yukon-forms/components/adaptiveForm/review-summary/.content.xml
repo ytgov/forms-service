@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root
+    xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    jcr:primaryType="cq:Component"
+    jcr:title="Review Summary"
+    jcr:description="Dynamically renders all visible, non-empty form field values for the Review / Finish and Submit step. No per-form configuration required."
+    componentGroup="Adaptive Form"
+    sling:resourceSuperType="wcm/foundation/components/responsivegrid" />
