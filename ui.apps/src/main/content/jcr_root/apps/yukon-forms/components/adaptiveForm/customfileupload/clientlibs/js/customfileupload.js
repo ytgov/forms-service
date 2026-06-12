@@ -109,10 +109,10 @@
 
           var pattern = $(this).data("fileNamePattern");
           var message = $(this).data("fileNamePatternMessage");
-          var showErrorMessage = $(this).data("showAlertMessage") !== "true";
+          var showErrorMessageInline = $(this).data("showAlertMessage") !== "true";
 
-          if (pattern || message || showErrorMessage) {
-            patchInstance(widget, pattern, message, showErrorMessage, $(this).closest('.guideFileUpload').find('.guideFieldError'));
+          if (pattern || message || showErrorMessageInline) {
+            patchInstance(widget, pattern, message, showErrorMessageInline, $(this).closest('.guideFileUpload').find('.guideFieldError'));
             $(this).data("customFileUploadPatched", true);
           }
         } catch (e) {
