@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="File Attachment"
+    buttonText="Attach"
+    dorExclusion="true"
+    guideNodeClass="guideFileUpload"
+    mimeType="[audio/*, video/*, image/*, text/*, application/pdf]">
+    <items jcr:primaryType="nt:unstructured">
+        <fileattachment
+            jcr:primaryType="nt:unstructured"
+            guideNodeClass="guideCompositeFieldItem"
+            name="fileAttachment"/>
+        <comment
+            jcr:primaryType="nt:unstructured"
+            guideNodeClass="guideCompositeFieldItem"
+            name="comment"/>
+    </items>
+</jcr:root>
