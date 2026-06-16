@@ -10,7 +10,6 @@
   --rs-value-color:     #555;
   --rs-panel-color:     #1f2937;
   --rs-divider-color:   #e5e7eb;
-  --rs-edit-color:      #2563eb;
   --rs-font-size-sm:    0.875rem;
   --rs-font-size-base:  1rem;
   --rs-font-size-panel: 1rem;
@@ -53,41 +52,16 @@
 
 .rs-page-header {
   font-size: 1.25rem;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  padding-top: 10px;
+  padding: 10px 10px 10px 0;
   font-weight: bold;
   color: #000;
-  border-right-width: 0;
-  border-left-width: 0;
-  border-top-width: 0;
-  border-bottom-width: 4px;
+  border-width: 0 0 4px;
   border-style: solid;
   border-color: #f1ab00;
-  padding-left: 0;
 }
 
 .rs-page-header .rs-section-title {
   font-size: inherit;
-}
-
-.rs-edit-btn {
-  color: var(--rs-edit-color);
-  font-size: var(--rs-font-size-sm);
-  text-decoration: none;
-  flex: 0 0 auto;
-}
-
-.rs-edit-btn:hover,
-.rs-edit-btn:focus-visible {
-  text-decoration: underline;
-}
-
-/* ── Top-level (page) sections ── */
-.page-level + .page-level {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--rs-divider-color);
 }
 
 .rs-panel-block button.rs-page-goto-btn {
@@ -98,10 +72,7 @@
   cursor: pointer;
   border-color: #00616d;
   border-style: solid;
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  border-top-right-radius: 8px;
+  border-radius: 8px;
   background: #ffffff;
   color: #00616d;
 }

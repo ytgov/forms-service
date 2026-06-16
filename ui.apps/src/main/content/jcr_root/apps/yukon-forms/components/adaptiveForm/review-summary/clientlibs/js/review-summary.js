@@ -68,13 +68,15 @@
 
     container.items.forEach(function (item) {
       if (item.type === "panel") {
-        if (excludedFields.indexOf(item.node.panel.name) >= 0) return;
-        var header = null;
-        if (item.node.panel.title) {
-          var title = item.node.panel.title;
-          var panelName = item.node.panel.name;
-          var panelSom = item.node.panel.somExpression || panelName;
+        var panel = item.node.panel;
+        if (excludedFields.indexOf(panel.name) >= 0) return;
 
+        var panelName = panel.name;
+        var panelSom  = panel.somExpression || panelName;
+        var title     = panel.title || panelName;
+
+        var header = null;
+        if (panel.title) {
           header = document.createElement("div");
           header.className = "rs-section-header" + (isTopLevelContainer ? " rs-page-header" : "");
 
@@ -83,28 +85,25 @@
           heading.textContent = title;
           header.appendChild(heading);
         }
+
         var childSection = buildSection(item.node, excludedFields, showEditLinks, false);
 
         var panelBlock = document.createElement("div");
         panelBlock.className = "rs-panel-block";
-        if (header) {
-          panelBlock.appendChild(header);
-        }
+        if (header) panelBlock.appendChild(header);
         panelBlock.appendChild(childSection);
 
-        if (isTopLevelContainer) {
-          if (showEditLinks) {
-            var rootItems  = item.node.panel.parent && item.node.panel.parent.items;
-            var pageNumber = rootItems ? rootItems.indexOf(item.node.panel) : null;
+        if (isTopLevelContainer && showEditLinks) {
+          var rootItems  = panel.parent && panel.parent.items;
+          var pageNumber = rootItems ? rootItems.indexOf(panel) : null;
 
-            var goBackBtn = document.createElement("button");
-            goBackBtn.type = "button";
-            goBackBtn.className = "rs-page-goto-btn";
-            goBackBtn.textContent = "Go back to page " + pageNumber + " to edit your " + title;
-            goBackBtn.dataset.rsPanel = panelName;
-            goBackBtn.dataset.rsPanelSom = panelSom;
-            panelBlock.appendChild(goBackBtn);
-          }
+          var goBackBtn = document.createElement("button");
+          goBackBtn.type = "button";
+          goBackBtn.className = "rs-page-goto-btn";
+          goBackBtn.textContent = "Go back to page " + pageNumber + " to edit your " + title;
+          goBackBtn.dataset.rsPanel = panelName;
+          goBackBtn.dataset.rsPanelSom = panelSom;
+          panelBlock.appendChild(goBackBtn);
         }
 
         section.appendChild(panelBlock);
@@ -201,7 +200,7 @@
 
     if (showEditLinks) {
       // Delegated handler on $root catches clicks regardless of DOM re-renders
-      $root.on("click.rs", ".rs-edit-btn, .rs-page-goto-btn", function (e) {
+      $root.on("click.rs", ".rs-page-goto-btn", function (e) {
         e.preventDefault();
         e.stopPropagation();
         var panelName = this.dataset.rsPanel;
