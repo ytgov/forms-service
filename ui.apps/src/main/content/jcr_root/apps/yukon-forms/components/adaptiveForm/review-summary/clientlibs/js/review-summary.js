@@ -52,16 +52,6 @@
     if (Array.isArray(display)) return display.join(", ") || null;
     if (display !== null && display !== undefined && display !== "") return String(display);
     if (Array.isArray(raw)) return raw.join(", ") || null;
-    if (field.className === "guideTextBox" && field.options && field.options.jsonModel && field.options.jsonModel && field.options.jsonModel.options) {
-      field.options.jsonModel.options.forEach(item => {
-        var nameValues = item.split('=');
-        if (nameValues.length === 2) {
-          if (raw === nameValues[0]) {
-            raw = nameValues[1];
-          }
-        }
-      });
-    }
     return String(raw);
   }
 
@@ -70,43 +60,73 @@
     return value;
   }
 
-  // ─── jsTree conversion ────────────────────────────────────────────────────
+  // ─── Flat list rendering ──────────────────────────────────────────────────
 
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-  }
+  function buildSection(container, excludedFields, showEditLinks, isTopLevelContainer) {
+    var section = document.createElement("div");
+    section.className = "rs-section";
 
-  function toJsTreeNodes(container, excludedFields) {
-    var nodes = [];
     container.items.forEach(function (item) {
       if (item.type === "panel") {
         if (excludedFields.indexOf(item.node.panel.name) >= 0) return;
-        var title = item.node.panel.title || item.node.panel.name || "Section";
-        nodes.push({
-          text: escapeHtml(title),
-          state: { opened: true },
-          children: toJsTreeNodes(item.node, excludedFields),
-          li_attr: {
-            "class": "rs-panel-node",
-            "data-rs-panel": item.node.panel.name,
-            "data-rs-panel-som": item.node.panel.somExpression || item.node.panel.name
+        var header = null;
+        if (item.node.panel.title) {
+          var title = item.node.panel.title;
+          var panelName = item.node.panel.name;
+          var panelSom = item.node.panel.somExpression || panelName;
+
+          header = document.createElement("div");
+          header.className = "rs-section-header" + (isTopLevelContainer ? " rs-page-header" : "");
+
+          var heading = document.createElement("h3");
+          heading.className = "rs-section-title";
+          heading.textContent = title;
+          header.appendChild(heading);
+        }
+        var childSection = buildSection(item.node, excludedFields, showEditLinks, false);
+
+        var panelBlock = document.createElement("div");
+        panelBlock.className = "rs-panel-block";
+        if (header) {
+          panelBlock.appendChild(header);
+        }
+        panelBlock.appendChild(childSection);
+
+        if (isTopLevelContainer) {
+          if (showEditLinks) {
+            var rootItems  = item.node.panel.parent && item.node.panel.parent.items;
+            var pageNumber = rootItems ? rootItems.indexOf(item.node.panel) : null;
+
+            var goBackBtn = document.createElement("button");
+            goBackBtn.type = "button";
+            goBackBtn.className = "rs-page-goto-btn";
+            goBackBtn.textContent = "Go back to page " + pageNumber + " to edit your " + title;
+            goBackBtn.dataset.rsPanel = panelName;
+            goBackBtn.dataset.rsPanelSom = panelSom;
+            panelBlock.appendChild(goBackBtn);
           }
-        });
+        }
+
+        section.appendChild(panelBlock);
       } else {
-        nodes.push({
-          text: "<span class='rs-label'>" + escapeHtml(item.label) + "</span>"
-              + "<span class='rs-value'>" + escapeHtml(item.value) + "</span>",
-          icon: false,
-          children: false,
-          li_attr: { "class": "rs-field-node" }
-        });
+        var row = document.createElement("div");
+        row.className = "rs-field";
+
+        var label = document.createElement("div");
+        label.className = "rs-label";
+        label.textContent = item.label;
+
+        var value = document.createElement("div");
+        value.className = "rs-value";
+        value.textContent = item.value;
+
+        row.appendChild(label);
+        row.appendChild(value);
+        section.appendChild(row);
       }
     });
-    return nodes;
+
+    return section;
   }
 
   // ─── Core renderer ────────────────────────────────────────────────────────
@@ -164,18 +184,12 @@
       current.items.push({ type: "field", label: node.title || node.name, value: value });
     });
 
-    // ── Initialise jsTree ─────────────────────────────────────────────────
+    // ── Render flat sections ──────────────────────────────────────────────
     var $root = $(root);
-
-    if ($root.data("jstree")) {
-      $root.off(".rs");
-      $root.jstree("destroy", true);
-    }
+    $root.off(".rs");
     root.innerHTML = "";
 
-    var jsData = toJsTreeNodes(treeRoot, excludedFields);
-
-    if (!jsData.length) {
+    if (!treeRoot.items.length) {
       var empty = document.createElement("p");
       empty.className = "review-summary__empty";
       empty.textContent = "No responses to display.";
@@ -183,35 +197,20 @@
       return;
     }
 
-    $root.jstree({
-      core: {
-        data: jsData,
-        themes: { icons: false, dots: false }
-      }
-    });
+    root.appendChild(buildSection(treeRoot, excludedFields, showEditLinks, true));
 
     if (showEditLinks) {
       // Delegated handler on $root catches clicks regardless of DOM re-renders
-      $root.on("click.rs", ".rs-edit-btn", function (e) {
+      $root.on("click.rs", ".rs-edit-btn, .rs-page-goto-btn", function (e) {
         e.preventDefault();
         e.stopPropagation();
-        var $li = $(this).closest("li.rs-panel-node");
-        var panelName = $li.attr("data-rs-panel");
-        var panelSom  = $li.attr("data-rs-panel-som") || panelName;
+        var panelName = this.dataset.rsPanel;
+        var panelSom  = this.dataset.rsPanelSom || panelName;
         guideBridge.setFocus(panelSom);
         setTimeout(function () {
           var el = document.getElementById(panelName);
           if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
         }, 300);
-      });
-
-      // Append Edit links after jsTree finishes rendering
-      $root.on("ready.jstree.rs", function () {
-        $root.find("li.rs-panel-node").each(function () {
-          $(this).children(".jstree-anchor").after(
-            $('<a href="#" class="rs-edit-btn">Edit</a>')
-          );
-        });
       });
     }
   }
