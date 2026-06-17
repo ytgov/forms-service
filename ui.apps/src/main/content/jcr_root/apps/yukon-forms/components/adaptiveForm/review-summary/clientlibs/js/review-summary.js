@@ -82,7 +82,7 @@
 
           var heading = document.createElement("h3");
           heading.className = "rs-section-title";
-          heading.textContent = title;
+          heading.innerHTML = title;
           header.appendChild(heading);
         }
 
