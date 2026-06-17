@@ -1,0 +1,100 @@
+/*
+ * validation-summary.css
+ *
+ * Styles for the Validation Summary component.
+ * Lists fields currently failing validation, grouped by section.
+ */
+
+/* ── Design tokens ── */
+.validation-summary {
+  --vs-label-color:     #111827;
+  --vs-error-color:     #b91c1c;
+  --vs-panel-color:     #1f2937;
+  --vs-divider-color:   #e5e7eb;
+  --vs-font-size-sm:    0.875rem;
+  --vs-font-size-base:  1rem;
+  --vs-font-size-panel: 1rem;
+}
+
+/* ── Loading state ── */
+.validation-summary__loading {
+  color: var(--vs-label-color);
+  font-size: var(--vs-font-size-sm);
+  padding: 1rem 0;
+}
+
+/* ── Empty state ── */
+.validation-summary__empty {
+  color: var(--vs-label-color);
+  font-style: italic;
+}
+
+/* ── Sections ── */
+.vs-panel-block + .vs-panel-block,
+.vs-panel-block .vs-panel-block {
+  margin-top: 1rem;
+}
+
+.vs-section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--vs-divider-color);
+  padding-bottom: 0.25rem;
+}
+
+.vs-section-title {
+  margin: 0;
+  color: var(--vs-panel-color);
+  font-weight: 600;
+  font-size: var(--vs-font-size-panel);
+}
+
+.vs-page-header {
+  font-size: 1.25rem;
+  padding: 10px 10px 10px 0;
+  font-weight: bold;
+  color: #000;
+  border-width: 0 0 4px;
+  border-style: solid;
+  border-color: #f1ab00;
+}
+
+.vs-page-header .vs-section-title {
+  font-size: inherit;
+}
+
+/* ── Go-back button ── */
+.vs-panel-block button.vs-page-goto-btn {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: var(--vs-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  border-color: #00616d;
+  border-style: solid;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #00616d;
+}
+
+/* ── Field error rows ── */
+.vs-field {
+  display: block;
+  padding: 0.375rem 0;
+}
+
+.vs-label {
+  font-size: var(--vs-font-size-base);
+  width: 100%;
+  color: var(--vs-label-color);
+}
+
+.vs-error {
+  color: var(--vs-error-color);
+  font-size: var(--vs-font-size-sm);
+  word-break: break-word;
+  width: 100%;
+  margin-top: 0.25rem;
+}

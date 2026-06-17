@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root
+    xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    jcr:primaryType="cq:Component"
+    jcr:title="Validation Summary"
+    jcr:description="Lists all fields currently failing validation, grouped by section. Drop on the Review / Finish and Submit panel."
+    componentGroup="Adaptive Form"
+    sling:resourceSuperType="wcm/foundation/components/responsivegrid" />

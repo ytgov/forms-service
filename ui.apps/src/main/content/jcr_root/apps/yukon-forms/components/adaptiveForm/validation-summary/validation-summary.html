@@ -1,0 +1,20 @@
+<!--
+  HTL template for the Validation Summary component.
+
+  Drop this component onto any Adaptive Form's Review/Finish panel.
+  The client-side JS (validation-summary.js) dynamically populates
+  the #validation-summary-root element via GuideBridge at runtime,
+  listing all fields currently failing validation grouped by section.
+
+  Authoring dialog properties (set on the component node):
+    - excludedFields : String[] — field names to suppress (e.g. hidden tokens)
+-->
+<div data-sly-use.model="ca.yukon.aem.core.models.ValidationSummaryModel"
+     class="validation-summary"
+     data-excluded-fields="${model.excludedFieldsJson}"
+     id="validation-summary-root">
+
+  <div class="validation-summary__loading" aria-live="polite">
+    <span>Loading&hellip;</span>
+  </div>
+</div>
