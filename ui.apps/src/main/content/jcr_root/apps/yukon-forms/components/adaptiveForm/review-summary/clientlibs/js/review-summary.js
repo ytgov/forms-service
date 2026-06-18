@@ -34,9 +34,9 @@
     var raw     = field.value;
     var display = field.displayValue;
     if (raw === null || raw === undefined || raw === "") return null;
-    if (field.className === "guideCheckBox" && field.options && field.options.jsonModel && field.options.jsonModel.options) {
+    if (field.className === "guideCheckBox" && field.jsonModel && field.jsonModel.options) {
       var value = null;
-      field.options.jsonModel.options.forEach(item => {
+      field.jsonModel.options.forEach(item => {
         var nameValues = item.split('=');
         if (nameValues.length === 2) {
           if (raw === nameValues[0]) {
@@ -111,16 +111,17 @@
         var row = document.createElement("div");
         row.className = "rs-field";
 
-        var label = document.createElement("div");
-        label.className = "rs-label";
-        label.textContent = item.label;
-
+        if (item.label) {
+          var label = document.createElement("div");
+          label.className = "rs-label";
+          label.innerHTML = item.label;
+          row.appendChild(label);
+        }
         var value = document.createElement("div");
         value.className = "rs-value";
-        value.textContent = item.value;
-
-        row.appendChild(label);
+        value.innerHTML = item.value;
         row.appendChild(value);
+
         section.appendChild(row);
       }
     });
@@ -180,7 +181,11 @@
         current = findOrCreateChild(current, panel);
       });
 
-      current.items.push({ type: "field", label: node.title || node.name, value: value });
+      current.items.push({
+        type: "field",
+        label: node.jsonModel && node.jsonModel.hideTitle === 'true' ? '' : (node.title || node.name),
+        value: value
+      });
     });
 
     // ── Render flat sections ──────────────────────────────────────────────
