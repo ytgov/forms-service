@@ -99,52 +99,54 @@ function _handleAccordionInteraction(e) {
   _openCloseAccordionElement(e);
 }
 
-document.addEventListener('click', function(e) {
-  var expandBtn = e.target.closest('.expandAllPanelsButton');
-  var collapseBtn = e.target.closest('.collapseAllPanelsButton');
-  
-  var clicked = expandBtn || collapseBtn;
-  if (!clicked) return;
+if (typeof document !== 'undefined') {
+  document.addEventListener('click', function (e) {
+    var expandBtn = e.target.closest('.expandAllPanelsButton');
+    var collapseBtn = e.target.closest('.collapseAllPanelsButton');
 
-  var expand = !!expandBtn;
+    var clicked = expandBtn || collapseBtn;
+    if (!clicked) return;
 
-  // Walk up to the outermost guide-item wrapper
-  var buttonWrapper = clicked.closest('[data-guide-parent-id]');
-  if (!buttonWrapper) return;
+    var expand = !!expandBtn;
 
-  // The accordion is in a sibling div, find the next sibling that contains .accordion-navigators
-  var sibling = buttonWrapper.nextElementSibling;
-  while (sibling) {
-    var accordion = sibling.querySelector('.accordion-navigators');
-    if (accordion) {
-      setAccordion(accordion, expand);
-      return;
+    // Walk up to the outermost guide-item wrapper
+    var buttonWrapper = clicked.closest('[data-guide-parent-id]');
+    if (!buttonWrapper) return;
+
+    // The accordion is in a sibling div, find the next sibling that contains .accordion-navigators
+    var sibling = buttonWrapper.nextElementSibling;
+    while (sibling) {
+      var accordion = sibling.querySelector('.accordion-navigators');
+      if (accordion) {
+        setAccordion(accordion, expand);
+        return;
+      }
+      sibling = sibling.nextElementSibling;
     }
-    sibling = sibling.nextElementSibling;
-  }
-});
+  });
 
-// Replace AEM's built-in panel header functionality to work with our expand/collapse all
-document.addEventListener('click', function(e) {
+  // Replace AEM's built-in panel header functionality to work with our expand/collapse all
+  document.addEventListener('click', function (e) {
 
-  // Allow the remove button to work normally
-  if (e.target.closest('[data-guide-addremove="remove"]')) {
-    _removeAccordionElement(e);
-    return;
-  }
-
-  _handleAccordionInteraction(e);
-}, true);
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === "Enter") {
     // Allow the remove button to work normally
     if (e.target.closest('[data-guide-addremove="remove"]')) {
       _removeAccordionElement(e);
       return;
     }
-  }
-  if (e.code === "Space") {
+
     _handleAccordionInteraction(e);
-  }
-}, true);
+  }, true);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === "Enter") {
+      // Allow the remove button to work normally
+      if (e.target.closest('[data-guide-addremove="remove"]')) {
+        _removeAccordionElement(e);
+        return;
+      }
+    }
+    if (e.code === "Space") {
+      _handleAccordionInteraction(e);
+    }
+  }, true);
+}

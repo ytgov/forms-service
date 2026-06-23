@@ -169,21 +169,21 @@
     } else {
       init();
     }
+    // Re-patch whenever new nodes land in the DOM (repeatable panels).
+    // adobeFileAttachment may not be set yet on the first mutation — the guard
+    // in processInputs skips those inputs, and Foundation's own subsequent DOM
+    // writes will trigger another callback that picks them up.
+    new MutationObserver(function (mutations) {
+      var hasNewNodes = mutations.some(function (m) {
+        return m.addedNodes.length > 0;
+      });
+      if (hasNewNodes) {
+        try { processInputs(); } catch (e) { console.error(LOG + "MutationObserver error.", e); }
+      }
+    }).observe(document.body, { childList: true, subtree: true });
   } catch (e) {
-    console.error(LOG + "Top-level init error — custom validation disabled.", e);
-  }
-
-  // Re-patch whenever new nodes land in the DOM (repeatable panels).
-  // adobeFileAttachment may not be set yet on the first mutation — the guard
-  // in processInputs skips those inputs, and Foundation's own subsequent DOM
-  // writes will trigger another callback that picks them up.
-  new MutationObserver(function (mutations) {
-    var hasNewNodes = mutations.some(function (m) {
-      return m.addedNodes.length > 0;
-    });
-    if (hasNewNodes) {
-      try { processInputs(); } catch (e) { console.error(LOG + "MutationObserver error.", e); }
+    if (typeof console !== "undefined") {
+      console.error(LOG + "Top-level init error — custom validation disabled.", e);
     }
-  }).observe(document.body, { childList: true, subtree: true });
-
+  }
 }(window, jQuery));
