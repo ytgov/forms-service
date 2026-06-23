@@ -38,3 +38,18 @@ ul.tab-navigators-vertical > li:focus-visible {
 	position: relative;
 }
 
+.helpAnchor label {
+	display: inline-block;
+	anchor-name: --label-anchor;
+}
+
+.helpAnchor .guideHelpQuestionMark, .helpAnchorCheckBox .guideHelpQuestionMark {
+	position-anchor: --label-anchor;
+	left: anchor(right);
+}
+
+.helpAnchorCheckBox .guideCheckBoxItem label {
+	display: inline-block;
+	anchor-name: --label-anchor;
+}
+
