@@ -9,4 +9,5 @@ validateDateByDaysPassed.js
 setFeedbackLinkParameters.js
 setLanguageLinkParameters.js
 triggerPerPanelValidation.js
+panel.js
 

@@ -179,23 +179,31 @@
         }
     }
 
-    window.AddressInput = AddressInput;
+    try {
+        window.AddressInput = AddressInput;
 
-    // Initialize inputs already in the DOM.
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() { initAll(); });
-    } else {
-        initAll();
-    }
-
-    // Re-initialize whenever a new panel instance is added to a repeatable panel.
-    new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            mutation.addedNodes.forEach(function(node) {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                    initAll(node);
-                }
+        // Initialize inputs already in the DOM.
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function () {
+                initAll();
             });
-        });
-    }).observe(document.body, { childList: true, subtree: true });
+        } else {
+            initAll();
+        }
+
+        // Re-initialize whenever a new panel instance is added to a repeatable panel.
+        new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                mutation.addedNodes.forEach(function (node) {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        initAll(node);
+                    }
+                });
+            });
+        }).observe(document.body, {childList: true, subtree: true});
+    } catch (e) {
+        if (typeof console !== "undefined") {
+            console.error("Top-level init error.", e);
+        }
+    }
 })();

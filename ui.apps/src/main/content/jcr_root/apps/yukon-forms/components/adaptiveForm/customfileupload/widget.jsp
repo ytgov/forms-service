@@ -27,6 +27,7 @@
     boolean isDoubleExtFTEnabled = toggleRouter != null && toggleRouter.isEnabled(FeatureToggleConstants.FT_DISABLE_DOUBLE_EXTENSION_FILES);
     pageContext.setAttribute("isDoubleExtFTEnabled", isDoubleExtFTEnabled);
 %>
+<cq:includeClientLib categories="yukon-forms.components.file-upload"/>
 <div class="<%= GuideConstants.GUIDE_FIELD_WIDGET%> afFileUpload"
      <c:if test="${isDoubleExtFTEnabled}">data-disable-double-extension-files="${guideField.disableDoubleExtensionFiles}"</c:if>
      style="${guide:encodeForHtmlAttr(guideField.styles,xssAPI)}">
