@@ -13,3 +13,13 @@ function getDateDisplayValue(dateFieldSOM) {
 	return dateField.formattedValue;
 }
 
+
+/** Returns today's date, according to the user's timezone
+ *
+@name todaysDate
+@return {Date} Todays date
+*/
+function todaysDate() {
+	return new Date();
+}
+
