@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Custom Drafts and Submissions component
+    
+    Modifies the default Drafts and Submissions component so that it only shows the drafts and submissions of the form that's embedded in the page, as opposed to all the drafts and submissions that the user has.
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:description="Custom Drafts and submissions Component with filtering for current form"
+    jcr:primaryType="cq:Component"
+    jcr:title="Drafts and Submissions (Custom)"
+    sling:resourceSuperType="core/fd/components/formsportal/draftsandsubmissions/v1/draftsandsubmissions"
+    componentGroup="Yukon Forms - Forms and Communications Portal"/>
