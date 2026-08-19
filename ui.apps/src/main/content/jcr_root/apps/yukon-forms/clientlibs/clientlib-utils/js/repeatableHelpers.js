@@ -75,6 +75,23 @@ function getDataFromRepeatablePanel(containerName, repeatableName, fieldNamesCsv
     return JSON.stringify(results);
 };
 
+/** Single-field getter for a repeatable panel. Returns an array containing
+the values of the field specified.
+ *
+@name getDataFromRepeatablePanelAsArray Get values of a single field from all instances of a repeatable panel
+@param {string} containerName Name of the wrapper panel containing the repeatable
+@param {string} repeatableName Name of the repeatable child panel
+@param {string} fieldNames Field name to pull from each instance
+@return {obj[]} Array of values
+ */
+function getDataFromRepeatablePanelAsArray(containerName, repeatableName, fieldName) {
+    var json = getDataFromRepeatablePanel(containerName, repeatableName, fieldName);
+    var itemsArray = JSON.parse(json);
+    return itemsArray.map(function (item) {
+        return item[fieldName];
+    });
+};
+
 /**
 Filters an array of objects by whether a given field matches (or doesn't match) a value.
  *
