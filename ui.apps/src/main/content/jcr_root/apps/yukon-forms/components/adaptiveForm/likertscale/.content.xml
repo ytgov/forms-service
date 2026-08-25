@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Likert Scale component.
+
+  Extends the out-of-the-box AEM Forms Foundation radio button component and
+  adds two configurable dialog properties:
+
+    lowEndLabel            — description of lowest value on the scale.
+                             e.g.  "Not at all satisfied"
+
+    highEndLabel           — description of the highest value on the scale.
+			     e.g.  "Very satisfied"
+
+  Deploy to:
+ui.apps/src/main/content/jcr_root/apps/<yourproject>/components/form/likertscale/
+-->
+<jcr:root
+  xmlns:jcr="http://www.jcp.org/jcr/1.0"
+  xmlns:cq="http://www.day.com/jcr/cq/1.0"
+  xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+  jcr:primaryType="cq:Component"
+  jcr:title="Likert Scale"
+  jcr:description="Likert Scale component."
+  sling:resourceSuperType="fd/af/components/guideradiobutton"
+  componentGroup="Adaptive Form" />

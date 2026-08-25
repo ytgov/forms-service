@@ -1,0 +1,70 @@
+.afLikertScale {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.afLikertScale::before {
+	display: none;
+}
+
+.afLikertScale .likert-high-end-label {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	font-size: 0.9rem;
+	color: #737373;
+}
+
+.afLikertScale .likert-low-end-label {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	font-size: 0.9rem;
+	color: #737373;
+}
+
+.afLikertScale input[type="radio"] {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+
+	border-radius: 5px;
+	width: 40px;
+	height: 40px;
+	border-color: #cdcdcd;
+
+	cursor: pointer;
+}
+
+.afLikertScale .likertWidgetLabel {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	margin: auto;
+	width: fit-content;
+	height: fit-content;
+}
+
+.afLikertScale .likertWidgetLabel label {
+	margin: 0;
+	font-size: 1rem;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.afLikertScale .likertScaleContainer {
+	position: relative;
+}
+
+.afLikertScale .likertWidgetLabel label::after {
+	display: none;
+}
+
+
