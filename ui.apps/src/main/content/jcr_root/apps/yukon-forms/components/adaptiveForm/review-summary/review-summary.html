@@ -1,0 +1,25 @@
+<!--
+  HTL template for the Review Summary component.
+
+  Drop this component onto any Adaptive Form's Review/Finish panel.
+  The client-side JS (review-summary.js) dynamically populates
+  the #review-summary-root element via GuideBridge at runtime.
+
+  Authoring dialog properties (set on the component node):
+    - excludedFields  : String[] — field names to suppress (e.g. hidden tokens)
+    - showEditLinks   : Boolean  — whether to render "Edit" nav links per section
+-->
+<div data-sly-use.model="ca.yukon.aem.core.models.ReviewSummaryModel"
+     class="review-summary"
+     data-excluded-fields="${model.excludedFieldsJson}"
+     data-show-edit-links="${model.showEditLinks ? 'true' : 'false'}"
+     id="review-summary-root">
+
+  <!--
+    Rendered at runtime by review-summary.js.
+    This placeholder is shown only while GuideBridge initialises.
+  -->
+  <div class="review-summary__loading" aria-live="polite">
+    <span>Loading your responses&hellip;</span>
+  </div>
+</div>
