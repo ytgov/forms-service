@@ -1,0 +1,11 @@
+<html>
+<body>
+	<blockquote style="text-align: left; border-bottom: solid 12px #ffcd57; padding: 20px;">
+		<p>
+			<img alt="Yukon Logo" src="https://yukon.ca/themes/custom/yukonca_glider/logo.svg">
+		</p>
+		
+		${emailBody}
+	</blockquote>
+</body>
+</html>
