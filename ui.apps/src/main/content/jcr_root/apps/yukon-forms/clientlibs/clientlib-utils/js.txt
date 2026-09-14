@@ -3,3 +3,4 @@
 repeatableHelpers.js
 choiceFieldHelpers.js
 dateFieldHelpers.js
+textFieldHelpers.js
