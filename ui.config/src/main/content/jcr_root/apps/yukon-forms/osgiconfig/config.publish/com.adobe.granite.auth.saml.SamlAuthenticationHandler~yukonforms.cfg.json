@@ -1,7 +1,6 @@
 {
   "path": [
-    "/content/yukon-forms",
-    "/content/forms/af/yukon-forms/protected-forms"
+    "/content/yukon-forms"
   ],
   "idpCertAlias": "$[env:SAML_IDP_CERT_ALIAS]",
   "identitySyncType": "idp_dynamic_simplified_id",

@@ -3,11 +3,8 @@
         "create group yukon-members with path /home/groups/yukon",
         "create path (sling:OrderedFolder) /content/dam/yukon-forms",
         "create path (sling:OrderedFolder) /content/dam/formsanddocuments/yukon-forms",
-        "create path (sling:OrderedFolder) /content/dam/formsanddocuments/yukon-forms/protected-forms",
         "create path (sling:OrderedFolder) /content/forms/af/yukon-forms",
         "create path (nt:unstructured) /content/dam/yukon-forms/jcr:content",
-        "set properties on /content/dam/yukon-forms/jcr:content\n  set cq:conf{String} to /conf/yukon-forms\n  set jcr:title{String} to \"Yukon Forms\"\nend",
-        "set ACL for anonymous\n  deny jcr:read on /content/dam/formsanddocuments/yukon-forms/protected-forms\nend",
-        "set ACL for yukon-members\n  allow jcr:read on /content/dam/formsanddocuments/yukon-forms/protected-forms\nend"
+        "set properties on /content/dam/yukon-forms/jcr:content\n  set cq:conf{String} to /conf/yukon-forms\n  set jcr:title{String} to \"Yukon Forms\"\nend"
     ]
 }

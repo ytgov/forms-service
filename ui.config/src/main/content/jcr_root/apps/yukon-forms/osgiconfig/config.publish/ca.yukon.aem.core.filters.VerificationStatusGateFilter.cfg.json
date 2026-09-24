@@ -1,0 +1,3 @@
+{
+  "redirect.page": "$[env:VERIFICATION_REDIRECT_PAGE;default=/content/yukon-forms/ca/en/verification-required.html]"
+}

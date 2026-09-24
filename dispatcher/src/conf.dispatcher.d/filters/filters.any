@@ -20,3 +20,6 @@ $include "./default_filters.any"
 
 # Allow POST-based SAML authentication invocation
 /0192 { /type "allow" /method "POST" /url "/system/sling/login" }
+
+# Allow the current user info debug endpoint
+/0200 { /type "allow" /method "GET" /url "/bin/yukon-forms/userinfo.json" }
