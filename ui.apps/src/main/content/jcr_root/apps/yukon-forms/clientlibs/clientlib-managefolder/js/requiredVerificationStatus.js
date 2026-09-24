@@ -6,7 +6,9 @@
  * and only saved, for FOLDER_ROOT and the folders under it.
  *
  * The level only takes effect once it reaches publish (where VerificationStatusGateFilter runs), so
- * after a successful save the folder node - not its forms - is published as well.
+ * after a successful save the folder node - not its forms - is published as well. editfolder.js
+ * reloads the page (FMBase.Util.refreshAction) as soon as its save succeeds, which would cancel the
+ * in-flight publish request, so that reload is held until the publish completes.
  */
 (function (document, $) {
     "use strict";
@@ -60,7 +62,7 @@
     });
 
     function publishFolder(path) {
-        $.ajax({
+        return $.ajax({
             type: "POST",
             url: Granite.HTTP.externalize(REPLICATE_URL),
             data: { cmd: "Activate", path: path, "_charset_": "utf-8" }
@@ -87,8 +89,18 @@
         }
         options.data += "&" + $.param(params);
         var savedFolderPath = folderPath;
+        // Registered before editfolder.js's own done handler (the prefilter runs inside its $.ajax
+        // call), so the reload override below is in place by the time that handler calls it.
         jqXHR.done(function () {
-            publishFolder(savedFolderPath);
+            var publish = publishFolder(savedFolderPath);
+            var refreshAction = FMBase.Util.refreshAction;
+            FMBase.Util.refreshAction = function () {
+                FMBase.Util.refreshAction = refreshAction;
+                // On failure, skip the reload so the "Publish Failed" message stays visible.
+                publish.done(function () {
+                    refreshAction();
+                });
+            };
         });
     });
 
