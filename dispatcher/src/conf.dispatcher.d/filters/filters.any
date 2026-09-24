@@ -21,5 +21,8 @@ $include "./default_filters.any"
 # Allow POST-based SAML authentication invocation
 /0192 { /type "allow" /method "POST" /url "/system/sling/login" }
 
+# Allow Sling logout (drops the AEM login-token, then redirects to the "resource" param)
+/0193 { /type "allow" /method "GET" /url "/system/sling/logout" /query "*" }
+
 # Allow the current user info debug endpoint
 /0200 { /type "allow" /method "GET" /url "/bin/yukon-forms/userinfo.json" }
