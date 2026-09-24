@@ -1,6 +1,7 @@
 {
   "path": [
-    "/content/yukon-forms"
+    "/content/yukon-forms",
+    "/content/forms/af/yukon-forms/protected-forms"
   ],
   "idpCertAlias": "$[env:SAML_IDP_CERT_ALIAS]",
   "identitySyncType": "idp_dynamic_simplified_id",
@@ -17,7 +18,9 @@
   "synchronizeAttributes": [
     "Email=profile/email",
     "FirstName=profile/givenName",
-    "LastName=profile/familyName"
+    "LastName=profile/familyName",
+    "urn:myyukon.ca/verification_status=profile/verificationStatus",
+    "urn:myyukon.ca/verification_process=profile/verificationProcess"
   ],
   "addGroupMemberships": true,
   "groupMembershipAttribute": "groups",
