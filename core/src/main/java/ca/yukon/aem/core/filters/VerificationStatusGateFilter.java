@@ -24,6 +24,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.engine.EngineConstants;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,9 +47,14 @@ import org.slf4j.LoggerFactory;
  * ACL backing it up, so it must cover both the public-facing {@code /content/forms/af/...} path and
  * the underlying DAM path (which is directly GET-able, e.g. for {@code jcr:content.json} model
  * fetches) to avoid a bypass.
+ *
+ * <p>The component requires its configuration, which only ships in {@code config.publish}, so it is
+ * inactive on author - otherwise it would also gate authors, e.g. the Forms &amp; Documents folder
+ * dialog reading a folder's {@code jcr:content.json}.
  */
 @Component(
         service = Filter.class,
+        configurationPolicy = ConfigurationPolicy.REQUIRE,
         property = {
                 EngineConstants.SLING_FILTER_SCOPE + "=" + EngineConstants.FILTER_SCOPE_REQUEST,
         })
