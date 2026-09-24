@@ -2,7 +2,7 @@
 
 <template data-sly-template.layout="${@ hideTime}">
     <table class="cmp-portallister__results cmp-portallister__results-list-container" data-cmp-hook-item-template="container">
-        <thead class="cmp-portallister__results-list-head">
+        <thead class="cmp-portallister__results-list-head" style="display: none">
             <tr>
                 <th class="cmp-portallister__item-list-image-wrapper-head"></th>
                 <th class="cmp-portallister__item-list-title-head">Titre</th>
@@ -11,6 +11,9 @@
                 <th class="cmp-portallister__item-list-operations-head"></th>
             </tr>
         </thead>
+	<tr class="no-drafts-row">
+	    <td>Aucun brouillon enregistré pour ce formulaire.</td>
+	</tr>
     </table>
     <table>
         <tr class="cmp-portallister__item cmp-portallister__item-list" data-cmp-hook-item-template="item">
