@@ -75,6 +75,12 @@ public class PrefillLoggedinUserAdaptiveForm implements DataXMLProvider {
                 rootElement.appendChild(emailElement);
                 log.debug("Created email Element");
             }
+            if (loggedinUser.hasProperty("profile/verificationStatus")) {
+                Element verificationStatusElement = doc.createElement("verificationStatus");
+                verificationStatusElement.setTextContent(loggedinUser.getProperty("profile/verificationStatus")[0].getString());
+                rootElement.appendChild(verificationStatusElement);
+                log.debug("Created verificationStatus Element");
+            }
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
