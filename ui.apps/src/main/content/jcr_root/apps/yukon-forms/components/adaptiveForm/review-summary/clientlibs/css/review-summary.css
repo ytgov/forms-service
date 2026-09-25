@@ -1,0 +1,100 @@
+/*
+ * review-summary.css
+ *
+ * Styles for the flat-list Review Summary component.
+ */
+
+/* ── Design tokens ── */
+.review-summary {
+  --rs-label-color:     #6b7280;
+  --rs-value-color:     #555;
+  --rs-panel-color:     #1f2937;
+  --rs-divider-color:   #e5e7eb;
+  --rs-font-size-sm:    0.875rem;
+  --rs-font-size-base:  1rem;
+  --rs-font-size-panel: 1rem;
+}
+
+/* ── Loading state ── */
+.review-summary__loading {
+  color: var(--rs-label-color);
+  font-size: var(--rs-font-size-sm);
+  padding: 1rem 0;
+}
+
+/* ── Empty state ── */
+.review-summary__empty {
+  color: var(--rs-label-color);
+  font-style: italic;
+}
+
+/* ── Sections ── */
+.rs-panel-block + .rs-panel-block,
+.rs-panel-block .rs-panel-block {
+  margin-top: 1rem;
+}
+
+.rs-section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.25rem;
+}
+
+.rs-section-title {
+  margin: 0;
+  color: var(--rs-panel-color);
+  font-weight: 600;
+  font-size: var(--rs-font-size-panel);
+}
+
+.rs-page-header {
+  font-size: 1.25rem;
+  padding: 10px 10px 10px 0;
+  font-weight: bold;
+  color: #000;
+  border-width: 0 0 4px;
+  border-style: solid;
+  border-color: #f1ab00;
+}
+
+.rs-page-header .rs-section-title {
+  font-size: inherit;
+}
+
+.rs-panel-block button.rs-page-goto-btn {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: var(--rs-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  border-color: #00616d;
+  border-style: solid;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #00616d;
+}
+
+.rs-field {
+  display: block;
+  padding: 0.375rem 0;
+}
+
+.rs-label {
+  font-size: var(--rs-font-size-sm);
+  font-weight: bold;
+  width: 100%;
+  color: black;
+}
+
+.rs-value {
+  color: var(--rs-value-color);
+  font-size: var(--rs-font-size-sm);
+  word-break: break-word;
+  width: 100%;
+  margin-top: .25rem;
+  padding-right: .75rem;
+  padding-top: .5rem;
+  margin-bottom: .25rem;
+}

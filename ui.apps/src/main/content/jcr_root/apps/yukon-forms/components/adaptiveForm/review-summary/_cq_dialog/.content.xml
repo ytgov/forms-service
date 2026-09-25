@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="\0"
+          sling:resourceType="cq/gui/components/authoring/dialog">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <accordion
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/accordion">
+                <items jcr:primaryType="nt:unstructured">
+                    <address
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="General"
+                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <!-- Excluded fields (multifield of textfield) -->
+                            <excludedFields
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                fieldLabel="Excluded Field Names"
+                                fieldDescription="Somerset/API names of fields to hide from the review (e.g. hidden tokens, internal IDs)."
+                                name="./excludedFields">
+                                <field
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    name="./excludedFields"
+                                    emptyText="e.g. trackingToken" />
+                            </excludedFields>
+
+                            <!-- Show edit links -->
+                            <showEditLinks
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                text="Show Edit Links"
+                                fieldDescription="Display an Edit link next to each section heading to navigate back."
+                                name="./showEditLinks"
+                                checked="{Boolean}true"
+                                value="{Boolean}true"
+                                uncheckedValue="{Boolean}false" />
+                        </items>
+                    </address>
+                </items>
+            </accordion>
+        </items>
+    </content>
+</jcr:root>
