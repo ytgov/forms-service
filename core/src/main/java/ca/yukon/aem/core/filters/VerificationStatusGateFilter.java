@@ -232,11 +232,14 @@ public class VerificationStatusGateFilter implements Filter {
 
         try {
             Authorizable user = userManager.getAuthorizable(userId);
-            if (user == null || !user.hasProperty(USER_STATUS_PROPERTY)) {
+            if (user == null) {
                 return 0d;
             }
+            if (!user.hasProperty(USER_STATUS_PROPERTY)) {
+                return 1d;
+            }
             Value[] values = user.getProperty(USER_STATUS_PROPERTY);
-            return values.length > 0 ? values[0].getDouble() : 0d;
+            return values.length > 0 ? values[0].getDouble() : 1d;
         } catch (RepositoryException e) {
             log.warn("Couldn't read {} for user {}", USER_STATUS_PROPERTY, userId, e);
             return 0d;
