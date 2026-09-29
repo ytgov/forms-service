@@ -17,7 +17,9 @@
   "synchronizeAttributes": [
     "Email=profile/email",
     "FirstName=profile/givenName",
-    "LastName=profile/familyName"
+    "LastName=profile/familyName",
+    "urn:myyukon.ca/verification_status=profile/verificationStatus",
+    "urn:myyukon.ca/verification_process=profile/verificationProcess"
   ],
   "addGroupMemberships": true,
   "groupMembershipAttribute": "groups",

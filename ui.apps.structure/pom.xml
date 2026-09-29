@@ -40,6 +40,10 @@
                         <filter><root>/apps/fd</root></filter>
                         <filter><root>/apps/fd/af</root></filter>
                         <filter><root>/apps/fd/af/themes</root></filter>
+                        <filter><root>/apps/fd/fm</root></filter>
+                        <filter><root>/apps/fd/fm/base</root></filter>
+                        <filter><root>/apps/fd/fm/base/content</root></filter>
+                        <filter><root>/apps/fd/fm/base/content/managefolder</root></filter>
                         <filter><root>/apps/sling</root></filter>
                         <filter><root>/apps/cq</root></filter>
                         <filter><root>/apps/dam</root></filter>
