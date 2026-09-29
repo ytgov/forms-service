@@ -3,7 +3,7 @@
  * dialog. The libs editfolder.js builds its own POST to <folder>/jcr:content containing only jcr:title
  * (and jcr:primaryType, so a missing jcr:content is created as nt:unstructured), so the verification
  * level is appended to that same request instead of being sent separately. The field is only shown,
- * and only saved, for FOLDER_ROOT and the folders under it.
+ * and only saved, for the folders under FOLDER_ROOT - not FOLDER_ROOT itself.
  *
  * The level only takes effect once it reaches publish (where VerificationStatusGateFilter runs), so
  * after a successful save the folder node - not its forms - is published as well. editfolder.js
@@ -27,7 +27,7 @@
     }
 
     function isUnderFolderRoot(path) {
-        return !!path && (path === FOLDER_ROOT || path.indexOf(FOLDER_ROOT + "/") === 0);
+        return !!path && path.indexOf(FOLDER_ROOT + "/") === 0;
     }
 
     function setStatusFieldVisible(visible) {
