@@ -55,6 +55,7 @@ public class MyCustomPrefillService implements DataProvider {
             String email = "Email Undefined";
             // Same default as VerificationStatusGateFilter: no synced status means unverified.
             String verificationStatus = "0";
+            String birthdate = "";
 
             if (loggedinUser.hasProperty("profile/givenName")) {
                 givenName = loggedinUser.getProperty("profile/givenName")[0].getString();
@@ -68,9 +69,12 @@ public class MyCustomPrefillService implements DataProvider {
             if (loggedinUser.hasProperty("profile/verificationStatus")) {
                 verificationStatus = loggedinUser.getProperty("profile/verificationStatus")[0].getString();
             }
+            if (loggedinUser.hasProperty("profile/birthDate")) {
+                birthdate = loggedinUser.getProperty("profile/birthDate")[0].getString();
+            }
 
             Gson gson = new Gson();
-            String jsonStr = "{\n  \"simple_submission\": {\n    \"Title\": \"" +familyName+" \",\n    \"Name\": \""+givenName+"\",\n    \"Email\": \""+email+ "\",\n    \"VerificationStatus\": \""+verificationStatus+ "\"\n  }\n}";
+            String jsonStr = "{\n  \"simple_submission\": {\n    \"Title\": \"" +familyName+" \",\n    \"Name\": \""+givenName+"\",\n    \"Email\": \""+email+ "\",\n    \"VerificationStatus\": \""+verificationStatus+ "\",\n    \"Birthdate\": \""+birthdate+ "\"\n  }\n}";
             HashMap myPojo = gson.fromJson(jsonStr, HashMap.class);
             String outputStr = gson.toJson(myPojo);
 

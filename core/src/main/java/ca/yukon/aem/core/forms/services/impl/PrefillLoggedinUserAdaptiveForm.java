@@ -11,6 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
@@ -33,7 +35,7 @@ import org.w3c.dom.Element;
 
 /**
  * Prefills the signed-in user's synced SAML profile ({@code fname}, {@code lname}, {@code email},
- * {@code verificationStatus}). Returns JSON ({@code afData.afBoundData.data}) to JSON-based forms (JSON schema,
+ * {@code verificationStatus}, {@code birthdate}). Returns JSON ({@code afData.afBoundData.data}) to JSON-based forms (JSON schema,
  * form data model) and XML ({@code <data>}) to XML-based ones (no schema, XSD) - handing XML to a JSON-based form
  * makes it fail to parse the data and hang.
  */
@@ -49,7 +51,11 @@ public class PrefillLoggedinUserAdaptiveForm implements DataProvider {
         PROFILE_FIELDS.put("profile/familyName", "lname");
         PROFILE_FIELDS.put("profile/email", "email");
         PROFILE_FIELDS.put("profile/verificationStatus", "verificationStatus");
+        PROFILE_FIELDS.put("profile/birthDate", "birthdate");
     }
+
+    /** Leading yyyy-MM-dd of an ISO date or date-time, e.g. "1980-05-17" or "1980-05-17T00:00:00Z". */
+    private static final Pattern ISO_DATE_PREFIX = Pattern.compile("^(\\d{4}-\\d{2}-\\d{2})(T.*)?$");
 
     @Override
     public String getServiceDescription() {
@@ -118,11 +124,25 @@ public class PrefillLoggedinUserAdaptiveForm implements DataProvider {
             if (user.hasProperty(field.getKey())) {
                 Value[] values = user.getProperty(field.getKey());
                 if (values != null && values.length > 0) {
-                    fields.put(field.getValue(), values[0].getString());
+                    String value = values[0].getString();
+                    fields.put(field.getValue(), "birthdate".equals(field.getValue()) ? toDateFieldValue(value) : value);
                 }
             }
         }
         return fields;
+    }
+
+    /**
+     * Date fields take yyyy-MM-dd, so an ISO date-time is cut down to its date part. Anything else is passed
+     * through unchanged (and won't fill a Date Picker field).
+     */
+    static String toDateFieldValue(String value) {
+        Matcher matcher = ISO_DATE_PREFIX.matcher(value.trim());
+        if (matcher.matches()) {
+            return matcher.group(1);
+        }
+        log.debug("Birthdate '{}' isn't an ISO date, passing it through unchanged", value);
+        return value;
     }
 
     private static Authorizable getLoggedinUser(DataOptions dataOptions) throws RepositoryException {

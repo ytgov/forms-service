@@ -76,6 +76,25 @@ class PrefillLoggedinUserAdaptiveFormTest {
     }
 
     @Test
+    void birthdate_prefilledAsDateFieldValue() throws Exception {
+        Map<String, String> profile = new HashMap<>();
+        profile.put("profile/birthDate", "1980-05-17T00:00:00Z");
+        withUser("jane@example.com", profile);
+
+        String xml = read(service.getPrefillData(options));
+
+        assertTrue(xml.contains("<birthdate>1980-05-17</birthdate>"), xml);
+    }
+
+    @Test
+    void toDateFieldValue_keepsIsoDatesAndPassesOthersThrough() {
+        assertEquals("1980-05-17", PrefillLoggedinUserAdaptiveForm.toDateFieldValue("1980-05-17"));
+        assertEquals("1980-05-17", PrefillLoggedinUserAdaptiveForm.toDateFieldValue("1980-05-17T08:30:00-07:00"));
+        assertEquals("1980-05-17", PrefillLoggedinUserAdaptiveForm.toDateFieldValue(" 1980-05-17 "));
+        assertEquals("17/05/1980", PrefillLoggedinUserAdaptiveForm.toDateFieldValue("17/05/1980"));
+    }
+
+    @Test
     void missingProfileProperties_leftOut() throws Exception {
         Map<String, String> profile = new HashMap<>();
         profile.put("profile/givenName", "Jane");

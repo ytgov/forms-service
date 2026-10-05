@@ -18,7 +18,8 @@
     "Email=profile/email",
     "FirstName=profile/givenName",
     "LastName=profile/familyName",
-    "urn:myyukon.ca/verification_status=profile/verificationStatus"
+    "urn:myyukon.ca/verification_status=profile/verificationStatus",
+    "urn:myyukon.ca/birthdate=profile/birthDate"
   ],
   "addGroupMemberships": true,
   "groupMembershipAttribute": "groups",

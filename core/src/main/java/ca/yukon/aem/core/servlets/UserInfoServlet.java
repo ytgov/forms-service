@@ -51,6 +51,7 @@ public class UserInfoServlet extends SlingSafeMethodsServlet {
             addStringOrNull(json, "lastName", getProfileProperty(user, "profile/familyName"));
             addStringOrNull(json, "email", getProfileProperty(user, "profile/email"));
             addStringOrNull(json, "verificationStatus", getProfileProperty(user, "profile/verificationStatus"));
+            addStringOrNull(json, "birthdate", getProfileProperty(user, "profile/birthDate"));
 
             List<String> groups = UserInfoUtils.listGroups(request.getResourceResolver());
             JsonArrayBuilder groupsArray = Json.createArrayBuilder();
