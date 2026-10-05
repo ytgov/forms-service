@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Returns the current session user's identity, verification attributes and group memberships as
- * JSON. Useful for verifying that SAML profile sync ({@code profile/verificationStatus},
- * {@code profile/verificationProcess}, group memberships) is working as expected. Only ever
+ * JSON. Useful for verifying that SAML profile sync ({@code profile/verificationStatus}, group
+ * memberships) is working as expected. Only ever
  * reflects the requesting user's own session - anonymous requests get anonymous's (empty) info.
  */
 @Component(service = {Servlet.class})
@@ -51,7 +51,6 @@ public class UserInfoServlet extends SlingSafeMethodsServlet {
             addStringOrNull(json, "lastName", getProfileProperty(user, "profile/familyName"));
             addStringOrNull(json, "email", getProfileProperty(user, "profile/email"));
             addStringOrNull(json, "verificationStatus", getProfileProperty(user, "profile/verificationStatus"));
-            addStringOrNull(json, "verificationProcess", getProfileProperty(user, "profile/verificationProcess"));
 
             List<String> groups = UserInfoUtils.listGroups(request.getResourceResolver());
             JsonArrayBuilder groupsArray = Json.createArrayBuilder();
