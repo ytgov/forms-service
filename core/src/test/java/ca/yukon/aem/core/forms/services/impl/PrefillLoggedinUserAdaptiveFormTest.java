@@ -87,6 +87,19 @@ class PrefillLoggedinUserAdaptiveFormTest {
     }
 
     @Test
+    void fullNameAndNickname_prefilled() throws Exception {
+        Map<String, String> profile = new HashMap<>();
+        profile.put("profile/fullName", "Shèhtsō Ndī");
+        profile.put("profile/nickname", "Loa2");
+        withUser("loa2@example.com", profile);
+
+        String xml = read(service.getPrefillData(options));
+
+        assertTrue(xml.contains("<fullName>Shèhtsō Ndī</fullName>"), xml);
+        assertTrue(xml.contains("<nickname>Loa2</nickname>"), xml);
+    }
+
+    @Test
     void toDateFieldValue_keepsIsoDatesAndPassesOthersThrough() {
         assertEquals("1980-05-17", PrefillLoggedinUserAdaptiveForm.toDateFieldValue("1980-05-17"));
         assertEquals("1980-05-17", PrefillLoggedinUserAdaptiveForm.toDateFieldValue("1980-05-17T08:30:00-07:00"));

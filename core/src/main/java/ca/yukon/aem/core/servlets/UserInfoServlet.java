@@ -49,6 +49,8 @@ public class UserInfoServlet extends SlingSafeMethodsServlet {
             json.add("username", user.getID());
             addStringOrNull(json, "firstName", getProfileProperty(user, "profile/givenName"));
             addStringOrNull(json, "lastName", getProfileProperty(user, "profile/familyName"));
+            addStringOrNull(json, "fullName", getProfileProperty(user, "profile/fullName"));
+            addStringOrNull(json, "nickname", getProfileProperty(user, "profile/nickname"));
             addStringOrNull(json, "email", getProfileProperty(user, "profile/email"));
             addStringOrNull(json, "verificationStatus", getProfileProperty(user, "profile/verificationStatus"));
             addStringOrNull(json, "birthdate", getProfileProperty(user, "profile/birthDate"));

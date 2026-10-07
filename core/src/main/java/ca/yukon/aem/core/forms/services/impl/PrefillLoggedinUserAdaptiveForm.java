@@ -35,7 +35,7 @@ import org.w3c.dom.Element;
 
 /**
  * Prefills the signed-in user's synced SAML profile ({@code fname}, {@code lname}, {@code email},
- * {@code verificationStatus}, {@code birthdate}). Returns JSON ({@code afData.afBoundData.data}) to JSON-based forms (JSON schema,
+ * {@code verificationStatus}, {@code birthdate}, {@code fullName}, {@code nickname}). Returns JSON ({@code afData.afBoundData.data}) to JSON-based forms (JSON schema,
  * form data model) and XML ({@code <data>}) to XML-based ones (no schema, XSD) - handing XML to a JSON-based form
  * makes it fail to parse the data and hang.
  */
@@ -52,6 +52,8 @@ public class PrefillLoggedinUserAdaptiveForm implements DataProvider {
         PROFILE_FIELDS.put("profile/email", "email");
         PROFILE_FIELDS.put("profile/verificationStatus", "verificationStatus");
         PROFILE_FIELDS.put("profile/birthDate", "birthdate");
+        PROFILE_FIELDS.put("profile/fullName", "fullName");
+        PROFILE_FIELDS.put("profile/nickname", "nickname");
     }
 
     /** Leading yyyy-MM-dd of an ISO date or date-time, e.g. "1980-05-17" or "1980-05-17T00:00:00Z". */
