@@ -69,10 +69,10 @@ class PrefillLoggedinUserAdaptiveFormTest {
 
         String xml = read(service.getPrefillData(options));
 
-        assertTrue(xml.contains("<fname>Jane</fname>"), xml);
-        assertTrue(xml.contains("<lname>Doe &amp; Co</lname>"), xml);
-        assertTrue(xml.contains("<email>jane@example.com</email>"), xml);
-        assertTrue(xml.contains("<verificationStatus>2</verificationStatus>"), xml);
+        assertTrue(xml.contains("<MyYukon_FirstName>Jane</MyYukon_FirstName>"), xml);
+        assertTrue(xml.contains("<MyYukon_LastName>Doe &amp; Co</MyYukon_LastName>"), xml);
+        assertTrue(xml.contains("<MyYukon_Email>jane@example.com</MyYukon_Email>"), xml);
+        assertTrue(xml.contains("<MyYukon_VerificationStatus>2</MyYukon_VerificationStatus>"), xml);
     }
 
     @Test
@@ -83,7 +83,7 @@ class PrefillLoggedinUserAdaptiveFormTest {
 
         String xml = read(service.getPrefillData(options));
 
-        assertTrue(xml.contains("<birthdate>1980-05-17</birthdate>"), xml);
+        assertTrue(xml.contains("<MyYukon_Birthdate>1980-05-17</MyYukon_Birthdate>"), xml);
     }
 
     @Test
@@ -95,8 +95,8 @@ class PrefillLoggedinUserAdaptiveFormTest {
 
         String xml = read(service.getPrefillData(options));
 
-        assertTrue(xml.contains("<fullName>Shèhtsō Ndī</fullName>"), xml);
-        assertTrue(xml.contains("<nickname>Loa2</nickname>"), xml);
+        assertTrue(xml.contains("<MyYukon_FullName>Shèhtsō Ndī</MyYukon_FullName>"), xml);
+        assertTrue(xml.contains("<MyYukon_Nickname>Loa2</MyYukon_Nickname>"), xml);
     }
 
     @Test
@@ -115,8 +115,8 @@ class PrefillLoggedinUserAdaptiveFormTest {
 
         String xml = read(service.getPrefillData(options));
 
-        assertTrue(xml.contains("<fname>Jane</fname>"), xml);
-        assertTrue(!xml.contains("<verificationStatus>"), xml);
+        assertTrue(xml.contains("<MyYukon_FirstName>Jane</MyYukon_FirstName>"), xml);
+        assertTrue(!xml.contains("<MyYukon_VerificationStatus>"), xml);
     }
 
     @Test
@@ -156,7 +156,7 @@ class PrefillLoggedinUserAdaptiveFormTest {
         PrefillData data = service.getPrefillData(options);
 
         assertEquals(ContentType.JSON, data.getContentType());
-        String fields = "{\"fname\":\"Jane \\\"JJ\\\"\",\"verificationStatus\":\"2\"}";
+        String fields = "{\"MyYukon_FirstName\":\"Jane \\\"JJ\\\"\",\"MyYukon_VerificationStatus\":\"2\"}";
         assertEquals("{\"afData\":{\"afUnboundData\":{\"data\":" + fields + "},\"afBoundData\":{\"data\":" + fields + "}}}",
                 read(data));
     }

@@ -28,7 +28,13 @@ import static org.mockito.Mockito.when;
 @ExtendWith(AemContextExtension.class)
 class VerificationStatusGateFilterTest {
 
-    private static final String REDIRECT_PAGE = "/content/yukon-forms/ca/en/verification-required.html";
+    private static final String REDIRECT_PATTERN = "/content/yukon-forms/ca/{lang}/verification-required.html";
+    /** Redirect for the user at level 1 trying a form in a level-5 folder, as used throughout these tests. */
+    private static final String REDIRECT_QUERY = "?u_loa=1&f_low=5&form_name=some-department%2Fsensitive-form";
+    private static final String REDIRECT_PAGE =
+            "/content/yukon-forms/ca/en/verification-required.html" + REDIRECT_QUERY;
+    private static final String REDIRECT_PAGE_FR =
+            "/content/yukon-forms/ca/fr/verification-required.html" + REDIRECT_QUERY;
     private static final String FOLDER_PATH =
             "/content/dam/formsanddocuments/yukon-forms/some-department";
     private static final String FORM_PATH = FOLDER_PATH + "/sensitive-form";
@@ -40,9 +46,7 @@ class VerificationStatusGateFilterTest {
     @BeforeEach
     void setup() {
         filter = new VerificationStatusGateFilter();
-        VerificationStatusGateConfig config = mock(VerificationStatusGateConfig.class);
-        when(config.redirect_page()).thenReturn(REDIRECT_PAGE);
-        filter.activate(config);
+        filter.activate(config());
         filterChain = mock(FilterChain.class);
     }
 
@@ -171,9 +175,7 @@ class VerificationStatusGateFilterTest {
                 return 1d;
             }
         };
-        VerificationStatusGateConfig config = mock(VerificationStatusGateConfig.class);
-        when(config.redirect_page()).thenReturn(REDIRECT_PAGE);
-        gate.activate(config);
+        gate.activate(config());
 
         context.requestPathInfo().setResourcePath(REQUEST_PATH);
         MockSlingHttpServletRequest request = context.request();
@@ -183,6 +185,46 @@ class VerificationStatusGateFilterTest {
 
         assertEquals(REDIRECT_PAGE, context.response().getHeader("Location"));
         verifyNoInteractions(filterChain);
+    }
+
+    @Test
+    void testDoFilter_userBelowRequiredStatus_frenchParameter_redirectsToFrenchPage(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        context.requestPathInfo().setResourcePath(REQUEST_PATH);
+        context.request().setParameterMap(Map.of("afAcceptLang", "fr-CA"));
+
+        assertEquals(REDIRECT_PAGE_FR, redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_userBelowRequiredStatus_frenchSelector_redirectsToFrenchPage(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        context.requestPathInfo().setResourcePath(REQUEST_PATH);
+        context.requestPathInfo().setSelectorString("fr");
+
+        assertEquals(REDIRECT_PAGE_FR, redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_userBelowRequiredStatus_frenchFormPage_redirectsToFrenchPage(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        context.create().resource(REQUEST_PATH + "/jcr:content", Map.of("jcr:language", "fr"));
+        context.requestPathInfo().setResourcePath(REQUEST_PATH);
+
+        assertEquals(REDIRECT_PAGE_FR, redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_userBelowRequiredStatus_unsupportedLanguage_redirectsToDefaultPage(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        context.requestPathInfo().setResourcePath(REQUEST_PATH);
+        context.request().setParameterMap(Map.of("afAcceptLang", "de"));
+
+        assertEquals(REDIRECT_PAGE, redirectBelowStatus(context));
     }
 
     @Test
@@ -200,9 +242,7 @@ class VerificationStatusGateFilterTest {
                 return 5d;
             }
         };
-        VerificationStatusGateConfig config = mock(VerificationStatusGateConfig.class);
-        when(config.redirect_page()).thenReturn(REDIRECT_PAGE);
-        gate.activate(config);
+        gate.activate(config());
 
         context.requestPathInfo().setResourcePath(REQUEST_PATH);
         MockSlingHttpServletRequest request = context.request();
@@ -211,6 +251,48 @@ class VerificationStatusGateFilterTest {
         gate.doFilter(request, context.response(), filterChain);
 
         verify(filterChain).doFilter(any(ServletRequest.class), any(ServletResponse.class));
+    }
+
+    @Test
+    void testFormatLevel() {
+        assertEquals("2", VerificationStatusGateFilter.formatLevel(2d));
+        assertEquals("0", VerificationStatusGateFilter.formatLevel(0d));
+        assertEquals("1.5", VerificationStatusGateFilter.formatLevel(1.5d));
+    }
+
+    @Test
+    void testToFormName() {
+        assertEquals("eco/youth-fund/application-f",
+                VerificationStatusGateFilter.toFormName("/content/dam/formsanddocuments/yukon-forms/eco/youth-fund/application-f"));
+    }
+
+    private static VerificationStatusGateConfig config() {
+        VerificationStatusGateConfig config = mock(VerificationStatusGateConfig.class);
+        when(config.redirect_page()).thenReturn(REDIRECT_PATTERN);
+        when(config.supported_languages()).thenReturn(new String[] {"en", "fr"});
+        return config;
+    }
+
+    /** Runs the request through a gate whose signed-in user is below the required status; returns the redirect. */
+    private String redirectBelowStatus(AemContext context) throws IOException, ServletException {
+        VerificationStatusGateFilter gate = new VerificationStatusGateFilter() {
+            @Override
+            boolean isLoggedIn(ResourceResolver resolver) {
+                return true;
+            }
+
+            @Override
+            double getUserVerificationStatus(ResourceResolver resolver) {
+                return 1d;
+            }
+        };
+        gate.activate(config());
+        context.request().setMethod("GET");
+
+        gate.doFilter(context.request(), context.response(), filterChain);
+
+        verifyNoInteractions(filterChain);
+        return context.response().getHeader("Location");
     }
 
     private static void withProperty(AemContext context, String path, double requiredStatus) {

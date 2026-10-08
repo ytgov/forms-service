@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import javax.servlet.Filter;
@@ -40,7 +44,9 @@ import org.slf4j.LoggerFactory;
  *   <li>Property {@code > 0} and the requester is anonymous: redirected to SAML login
  *       ({@code /system/sling/login}), so they get a chance to authenticate.
  *   <li>Property {@code > 0} and the requester's synced {@code profile/verificationStatus} is lower
- *       than required: redirected to the configurable {@code redirect.page}.
+ *       than required: redirected to the configurable {@code redirect.page}, in the form's language
+ *       (see {@link #resolveLanguage}), with the user's level ({@code u_loa}), the folder's required
+ *       level ({@code f_low}) and the form's path under yukon-forms ({@code form_name}) as query parameters.
  * </ul>
  *
  * <p>This filter is the sole enforcement point for yukon-forms access - there is no repository
@@ -75,12 +81,23 @@ public class VerificationStatusGateFilter implements Filter {
      * points at the one root the handler is still registered for.
      */
     static final String SAML_AUTH_RESOURCE_PATH = "/content/yukon-forms";
+    /** AEM Forms' own parameter for showing an adaptive form in another language. */
+    static final String LANGUAGE_PARAMETER = "afAcceptLang";
+    static final String LANGUAGE_PLACEHOLDER = "{lang}";
+    static final String USER_LEVEL_PARAMETER = "u_loa";
+    static final String FOLDER_LEVEL_PARAMETER = "f_low";
+    static final String FORM_NAME_PARAMETER = "form_name";
 
     private String redirectPage;
+    private List<String> supportedLanguages;
 
     @Activate
     protected void activate(VerificationStatusGateConfig config) {
         this.redirectPage = config.redirect_page();
+        String[] languages = config.supported_languages();
+        this.supportedLanguages = languages != null && languages.length > 0
+                ? Arrays.asList(languages)
+                : Collections.singletonList("en");
     }
 
     @Override
@@ -123,10 +140,15 @@ public class VerificationStatusGateFilter implements Filter {
 
         double userStatus = getUserVerificationStatus(resolver);
         if (userStatus < requiredStatus) {
+            String target = withQueryParameters(
+                    redirectPage.replace(LANGUAGE_PLACEHOLDER, resolveLanguage(slingRequest, contentPath)),
+                    USER_LEVEL_PARAMETER, formatLevel(userStatus),
+                    FOLDER_LEVEL_PARAMETER, formatLevel(requiredStatus),
+                    FORM_NAME_PARAMETER, toFormName(contentPath));
             log.debug(
                     "Redirecting user {} to {} - verification status {} is below required {} for {}",
-                    resolver.getUserID(), redirectPage, userStatus, requiredStatus, requestPath);
-            httpResponse.sendRedirect(redirectPage);
+                    resolver.getUserID(), target, userStatus, requiredStatus, requestPath);
+            httpResponse.sendRedirect(target);
             return;
         }
 
@@ -191,6 +213,67 @@ public class VerificationStatusGateFilter implements Filter {
             path = lastSlash > 0 ? path.substring(0, lastSlash) : null;
         }
         return null;
+    }
+
+    /**
+     * The form's language, as the first supported language found in: the {@code afAcceptLang} parameter
+     * (e.g. {@code ?afAcceptLang=fr}), a selector (e.g. {@code form.fr.html}), then {@code jcr:language}
+     * on the form page. Falls back to the first supported language. Regional variants such as
+     * {@code fr-CA} or {@code fr_CA} count as their base language.
+     */
+    String resolveLanguage(SlingHttpServletRequest request, String contentPath) {
+        String language = supportedLanguage(request.getParameter(LANGUAGE_PARAMETER));
+        if (language == null) {
+            for (String selector : request.getRequestPathInfo().getSelectors()) {
+                language = supportedLanguage(selector);
+                if (language != null) {
+                    break;
+                }
+            }
+        }
+        if (language == null) {
+            Resource formContent = request.getResourceResolver()
+                    .getResource(toFormPagePath(contentPath) + "/jcr:content");
+            if (formContent != null) {
+                language = supportedLanguage(formContent.getValueMap().get("jcr:language", String.class));
+            }
+        }
+        return language != null ? language : supportedLanguages.get(0);
+    }
+
+    private String supportedLanguage(String value) {
+        if (value == null || value.isEmpty()) {
+            return null;
+        }
+        String base = value.split("[-_]")[0].toLowerCase(Locale.ROOT);
+        return supportedLanguages.contains(base) ? base : null;
+    }
+
+    /** Appends name/value pairs to {@code url}, URL-encoding the values. */
+    private static String withQueryParameters(String url, String... namesAndValues) throws IOException {
+        StringBuilder result = new StringBuilder(url);
+        char separator = url.contains("?") ? '&' : '?';
+        for (int i = 0; i < namesAndValues.length; i += 2) {
+            result.append(separator).append(namesAndValues[i]).append('=').append(urlEncode(namesAndValues[i + 1]));
+            separator = '&';
+        }
+        return result.toString();
+    }
+
+    /** Levels are stored as numbers; whole ones are written without a decimal part ("2", not "2.0"). */
+    static String formatLevel(double level) {
+        return level == Math.rint(level) ? String.valueOf((long) level) : String.valueOf(level);
+    }
+
+    /** The form's path relative to the yukon-forms folder, e.g. "eco/some-folder/some-form". */
+    static String toFormName(String contentPath) {
+        String relative = contentPath.substring(CONTENT_SOURCE_PREFIX.length());
+        return relative.startsWith("/") ? relative.substring(1) : relative;
+    }
+
+    /** The adaptive form page behind a DAM content path, e.g. .../formsanddocuments/yukon-forms/x -> .../af/yukon-forms/x. */
+    private static String toFormPagePath(String contentPath) {
+        return PROTECTED_PATH_PREFIX + contentPath.substring(CONTENT_SOURCE_PREFIX.length());
     }
 
     boolean isLoggedIn(ResourceResolver resolver) {

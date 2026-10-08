@@ -34,8 +34,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * Prefills the signed-in user's synced SAML profile ({@code fname}, {@code lname}, {@code email},
- * {@code verificationStatus}, {@code birthdate}, {@code fullName}, {@code nickname}). Returns JSON ({@code afData.afBoundData.data}) to JSON-based forms (JSON schema,
+ * Prefills the signed-in user's synced SAML profile ({@code MyYukon_FirstName}, {@code MyYukon_LastName},
+ * {@code MyYukon_Email}, {@code MyYukon_VerificationStatus}, {@code MyYukon_Birthdate}, {@code MyYukon_FullName},
+ * {@code MyYukon_Nickname}). Returns JSON ({@code afData.afBoundData.data}) to JSON-based forms (JSON schema,
  * form data model) and XML ({@code <data>}) to XML-based ones (no schema, XSD) - handing XML to a JSON-based form
  * makes it fail to parse the data and hang.
  */
@@ -43,17 +44,21 @@ import org.w3c.dom.Element;
 public class PrefillLoggedinUserAdaptiveForm implements DataProvider {
     private static final Logger log = LoggerFactory.getLogger(PrefillLoggedinUserAdaptiveForm.class);
 
+    /** Prefix of every prefill data field name, so MyYukon-sourced fields are recognisable in forms. */
+    static final String FIELD_PREFIX = "MyYukon_";
+    private static final String BIRTH_DATE_PROPERTY = "profile/birthDate";
+
     /** Profile property -> prefill data field name. */
     private static final Map<String, String> PROFILE_FIELDS = new LinkedHashMap<>();
 
     static {
-        PROFILE_FIELDS.put("profile/givenName", "fname");
-        PROFILE_FIELDS.put("profile/familyName", "lname");
-        PROFILE_FIELDS.put("profile/email", "email");
-        PROFILE_FIELDS.put("profile/verificationStatus", "verificationStatus");
-        PROFILE_FIELDS.put("profile/birthDate", "birthdate");
-        PROFILE_FIELDS.put("profile/fullName", "fullName");
-        PROFILE_FIELDS.put("profile/nickname", "nickname");
+        PROFILE_FIELDS.put("profile/givenName", FIELD_PREFIX + "FirstName");
+        PROFILE_FIELDS.put("profile/familyName", FIELD_PREFIX + "LastName");
+        PROFILE_FIELDS.put("profile/email", FIELD_PREFIX + "Email");
+        PROFILE_FIELDS.put("profile/verificationStatus", FIELD_PREFIX + "VerificationStatus");
+        PROFILE_FIELDS.put(BIRTH_DATE_PROPERTY, FIELD_PREFIX + "Birthdate");
+        PROFILE_FIELDS.put("profile/fullName", FIELD_PREFIX + "FullName");
+        PROFILE_FIELDS.put("profile/nickname", FIELD_PREFIX + "Nickname");
     }
 
     /** Leading yyyy-MM-dd of an ISO date or date-time, e.g. "1980-05-17" or "1980-05-17T00:00:00Z". */
@@ -127,7 +132,7 @@ public class PrefillLoggedinUserAdaptiveForm implements DataProvider {
                 Value[] values = user.getProperty(field.getKey());
                 if (values != null && values.length > 0) {
                     String value = values[0].getString();
-                    fields.put(field.getValue(), "birthdate".equals(field.getValue()) ? toDateFieldValue(value) : value);
+                    fields.put(field.getValue(), BIRTH_DATE_PROPERTY.equals(field.getKey()) ? toDateFieldValue(value) : value);
                 }
             }
         }
