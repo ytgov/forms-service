@@ -1,1 +1,9 @@
 npm --version
+
+# Warn (never block) when a major change is committed without a README.md update
+staged=$(git diff --cached --name-status)
+if echo "$staged" | grep -qE '^A[[:space:]]+(core/src/main/java/|ui\.apps/src/main/content/jcr_root/apps/yukon-forms/(components|clientlibs|templates)/|ui\.config/)|^M[[:space:]]+(.*/)?pom\.xml$' \
+  && ! echo "$staged" | grep -qE '[[:space:]]README\.md$'; then
+  echo "⚠️  Major change detected (new code/component/config or pom.xml edit) but README.md not updated."
+  echo "   Update the docs if this changes how the project is built, run, or structured."
+fi

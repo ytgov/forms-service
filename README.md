@@ -24,7 +24,7 @@ Ensure node is install and its version is great or equal to v20.18.0+
     node --version
     v20.18.0
 
-Install dev dependencies (mainly for linters and formatters)
+Install dev dependencies (only Husky, for the git hooks)
 
     npm install
 
@@ -34,9 +34,13 @@ Initialize Husky (commit hooks)
 
 ## How to commit code
 
-Run the following git commit would trigger lint-staged to auto lint/format staged files
+Commit as usual (the pre-commit hook does not lint or format files)
 
     git commit -m "commit message here"
+
+The pre-commit hook also prints a reminder (it does not block the commit) if you add new code, components or configs, or change `pom.xml`, without updating `README.md`.
+
+Pull requests are pre-filled from `.github/pull_request_template.md`, which includes a short review checklist.
 
 Run the following git push command would trigger mvn clean verify command to ensure it builds successfully before pushing to the git repo
 
