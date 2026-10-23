@@ -1,10 +1,11 @@
 /**
  * Downloads the submission PDF (Document of Record) for the data currently entered, without submitting the form
  * @name downloadDorPreview Download submission PDF before submitting
- * @param {string} fileName Name of the downloaded file, e.g. "my-application.pdf" (optional)
+ * @param {string} [fileName] File name for the PDF, for example application.pdf. If empty, a default name is used
  * @return {string}
  */
 
+// Keep hyphens out of the JSDoc above: the Rule Editor cuts a parameter description at the first hyphen.
 // Posts the current form data to AEM's built-in DoR endpoint (/adobe/forms/af/dor/{id}, the one Core Components'
 // downloadDoR() uses) and saves the returned PDF. It renders the same PDF as the one emailed on submit (YUKONAEMF-80).
 function downloadDorPreview(fileName) {
