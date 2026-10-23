@@ -6,16 +6,18 @@ This is a project template for AEM-based applications. It is intended as a best-
 
 The main parts of the template are:
 
-* [core:](core/README.md) Java bundle containing all core functionality like OSGi services, listeners or schedulers, as well as component-related Java code such as servlets or request filters.
-* [it.tests:](it.tests/README.md) Java based integration tests
-* [ui.apps:](ui.apps/README.md) contains the /apps (and /etc) parts of the project, ie JS&CSS clientlibs, components, and templates
-* [ui.content:](ui.content/README.md) contains sample content using the components from the ui.apps
+* core: Java bundle containing all core functionality like OSGi services, listeners or schedulers, as well as component-related Java code such as servlets or request filters.
+* it.tests: Java based integration tests
+* ui.apps: contains the /apps (and /etc) parts of the project, ie JS&CSS clientlibs, components, and templates
+* ui.apps.structure: the repository structure package that defines the root paths the other packages install into
+* ui.content: contains sample content using the components from the ui.apps
 * ui.config: contains runmode specific OSGi configs for the project
-* [ui.frontend:](ui.frontend.general/README.md) an optional dedicated front-end build mechanism (Angular, React or general Webpack project)
-* [ui.tests.cypress:](ui.tests.cypress/README.md) Cypress based UI tests
-* [ui.tests.wdio:](ui.tests.wdio/README.md) Selenium based UI tests
-* all: a single content package that embeds all of the compiled modules (bundles and content packages) including any vendor dependencies
-* analyse: this module runs analysis on the project which provides additional validation for deploying into AEMaaCS
+* [ui.frontend:](ui.frontend/README.md) general Webpack + TypeScript front-end build that generates clientlibs
+* ui.frontend.react.forms.af: React-based adaptive forms renderer (Webpack build that generates clientlibs)
+* [ui.tests:](ui.tests/README.md) Cypress based UI tests
+* dispatcher: Dispatcher configuration for AEMaaCS
+* fonts: custom fonts package
+* all: a single content package that embeds all of the compiled modules (bundles and content packages) including any vendor dependencies, and runs the AEMaaCS analyser (see Static Analysis)
 
 ## How to set up local development
 
@@ -96,9 +98,40 @@ Authenticated users can save a draft of a long form and reopen it on the same si
 - **`EmbeddedFormPrefillServlet`** (core): inside the embed, Adobe's form runtime requests `<embed>.af.prefilldata.json`. The servlet forwards that to the form's `guideContainer`. Without it the draft isn't restored, and on author the default POST servlet writes the query parameters onto the embed node. AEM only returns a draft to its owner.
 - **Don't use the iframe embed for this:** a page URL with `?dataRef=` makes Adobe's iframe embed template (Core Forms Components 3.0.172) return HTTP 500.
 
-## Documentation
+## Local AEM Forms setup
 
-The build process also generates documentation in the form of README.md files in each module directory for easy reference. Depending on the options you select at build time, the content may be customized to your project.
+Some AEM Forms features need extra local setup on top of the AEM SDK quickstart.
+
+### PDF generation (Document of Record)
+
+The Forms add-on SDK renders PDFs (Document of Record, Output service) in a separate Docker container, `forms-native-sdk` on port 8007. If it isn't running, PDF generation fails with `Error getting shared temp directory, check whether the SDK started successfully` (`Connection refused`).
+
+Start it from the extracted Forms add-on SDK folder (needs Docker), pointing `AEM_HOME` at your AEM author directory:
+
+    export AEM_HOME=/path/to/aem/author
+    ./sdk.sh start
+
+`sdk.sh` calls the legacy `docker-compose` command. If you only have `docker compose` (Docker Desktop), install it with `brew install docker-compose`. The containers don't restart on their own after a reboot, so start them again before testing PDFs. Check they're running with:
+
+    docker ps | grep forms-native-sdk
+
+### Adobe Fonts for form themes
+
+The Yukon form themes use the Adobe Fonts (Typekit) configuration `yg-fonts`. If it doesn't exist locally, forms using those themes fail to render (`TypekitConfiguration ... is null`). Create it under Tools > Cloud Services > Adobe Fonts in `/conf/global`, with name `yg-fonts` and kit ID `plb4eig` (the kit imported by `ui.apps/.../clientlibs/clientlibs-forms/theme-base-clientlibs/yukon-default-theme/css/style.css`).
+
+## Adaptive form custom functions
+
+Custom functions for the Foundation adaptive form Rule Editor live in `ui.apps/.../clientlibs/clientlib-yukon` (category `yukon-forms.custom`). They include `validatePHN`, `validateDateByDaysPassed`, `calculatePug`, `downloadDorPreview` and `previewDorInNewTab`. A form uses them by listing the category in its container's **Client Library Category** (`clientLibRef`).
+
+Set **one** category there, normally `yukon-forms.custom`. Server-side validation loads only a single client library: it treats a comma-separated list as one (non-existent) category name, and it doesn't load dependencies. Custom functions used by validation rules then don't exist on the server, and valid submissions are rejected. The browser still gets `yukon-forms.utils` and `yukon-forms.typeahead`, because `yukon-forms.custom` declares them as dependencies.
+
+### Download the submission PDF before submitting
+
+`downloadDorPreview(fileName)` downloads the form's submission PDF (Document of Record) for the data entered so far, without submitting. Add a button to the form, typically on the last panel before Submit, with a click rule that calls the function (Rule Editor: "Download submission PDF before submitting"), e.g. `downloadDorPreview("my-application.pdf")`.
+
+It posts the current data from `guideBridge.getDataXML()` to AEM's built-in endpoint `/adobe/forms/af/dor/{id}`. The PDF is the same one the form emails on submit, so the form needs a Document of Record configured. The existing dispatcher filter for `/adobe/forms/*` covers the endpoint.
+
+To show the PDF in a new browser tab instead of downloading it, call `previewDorInNewTab()` (Rule Editor: "Preview submission PDF in a new tab before submitting"). It opens the tab during the click, so pop-up blockers allow it, then loads the PDF into it when it's ready. If the browser still blocks the tab, it downloads the PDF instead.
 
 ## Testing
 
@@ -143,7 +176,7 @@ be put in use when writing integration tests for AEM.
 
 ## Static Analysis
 
-The `analyse` module performs static analysis on the project for deploying into AEMaaCS. It is automatically
+The `all` module runs the AEMaaCS analyser (`aemanalyser-maven-plugin`) on the project for deploying into AEMaaCS. It is automatically
 run when executing
 
     mvn clean install
@@ -153,9 +186,9 @@ can be found here https://github.com/adobe/aemanalyser-maven-plugin
 
 ### UI tests
 
-They will test the UI layer of your AEM application using either Cypress or Selenium technology.
+They test the UI layer of your AEM application using Cypress.
 
-Check README file in `ui.tests.cypress` or `ui.tests.wdio` module for more details.
+Check the README file in the `ui.tests` module for more details.
 
 ## ClientLibs
 
