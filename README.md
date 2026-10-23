@@ -113,9 +113,27 @@ Start it from the extracted Forms add-on SDK folder (needs Docker), pointing `AE
     export AEM_HOME=/path/to/aem/author
     ./sdk.sh start
 
-`sdk.sh` calls the legacy `docker-compose` command. If you only have `docker compose` (Docker Desktop), install it with `brew install docker-compose`. The containers don't restart on their own after a reboot, so start them again before testing PDFs. Check they're running with:
+`sdk.sh` calls the legacy `docker-compose` command. If you only have `docker compose` (Docker Desktop), install it with `brew install docker-compose`. The containers don't restart on their own after a reboot, so start them again before testing PDFs. Start them **after** AEM is up: AEM empties `crx-quickstart/temp` at startup, which deletes `temp/sdk`, the folder shared with the container, and PDFs then fail with `NoSuchFileException …/temp/sdk/rf_temp_dir…`. If that happens, stop and start the SDK again. Check they're running with:
 
     docker ps | grep forms-native-sdk
+
+### Email (Send Email submit action)
+
+AEM sends email through the Day CQ Mail Service. Its config (`ui.config/.../com.day.cq.mailer.DefaultMailService.cfg.json`) is set up for AEMaaCS: host and port come from the env vars `AEM_PROXY_HOST` and `SMTP_PORT`, the password from the secret `EMAIL_PASSWORD`, and STARTTLS is required. Without those env vars, local AEM tries `proxy.tunnel:30587` and email fails.
+
+To test email locally without a real mail server, run [Mailpit](https://mailpit.axllent.org/), which catches every email and shows it, attachments included, at http://localhost:8025:
+
+1. Start Mailpit with STARTTLS, using a certificate for `localhost` that the AEM JVM trusts (add it to the trust store passed with `-Djavax.net.ssl.trustStore`). It accepts any username and password:
+
+       docker run -d --name mailpit -p 127.0.0.1:1025:1025 -p 127.0.0.1:8025:8025 \
+         -v /path/to/certs:/certs:ro axllent/mailpit:v1.20 \
+         --smtp-tls-cert /certs/cert.pem --smtp-tls-key /certs/key.pem --smtp-require-starttls --smtp-auth-accept-any
+
+2. Start AEM with these env vars, so the repo config stays unchanged:
+
+       export AEM_PROXY_HOST=localhost SMTP_PORT=1025 EMAIL_USERNAME=local
+
+3. Submit a form whose submit action is "Send Email". The email and its Document of Record appear in Mailpit.
 
 ### Adobe Fonts for form themes
 
