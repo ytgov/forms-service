@@ -14,6 +14,16 @@
  * limitations under the License.
  ******************************************************************************/
 
+/*
+ * Fork of Adobe's Core Forms Components file
+ * core/fd/components/formsportal/draftsandsubmissions/v1/draftsandsubmissions/clientlibs/site/js/draftsandsubmissions.js
+ * (identical in 3.0.172; upstream unchanged since a1c569ce, 2021-09-06).
+ * Adobe's script has no hook to change items before they're rendered, so it is copied. Our changes:
+ * filter to the form embedded on the page, page title as item title, French operation labels,
+ * "No drafts saved" row, and resume drafts in this page (openDraftInPage).
+ * On a Core Forms Components or Forms add-on upgrade: diff against upstream and retest list, open, resume.
+ */
+
 (function($) {
     var NS = 'cmp',
         IS = 'draftsandsubmissions',

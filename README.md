@@ -98,6 +98,7 @@ Authenticated users can save a draft of a long form and reopen it on the same si
 - **Page setup:** embed the form with "Adaptive Form - Embed" (`aemformscontainer`) **inline** ("Form covers entire width of the page" ticked). Place "Drafts and Submissions (Custom)" (`customdraftsandsubmissions`) on the same page. Add a "Save draft" button (Rule Editor → Save Form) to the form.
 - **Resume:** clicking a draft, or its "Open" action, reloads the same page in the same tab with `?dataRef=service://FP/draft/<id>`.
 - **`EmbeddedFormPrefillServlet`** (core): inside the embed, Adobe's form runtime requests `<embed>.af.prefilldata.json`. The servlet forwards that to the form's `guideContainer`. Without it the draft isn't restored, and on author the default POST servlet writes the query parameters onto the embed node. AEM only returns a draft to its owner.
+- **Forked Adobe script:** `customdraftsandsubmissions/clientlibs/custom/js/draftsandsubmissions.js` is a copy of Adobe's Drafts & Submissions client script (Core Forms Components 3.0.172) with our filtering and resume changes; Adobe's version isn't loaded. On a Core Forms Components or Forms add-on upgrade, diff it against upstream and retest list, open and resume.
 - **Don't use the iframe embed for this:** a page URL with `?dataRef=` makes Adobe's iframe embed template (Core Forms Components 3.0.172) return HTTP 500.
 
 ## Local AEM Forms setup
