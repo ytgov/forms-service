@@ -15,7 +15,7 @@ function downloadDorPreview(fileName) {
 }
 
 /**
- * Opens the submission PDF (Document of Record) for the data currently entered in a new browser tab, without submitting the form
+ * Opens the submission PDF (Document of Record) for the data currently entered in a new browser tab, without submitting the form; downloads the PDF instead if the browser blocks the tab
  * @name previewDorInNewTab Preview submission PDF in a new tab before submitting
  * @return {string}
  */
