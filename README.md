@@ -129,6 +129,8 @@ Set **one** category there, normally `yukon-forms.custom`. Server-side validatio
 
 `downloadDorPreview(fileName)` downloads the form's submission PDF (Document of Record) for the data entered so far, without submitting. Add a button to the form, typically on the last panel before Submit, with a click rule that calls the function. In the visual Rule Editor, use "When [button] is clicked" → **Function Output** → "Download submission PDF before submitting", with an optional file name; no Code Editor is needed. The generated code is e.g. `downloadDorPreview("my-application.pdf")`.
 
+The downloaded file is named `<name>-YYYYMMDD-HHmmss.pdf` in the user's local time, so repeated downloads don't share a name. `<name>` is the file name given (without `.pdf`), or the form's page name if none is given, e.g. `update-yhcip-information_e-20261023-142530.pdf`.
+
 It posts the current data from `guideBridge.getDataXML()` to AEM's built-in endpoint `/adobe/forms/af/dor/{id}`. The PDF is the same one the form emails on submit, so the form needs a Document of Record configured. The existing dispatcher filter for `/adobe/forms/*` covers the endpoint.
 
 To show the PDF in a new browser tab instead of downloading it, call `previewDorInNewTab()` (Rule Editor: "Preview submission PDF in a new tab before submitting"). It opens the tab during the click, so pop-up blockers allow it, then loads the PDF into it when it's ready. If the browser still blocks the tab, it downloads the PDF instead.

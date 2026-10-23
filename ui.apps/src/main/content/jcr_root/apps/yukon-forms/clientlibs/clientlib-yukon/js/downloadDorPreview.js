@@ -1,7 +1,7 @@
 /**
  * Downloads the submission PDF (Document of Record) for the data currently entered, without submitting the form
  * @name downloadDorPreview Download submission PDF before submitting
- * @param {string} [fileName] File name for the PDF, for example application.pdf. If empty, a default name is used
+ * @param {string} [fileName] File name for the PDF, for example application.pdf. The date and time are added to it. If empty, the form name is used
  * @return {string}
  */
 
@@ -50,11 +50,28 @@ function downloadDorPreviewSave(pdf, fileName) {
     var blobUrl = URL.createObjectURL(pdf);
     var link = document.createElement("a");
     link.href = blobUrl;
-    link.download = fileName || "submission-preview.pdf";
+    link.download = downloadDorPreviewFileName(fileName);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(blobUrl);
+}
+
+// Builds "<name>-YYYYMMDD-HHmmss.pdf" in the user's local time, so each download gets its own file name. <name> is
+// fileName without ".pdf", or the form's page name (e.g. update-yhcip-information_e) when fileName is empty.
+function downloadDorPreviewFileName(fileName) {
+    var name = (fileName || "").replace(/\.pdf$/i, "");
+    if (!name) {
+        // getGuidePath() is ".../<form page>/jcr:content/guideContainer".
+        var formPath = guideBridge.getGuidePath().split("/jcr:content")[0];
+        name = formPath.substring(formPath.lastIndexOf("/") + 1);
+    }
+    var now = new Date();
+    var pad = function (n) {
+        return (n < 10 ? "0" : "") + n;
+    };
+    return name + "-" + now.getFullYear() + pad(now.getMonth() + 1) + pad(now.getDate()) +
+        "-" + pad(now.getHours()) + pad(now.getMinutes()) + pad(now.getSeconds()) + ".pdf";
 }
 
 // Reads the form data, posts it to the DoR endpoint and passes the PDF blob to onPdf. Calls onError (optional) on failure.
