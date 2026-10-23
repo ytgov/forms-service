@@ -54,13 +54,17 @@ function downloadDorPreviewSave(pdf, fileName) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(blobUrl);
+    // Some browsers start the download after click() returns, so keep the blob alive for a while before releasing it.
+    setTimeout(function () {
+        URL.revokeObjectURL(blobUrl);
+    }, 60000);
 }
 
 // Builds "<name>-YYYYMMDD-HHmmss.pdf" in the user's local time, so each download gets its own file name. <name> is
 // fileName without ".pdf", or the form's page name (e.g. update-yhcip-information_e) when fileName is empty.
+// fileName may come from a form field, so it can be a number or have stray spaces.
 function downloadDorPreviewFileName(fileName) {
-    var name = (fileName || "").replace(/\.pdf$/i, "");
+    var name = String(fileName || "").trim().replace(/\.pdf$/i, "").trim();
     if (!name) {
         // getGuidePath() is ".../<form page>/jcr:content/guideContainer".
         var formPath = guideBridge.getGuidePath().split("/jcr:content")[0];
