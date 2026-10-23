@@ -37,6 +37,10 @@
 
     var formURL = null;
 
+    // Replaces Adobe's "openDraft" operation, which opens the standalone form page in a new tab
+    var RESUME_OPERATION = "openDraftInPage";
+    var DRAFT_DATA_REF_PREFIX = "service://FP/draft/";
+
     var cleanup = function (id) {
             var componentConfig = componentStore[id];
             ItemAPI.clear(componentConfig.itemTemplate, componentConfig.resultsNode);
@@ -59,6 +63,16 @@
 		    		? "Supprimer"
 		    		: op.title,
             };
+	},
+	// Resume a draft in this page, same tab. The inline-embedded form reads dataRef from the page URL;
+	// EmbeddedFormPrefillServlet forwards its prefill request to the form's guideContainer.
+	draftResumeUrl = function (draftId) {
+	    var url = new URL(window.location.href);
+	    url.searchParams.set("dataRef", DRAFT_DATA_REF_PREFIX + draftId);
+	    return url.toString();
+	},
+	toResumeOperation = function (op) {
+	    return op.name === "openDraft" ? { ...op, name: RESUME_OPERATION } : op;
 	},
 	// Hide "No drafts saved" span and show header
         updateLayoutWithDrafts = function () {
@@ -86,12 +100,17 @@
 		        return item.formLink.includes(formURL);
 		    })
 		    .map(function(item) {
+			var isDraft = item.operations.some(function(op) {
+			    return op.name === "openDraft";
+			});
 			return {
 			    ...item,
 			    // Replace form title with page title
 			    title: document.title,
+			    // Resume drafts in this page instead of the standalone form page
+			    formLink: isDraft ? draftResumeUrl(item.id) : item.formLink,
 			    // Translate operations if the page is in French
-			    operations: item.operations.map(translateOperation)
+			    operations: item.operations.map(translateOperation).map(toResumeOperation)
 			}
 		   });
             }
@@ -160,6 +179,17 @@
             componentConfig.loadmoreNode.addEventListener("click", (event) => {
                 paginateNext(event, config.id)
             });
+            // Draft title links resume in this page. Capture phase, so Adobe's link handler
+            // (window.open(link, "_blank")) never runs for them.
+            componentConfig.componentNode.addEventListener("click", (event) => {
+                var link = event.target.closest(".item-link");
+                var dataRef = link && new URL(link.getAttribute("link"), window.location.href).searchParams.get("dataRef");
+                if (dataRef && dataRef.startsWith(DRAFT_DATA_REF_PREFIX)) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    window.location.assign(link.getAttribute("link"));
+                }
+            }, true);
 
             ItemAPI.init(componentConfig);
 
@@ -204,6 +234,12 @@
     // wait for window load to prevent any race condition
     $(function() {
         $(window).trigger("core-forms-itemapi-onload", tmpEvent);
+        $(window).trigger("core-forms-register-operation", {
+            name: RESUME_OPERATION,
+            handler: function (event, operationData) {
+                window.location.assign(draftResumeUrl(operationData.operation_model_id));
+            }
+        });
     });
 
 }(jQuery));

@@ -88,6 +88,16 @@ Or to deploy only a single content package, run in the sub-module directory (i.e
 
     mvn clean install -PautoInstallPackage
 
+## Save and resume (Forms Portal drafts)
+
+Authenticated users can save a draft of a long form and reopen it on the same site page (YUKONAEMF-81). See `docs/YUKONAEMF-81-save-resume-plan.md`.
+
+- **Storage:** drafts are stored through the Unified Storage Connector (Tools › Cloud Services › Unified Storage Connector → Forms Portal → Azure). It isn't in Git; each environment needs its own configuration. To use Azurite locally, see §8.5 of the plan.
+- **Page setup:** embed the form with "Adaptive Form - Embed" (`aemformscontainer`) **inline** ("Form covers entire width of the page" ticked). Place "Drafts and Submissions (Custom)" (`customdraftsandsubmissions`) on the same page. Add a "Save draft" button (Rule Editor → Save Form) to the form.
+- **Resume:** clicking a draft, or its "Open" action, reloads the same page in the same tab with `?dataRef=service://FP/draft/<id>`.
+- **`EmbeddedFormPrefillServlet`** (core): inside the embed, Adobe's form runtime requests `<embed>.af.prefilldata.json`. The servlet forwards that to the form's `guideContainer`. Without it the draft isn't restored, and on author the default POST servlet writes the query parameters onto the embed node. AEM only returns a draft to its owner.
+- **Don't use the iframe embed for this:** a page URL with `?dataRef=` makes Adobe's iframe embed template (Core Forms Components 3.0.172) return HTTP 500.
+
 ## Local AEM Forms setup
 
 Some AEM Forms features need extra local setup on top of the AEM SDK quickstart.
