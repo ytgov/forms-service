@@ -1,10 +1,11 @@
 /**
  * Downloads the submission PDF (Document of Record) for the data currently entered, without submitting the form
  * @name downloadDorPreview Download submission PDF before submitting
- * @param {string} fileName Name of the downloaded file, e.g. "my-application.pdf" (optional)
+ * @param {string} [fileName] File name for the PDF, for example application.pdf. The date and time are added to it. If empty, the form name is used
  * @return {string}
  */
 
+// Keep hyphens out of the JSDoc above: the Rule Editor cuts a parameter description at the first hyphen.
 // Posts the current form data to AEM's built-in DoR endpoint (/adobe/forms/af/dor/{id}, the one Core Components'
 // downloadDoR() uses) and saves the returned PDF. It renders the same PDF as the one emailed on submit (YUKONAEMF-80).
 function downloadDorPreview(fileName) {
@@ -49,11 +50,32 @@ function downloadDorPreviewSave(pdf, fileName) {
     var blobUrl = URL.createObjectURL(pdf);
     var link = document.createElement("a");
     link.href = blobUrl;
-    link.download = fileName || "submission-preview.pdf";
+    link.download = downloadDorPreviewFileName(fileName);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(blobUrl);
+    // Some browsers start the download after click() returns, so keep the blob alive for a while before releasing it.
+    setTimeout(function () {
+        URL.revokeObjectURL(blobUrl);
+    }, 60000);
+}
+
+// Builds "<name>-YYYYMMDD-HHmmss.pdf" in the user's local time, so each download gets its own file name. <name> is
+// fileName without ".pdf", or the form's page name (e.g. update-yhcip-information_e) when fileName is empty.
+// fileName may come from a form field, so it can be a number or have stray spaces.
+function downloadDorPreviewFileName(fileName) {
+    var name = String(fileName || "").trim().replace(/\.pdf$/i, "").trim();
+    if (!name) {
+        // getGuidePath() is ".../<form page>/jcr:content/guideContainer".
+        var formPath = guideBridge.getGuidePath().split("/jcr:content")[0];
+        name = formPath.substring(formPath.lastIndexOf("/") + 1);
+    }
+    var now = new Date();
+    var pad = function (n) {
+        return (n < 10 ? "0" : "") + n;
+    };
+    return name + "-" + now.getFullYear() + pad(now.getMonth() + 1) + pad(now.getDate()) +
+        "-" + pad(now.getHours()) + pad(now.getMinutes()) + pad(now.getSeconds()) + ".pdf";
 }
 
 // Reads the form data, posts it to the DoR endpoint and passes the PDF blob to onPdf. Calls onError (optional) on failure.
