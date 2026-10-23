@@ -1,16 +1,24 @@
 package ca.yukon.aem.core.forms.services.impl;
 
-import com.adobe.forms.common.service.DataXMLOptions;
-import com.adobe.forms.common.service.DataXMLProvider;
+import com.adobe.forms.common.service.ContentType;
+import com.adobe.forms.common.service.DataOptions;
+import com.adobe.forms.common.service.DataProvider;
 import com.adobe.forms.common.service.FormsException;
+import com.adobe.forms.common.service.PrefillData;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.xml.parsers.DocumentBuilder;
+import javax.jcr.Value;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -25,9 +33,36 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-@Component
-public class PrefillLoggedinUserAdaptiveForm implements DataXMLProvider {
+/**
+ * Prefills the signed-in user's synced SAML profile ({@code MyYukon_FirstName}, {@code MyYukon_LastName},
+ * {@code MyYukon_Email}, {@code MyYukon_VerificationStatus}, {@code MyYukon_Birthdate}, {@code MyYukon_FullName},
+ * {@code MyYukon_Nickname}). Returns JSON ({@code afData.afBoundData.data}) to JSON-based forms (JSON schema,
+ * form data model) and XML ({@code <data>}) to XML-based ones (no schema, XSD) - handing XML to a JSON-based form
+ * makes it fail to parse the data and hang.
+ */
+@Component(service = DataProvider.class)
+public class PrefillLoggedinUserAdaptiveForm implements DataProvider {
     private static final Logger log = LoggerFactory.getLogger(PrefillLoggedinUserAdaptiveForm.class);
+
+    /** Prefix of every prefill data field name, so MyYukon-sourced fields are recognisable in forms. */
+    static final String FIELD_PREFIX = "MyYukon_";
+    private static final String BIRTH_DATE_PROPERTY = "profile/birthDate";
+
+    /** Profile property -> prefill data field name. */
+    private static final Map<String, String> PROFILE_FIELDS = new LinkedHashMap<>();
+
+    static {
+        PROFILE_FIELDS.put("profile/givenName", FIELD_PREFIX + "FirstName");
+        PROFILE_FIELDS.put("profile/familyName", FIELD_PREFIX + "LastName");
+        PROFILE_FIELDS.put("profile/email", FIELD_PREFIX + "Email");
+        PROFILE_FIELDS.put("profile/verificationStatus", FIELD_PREFIX + "VerificationStatus");
+        PROFILE_FIELDS.put(BIRTH_DATE_PROPERTY, FIELD_PREFIX + "Birthdate");
+        PROFILE_FIELDS.put("profile/fullName", FIELD_PREFIX + "FullName");
+        PROFILE_FIELDS.put("profile/nickname", FIELD_PREFIX + "Nickname");
+    }
+
+    /** Leading yyyy-MM-dd of an ISO date or date-time, e.g. "1980-05-17" or "1980-05-17T00:00:00Z". */
+    private static final Pattern ISO_DATE_PREFIX = Pattern.compile("^(\\d{4}-\\d{2}-\\d{2})(T.*)?$");
 
     @Override
     public String getServiceDescription() {
@@ -40,61 +75,134 @@ public class PrefillLoggedinUserAdaptiveForm implements DataXMLProvider {
     }
 
     @Override
-    public InputStream getDataXMLForDataRef(DataXMLOptions dataXmlOptions) throws FormsException {
-        InputStream xmlDataStream;
-        Resource aemFormContainer = dataXmlOptions.getFormResource();
-        ResourceResolver resolver = aemFormContainer.getResourceResolver();
-        Session session = resolver.adaptTo(Session.class);
+    public PrefillData getPrefillData(DataOptions dataOptions) throws FormsException {
+        ContentType contentType = resolveContentType(dataOptions);
+        Map<String, String> fields;
         try {
-            UserManager um = ((JackrabbitSession) session).getUserManager();
-            Authorizable loggedinUser = um.getAuthorizable(session.getUserID());
-            log.debug("The path of the user is" + loggedinUser.getPath());
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            Document doc = docBuilder.newDocument();
-            Element rootElement = doc.createElement("data");
-            doc.appendChild(rootElement);
-
-            if (loggedinUser.hasProperty("profile/givenName")) {
-                Element firstNameElement = doc.createElement("fname");
-                firstNameElement.setTextContent(loggedinUser.getProperty("profile/givenName")[0].getString());
-                rootElement.appendChild(firstNameElement);
-                log.debug("Created firstName Element");
-            }
-
-            if (loggedinUser.hasProperty("profile/familyName")) {
-                Element lastNameElement = doc.createElement("lname");
-                lastNameElement.setTextContent(loggedinUser.getProperty("profile/familyName")[0].getString());
-                rootElement.appendChild(lastNameElement);
-                log.debug("Created lastName Element");
-            }
-
-            if (loggedinUser.hasProperty("profile/email")) {
-                Element emailElement = doc.createElement("email");
-                emailElement.setTextContent(loggedinUser.getProperty("profile/email")[0].getString());
-                rootElement.appendChild(emailElement);
-                log.debug("Created email Element");
-            }
-
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult outputTarget = new StreamResult(outputStream);
-            TransformerFactory.newInstance().newTransformer().transform(source, outputTarget);
-            if (log.isDebugEnabled()) {
-                FileOutputStream output = new FileOutputStream("afdata.xml");
-                StreamResult result = new StreamResult(output);
-                transformer.transform(source, result);
-            }
-
-            xmlDataStream = new ByteArrayInputStream(outputStream.toByteArray());
-            return xmlDataStream;
+            fields = readProfileFields(dataOptions);
         } catch (Exception e) {
-            log.error("The error message is {}", e.getMessage());
+            // Never fail the request: the form waits for prefill data and hangs on its loading screen without it.
+            log.error("Couldn't read the user's profile, returning empty prefill data", e);
+            fields = Collections.emptyMap();
         }
-        return null;
-
+        try {
+            byte[] bytes = contentType == ContentType.JSON ? toJson(fields) : toXml(fields);
+            return new PrefillData(new ByteArrayInputStream(bytes), contentType);
+        } catch (Exception e) {
+            log.error("Couldn't build prefill data, returning empty prefill data", e);
+            return new PrefillData(new ByteArrayInputStream(emptyData(contentType)), contentType);
+        }
     }
 
+    /**
+     * The format the form expects, as reported by AEM Forms; falls back to the form container's schema type if
+     * AEM Forms doesn't say.
+     */
+    static ContentType resolveContentType(DataOptions dataOptions) {
+        if (dataOptions.getContentType() != null) {
+            return dataOptions.getContentType();
+        }
+        Resource formResource = dataOptions.getFormResource();
+        String schemaType = null;
+        if (formResource != null) {
+            schemaType = formResource.getValueMap().get("schemaType", String.class);
+            Resource guideContainer = formResource.getChild("jcr:content/guideContainer");
+            if (schemaType == null && guideContainer != null) {
+                schemaType = guideContainer.getValueMap().get("schemaType", String.class);
+            }
+        }
+        return "jsonschema".equals(schemaType) || "formdatamodel".equals(schemaType)
+                ? ContentType.JSON
+                : ContentType.XML;
+    }
+
+    /**
+     * The user's profile values keyed by prefill field name - empty for anonymous requests and for sessions that
+     * can't read their own user node (e.g. anonymous on publish).
+     */
+    private static Map<String, String> readProfileFields(DataOptions dataOptions) throws RepositoryException {
+        Map<String, String> fields = new LinkedHashMap<>();
+        Authorizable user = getLoggedinUser(dataOptions);
+        if (user == null) {
+            log.debug("No signed-in user whose profile can be read, returning empty prefill data");
+            return fields;
+        }
+        for (Map.Entry<String, String> field : PROFILE_FIELDS.entrySet()) {
+            if (user.hasProperty(field.getKey())) {
+                Value[] values = user.getProperty(field.getKey());
+                if (values != null && values.length > 0) {
+                    String value = values[0].getString();
+                    fields.put(field.getValue(), BIRTH_DATE_PROPERTY.equals(field.getKey()) ? toDateFieldValue(value) : value);
+                }
+            }
+        }
+        return fields;
+    }
+
+    /**
+     * Date fields take yyyy-MM-dd, so an ISO date-time is cut down to its date part. Anything else is passed
+     * through unchanged (and won't fill a Date Picker field).
+     */
+    static String toDateFieldValue(String value) {
+        Matcher matcher = ISO_DATE_PREFIX.matcher(value.trim());
+        if (matcher.matches()) {
+            return matcher.group(1);
+        }
+        log.debug("Birthdate '{}' isn't an ISO date, passing it through unchanged", value);
+        return value;
+    }
+
+    private static Authorizable getLoggedinUser(DataOptions dataOptions) throws RepositoryException {
+        ResourceResolver resolver = dataOptions.getFormResource().getResourceResolver();
+        Session session = resolver.adaptTo(Session.class);
+        if (!(session instanceof JackrabbitSession)) {
+            return null;
+        }
+        String userId = session.getUserID();
+        if (userId == null || "anonymous".equals(userId)) {
+            return null;
+        }
+        UserManager um = ((JackrabbitSession) session).getUserManager();
+        return um.getAuthorizable(userId);
+    }
+
+    /**
+     * The same values go into both halves: {@code afUnboundData} fills unbound fields by their name, and
+     * {@code afBoundData} fills fields bound to top-level model properties with these names (fields bound deeper
+     * into a form data model, e.g. {@code /Entity/fname}, aren't matched).
+     */
+    private static byte[] toJson(Map<String, String> fields) {
+        JsonObjectBuilder data = Json.createObjectBuilder();
+        fields.forEach(data::add);
+        JsonObjectBuilder unboundData = Json.createObjectBuilder();
+        fields.forEach(unboundData::add);
+        String payload = Json.createObjectBuilder()
+                .add("afData", Json.createObjectBuilder()
+                        .add("afUnboundData", Json.createObjectBuilder().add("data", unboundData))
+                        .add("afBoundData", Json.createObjectBuilder().add("data", data)))
+                .build()
+                .toString();
+        return payload.getBytes(StandardCharsets.UTF_8);
+    }
+
+    private static byte[] toXml(Map<String, String> fields) throws Exception {
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        Element rootElement = doc.createElement("data");
+        doc.appendChild(rootElement);
+        for (Map.Entry<String, String> field : fields.entrySet()) {
+            Element element = doc.createElement(field.getKey());
+            element.setTextContent(field.getValue());
+            rootElement.appendChild(element);
+        }
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        TransformerFactory.newInstance().newTransformer().transform(new DOMSource(doc), new StreamResult(outputStream));
+        return outputStream.toByteArray();
+    }
+
+    private static byte[] emptyData(ContentType contentType) {
+        String empty = contentType == ContentType.JSON
+                ? "{\"afData\":{\"afUnboundData\":{\"data\":{}},\"afBoundData\":{\"data\":{}}}}"
+                : "<?xml version=\"1.0\" encoding=\"UTF-8\"?><data/>";
+        return empty.getBytes(StandardCharsets.UTF_8);
+    }
 }
