@@ -52,15 +52,17 @@ Run the following git push command would trigger mvn clean verify command to ens
 
 Add cloud manager origin
 
-    git remote add cm-origin https://git.cloudmanager.adobe.com/governmentofyukon/FormsSandbox-p125405-uk97084/
+    git remote add cm-origin https://git.cloudmanager.adobe.com/governmentofyukon/yukon-forms-cloud/
 
 Force push to dev branch on CM git repo to trigger deploy to DEV environment
 
-    git push cm-origin dev --force
+    git fetch origin && git fetch cm-origin
+    git push cm-origin refs/remotes/origin/dev:refs/heads/dev --force-with-lease=refs/heads/dev:cm-origin/dev
 
 Force push to main branch on CM git repo to trigger deploy to STG environment
 
-    git push cm-origin main --force
+    git fetch origin && git fetch cm-origin
+    git push cm-origin refs/remotes/origin/main:refs/heads/main --force-with-lease=refs/heads/main:cm-origin/main
 
 ## How to build
 
