@@ -111,7 +111,7 @@ The Yukon form themes use the Adobe Fonts (Typekit) configuration `yg-fonts`. If
 
 ## Adaptive form custom functions
 
-Custom functions for the Foundation adaptive form Rule Editor live in `ui.apps/.../clientlibs/clientlib-yukon` (category `yukon-forms.custom`). They include `validatePHN`, `validateDateByDaysPassed`, `calculatePug` and `downloadDorPreview`. A form uses them by listing the category in its container's **Client Library Category** (`clientLibRef`).
+Custom functions for the Foundation adaptive form Rule Editor live in `ui.apps/.../clientlibs/clientlib-yukon` (category `yukon-forms.custom`). They include `validatePHN`, `validateDateByDaysPassed`, `calculatePug`, `downloadDorPreview` and `previewDorInNewTab`. A form uses them by listing the category in its container's **Client Library Category** (`clientLibRef`).
 
 Set **one** category there, normally `yukon-forms.custom`. Server-side validation loads only a single client library: it treats a comma-separated list as one (non-existent) category name, and it doesn't load dependencies. Custom functions used by validation rules then don't exist on the server, and valid submissions are rejected. The browser still gets `yukon-forms.utils` and `yukon-forms.typeahead`, because `yukon-forms.custom` declares them as dependencies.
 
@@ -120,6 +120,8 @@ Set **one** category there, normally `yukon-forms.custom`. Server-side validatio
 `downloadDorPreview(fileName)` downloads the form's submission PDF (Document of Record) for the data entered so far, without submitting. Add a button to the form, typically on the last panel before Submit, with a click rule that calls the function (Rule Editor: "Download submission PDF before submitting"), e.g. `downloadDorPreview("my-application.pdf")`.
 
 It posts the current data from `guideBridge.getDataXML()` to AEM's built-in endpoint `/adobe/forms/af/dor/{id}`. The PDF is the same one the form emails on submit, so the form needs a Document of Record configured. The existing dispatcher filter for `/adobe/forms/*` covers the endpoint.
+
+To show the PDF in a new browser tab instead of downloading it, call `previewDorInNewTab()` (Rule Editor: "Preview submission PDF in a new tab before submitting"). It opens the tab during the click, so pop-up blockers allow it, then loads the PDF into it when it's ready.
 
 ## Testing
 
