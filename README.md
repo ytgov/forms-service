@@ -121,7 +121,7 @@ Set **one** category there, normally `yukon-forms.custom`. Server-side validatio
 
 It posts the current data from `guideBridge.getDataXML()` to AEM's built-in endpoint `/adobe/forms/af/dor/{id}`. The PDF is the same one the form emails on submit, so the form needs a Document of Record configured. The existing dispatcher filter for `/adobe/forms/*` covers the endpoint.
 
-To show the PDF in a new browser tab instead of downloading it, call `previewDorInNewTab()` (Rule Editor: "Preview submission PDF in a new tab before submitting"). It opens the tab during the click, so pop-up blockers allow it, then loads the PDF into it when it's ready.
+To show the PDF in a new browser tab instead of downloading it, call `previewDorInNewTab()` (Rule Editor: "Preview submission PDF in a new tab before submitting"). It opens the tab during the click, so pop-up blockers allow it, then loads the PDF into it when it's ready. If the browser still blocks the tab, it downloads the PDF instead.
 
 ## Testing
 

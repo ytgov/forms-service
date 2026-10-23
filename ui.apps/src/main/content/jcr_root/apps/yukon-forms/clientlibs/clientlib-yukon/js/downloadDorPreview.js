@@ -9,14 +9,7 @@
 // downloadDoR() uses) and saves the returned PDF. It renders the same PDF as the one emailed on submit (YUKONAEMF-80).
 function downloadDorPreview(fileName) {
     downloadDorPreviewFetch(function (pdf) {
-        var blobUrl = URL.createObjectURL(pdf);
-        var link = document.createElement("a");
-        link.href = blobUrl;
-        link.download = fileName || "submission-preview.pdf";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(blobUrl);
+        downloadDorPreviewSave(pdf, fileName);
     });
     return "";
 }
@@ -32,13 +25,13 @@ function downloadDorPreview(fileName) {
 function previewDorInNewTab() {
     var tab = window.open("", "_blank");
     downloadDorPreviewFetch(function (pdf) {
-        var blobUrl = URL.createObjectURL(pdf);
-        if (tab) {
-            tab.location.href = blobUrl;
-        } else {
-            // The pop-up was blocked; this may be blocked too, but there's nothing else to try.
-            window.open(blobUrl, "_blank");
+        if (!tab) {
+            // The pop-up was blocked, and a second window.open from here would be too; a download needs no pop-up permission.
+            downloadDorPreviewSave(pdf);
+            return;
         }
+        var blobUrl = URL.createObjectURL(pdf);
+        tab.location.href = blobUrl;
         // The tab is still loading the blob, so keep it alive for a while before releasing it.
         setTimeout(function () {
             URL.revokeObjectURL(blobUrl);
@@ -49,6 +42,18 @@ function previewDorInNewTab() {
         }
     });
     return "";
+}
+
+// Saves the PDF blob as a file download.
+function downloadDorPreviewSave(pdf, fileName) {
+    var blobUrl = URL.createObjectURL(pdf);
+    var link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = fileName || "submission-preview.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
 }
 
 // Reads the form data, posts it to the DoR endpoint and passes the PDF blob to onPdf. Calls onError (optional) on failure.
