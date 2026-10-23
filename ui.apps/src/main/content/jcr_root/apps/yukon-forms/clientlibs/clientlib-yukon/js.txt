@@ -10,4 +10,5 @@ setFeedbackLinkParameters.js
 setLanguageLinkParameters.js
 triggerPerPanelValidation.js
 panel.js
+downloadDorPreview.js
 
