@@ -40,6 +40,18 @@
     return title + " " + (panel.instanceIndex + 1);
   }
 
+  // The page's position among the wizard pages the user can see (1-based),
+  // so pages hidden by rules don't throw the numbering off.
+  function pageNumber(panel) {
+    var pages = (panel.parent && panel.parent.items) || [];
+    var number = 0;
+    for (var i = 0; i < pages.length; i++) {
+      if (pages[i].visible !== false) number++;
+      if (pages[i] === panel) return number;
+    }
+    return null;
+  }
+
   // ─── Flat list rendering ──────────────────────────────────────────────────
 
   function buildSection(container, excludedFields, isTopLevelContainer) {
@@ -54,9 +66,14 @@
         var panelName = panel.name;
         var panelSom  = panel.somExpression || panelName;
         var title     = panelTitle(panel);
+        var number    = isTopLevelContainer ? pageNumber(panel) : null;
+
+        if (number) {
+          title = panel.title ? "Page " + number + ": " + title : "Page " + number;
+        }
 
         var header = null;
-        if (panel.title) {
+        if (panel.title || number) {
           header = document.createElement("div");
           header.className = "vs-section-header" + (isTopLevelContainer ? " vs-page-header" : "");
 
@@ -74,13 +91,10 @@
         panelBlock.appendChild(childSection);
 
         if (isTopLevelContainer) {
-          var rootItems  = panel.parent && panel.parent.items;
-          var pageNumber = rootItems ? rootItems.indexOf(panel) + 1 : null;
-
           var goBackBtn = document.createElement("button");
           goBackBtn.type = "button";
           goBackBtn.className = "vs-page-goto-btn";
-          goBackBtn.textContent = "Go back to page " + pageNumber + " to fix errors in " + title;
+          goBackBtn.textContent = number ? "Go back to page " + number : "Go back to " + title;
           goBackBtn.dataset.vsPanel = panelName;
           goBackBtn.dataset.vsPanelSom = panelSom;
           panelBlock.appendChild(goBackBtn);
