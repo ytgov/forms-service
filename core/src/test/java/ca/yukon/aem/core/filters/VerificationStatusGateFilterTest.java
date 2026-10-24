@@ -228,6 +228,36 @@ class VerificationStatusGateFilterTest {
     }
 
     @Test
+    void testDoFilter_userBelowRequiredStatus_formHasTitle_addsFormTitle(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        context.create().resource(REQUEST_PATH + "/jcr:content", Map.of("jcr:title", "Sensitive form & co"));
+        context.requestPathInfo().setResourcePath(REQUEST_PATH);
+
+        assertEquals(REDIRECT_PAGE + "&form_title=Sensitive+form+%26+co", redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_userBelowRequiredStatus_directDamPathRequest_addsFormTitle(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        context.create().resource(REQUEST_PATH + "/jcr:content", Map.of("jcr:title", "Sensitive form"));
+        context.requestPathInfo().setResourcePath(FORM_PATH + "/jcr:content");
+
+        assertEquals(REDIRECT_PAGE + "&form_title=Sensitive+form", redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_userBelowRequiredStatus_blankFormTitle_leavesFormTitleOut(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        context.create().resource(REQUEST_PATH + "/jcr:content", Map.of("jcr:title", "  "));
+        context.requestPathInfo().setResourcePath(REQUEST_PATH);
+
+        assertEquals(REDIRECT_PAGE, redirectBelowStatus(context));
+    }
+
+    @Test
     void testDoFilter_userMeetsRequiredStatus_allowsThrough(AemContext context)
             throws IOException, ServletException {
         withProperty(context, FORM_PATH, 5d);

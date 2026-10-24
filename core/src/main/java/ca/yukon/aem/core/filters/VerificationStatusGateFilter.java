@@ -46,7 +46,8 @@ import org.slf4j.LoggerFactory;
  *   <li>Property {@code > 0} and the requester's synced {@code profile/verificationStatus} is lower
  *       than required: redirected to the configurable {@code redirect.page}, in the form's language
  *       (see {@link #resolveLanguage}), with the user's level ({@code u_loa}), the folder's required
- *       level ({@code f_low}) and the form's path under yukon-forms ({@code form_name}) as query parameters.
+ *       level ({@code f_low}), the form's path under yukon-forms ({@code form_name}) and the form's
+ *       title ({@code form_title}, left out when the form has none) as query parameters.
  * </ul>
  *
  * <p>This filter is the sole enforcement point for yukon-forms access - there is no repository
@@ -87,6 +88,7 @@ public class VerificationStatusGateFilter implements Filter {
     static final String USER_LEVEL_PARAMETER = "u_loa";
     static final String FOLDER_LEVEL_PARAMETER = "f_low";
     static final String FORM_NAME_PARAMETER = "form_name";
+    static final String FORM_TITLE_PARAMETER = "form_title";
 
     private String redirectPage;
     private List<String> supportedLanguages;
@@ -144,7 +146,8 @@ public class VerificationStatusGateFilter implements Filter {
                     redirectPage.replace(LANGUAGE_PLACEHOLDER, resolveLanguage(slingRequest, contentPath)),
                     USER_LEVEL_PARAMETER, formatLevel(userStatus),
                     FOLDER_LEVEL_PARAMETER, formatLevel(requiredStatus),
-                    FORM_NAME_PARAMETER, toFormName(contentPath));
+                    FORM_NAME_PARAMETER, toFormName(contentPath),
+                    FORM_TITLE_PARAMETER, resolveFormTitle(resolver, contentPath));
             log.debug(
                     "Redirecting user {} to {} - verification status {} is below required {} for {}",
                     resolver.getUserID(), target, userStatus, requiredStatus, requestPath);
@@ -241,6 +244,16 @@ public class VerificationStatusGateFilter implements Filter {
         return language != null ? language : supportedLanguages.get(0);
     }
 
+    /** The {@code jcr:title} of the adaptive form page, or {@code null} if it has none. */
+    static String resolveFormTitle(ResourceResolver resolver, String contentPath) {
+        Resource formContent = resolver.getResource(toFormPagePath(contentPath) + "/jcr:content");
+        if (formContent == null) {
+            return null;
+        }
+        String title = formContent.getValueMap().get("jcr:title", String.class);
+        return title != null && !title.trim().isEmpty() ? title : null;
+    }
+
     private String supportedLanguage(String value) {
         if (value == null || value.isEmpty()) {
             return null;
@@ -249,11 +262,14 @@ public class VerificationStatusGateFilter implements Filter {
         return supportedLanguages.contains(base) ? base : null;
     }
 
-    /** Appends name/value pairs to {@code url}, URL-encoding the values. */
+    /** Appends name/value pairs to {@code url}, URL-encoding the values and skipping {@code null} ones. */
     private static String withQueryParameters(String url, String... namesAndValues) throws IOException {
         StringBuilder result = new StringBuilder(url);
         char separator = url.contains("?") ? '&' : '?';
         for (int i = 0; i < namesAndValues.length; i += 2) {
+            if (namesAndValues[i + 1] == null) {
+                continue;
+            }
             result.append(separator).append(namesAndValues[i]).append('=').append(urlEncode(namesAndValues[i + 1]));
             separator = '&';
         }
