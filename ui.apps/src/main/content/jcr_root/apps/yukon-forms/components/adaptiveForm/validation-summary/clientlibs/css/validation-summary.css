@@ -2,7 +2,7 @@
  * validation-summary.css
  *
  * Styles for the Validation Summary component.
- * Lists fields currently failing validation, grouped by section.
+ * Lists fields failing validation, grouped by section, after a failed submit.
  */
 
 /* ── Design tokens ── */
@@ -16,17 +16,28 @@
   --vs-font-size-panel: 1rem;
 }
 
-/* ── Loading state ── */
-.validation-summary__loading {
-  color: var(--vs-label-color);
-  font-size: var(--vs-font-size-sm);
-  padding: 1rem 0;
+/* ── Container (shown only after a failed submit) ──
+ * Scoped to __panel because AEM also puts .validation-summary on the
+ * component's wrapper div. */
+.validation-summary__panel {
+  border-left: 4px solid var(--vs-error-color);
+  padding: 1rem 1rem 1rem 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
-/* ── Empty state ── */
-.validation-summary__empty {
-  color: var(--vs-label-color);
-  font-style: italic;
+.validation-summary__panel[hidden] {
+  display: none;
+}
+
+.validation-summary__title {
+  margin: 0 0 1rem;
+  color: var(--vs-error-color);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.validation-summary__title:focus {
+  outline: none;
 }
 
 /* ── Sections ── */

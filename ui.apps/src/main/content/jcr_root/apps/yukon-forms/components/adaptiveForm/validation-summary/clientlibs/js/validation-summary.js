@@ -4,6 +4,7 @@
   // ─── Constants ────────────────────────────────────────────────────────────
 
   var BRIDGE_READY_EVENT = "bridgeInitializeStart";
+  var SUBMIT_BUTTON_SELECTOR = "button.submit";
 
   var INPUT_CLASSES = [
     "guideTextBox",
@@ -30,6 +31,15 @@
     return true;
   }
 
+  // Repeatable panel instances share a title, so number them (1-based).
+  function panelTitle(panel) {
+    var title = panel.title || panel.name;
+    var instanceManager = panel.instanceManager;
+    if (!instanceManager || instanceManager.maxOccur === 1) return title;
+    if (typeof panel.instanceIndex !== "number") return title;
+    return title + " " + (panel.instanceIndex + 1);
+  }
+
   // ─── Flat list rendering ──────────────────────────────────────────────────
 
   function buildSection(container, excludedFields, isTopLevelContainer) {
@@ -43,7 +53,7 @@
 
         var panelName = panel.name;
         var panelSom  = panel.somExpression || panelName;
-        var title     = panel.title || panelName;
+        var title     = panelTitle(panel);
 
         var header = null;
         if (panel.title) {
@@ -65,7 +75,7 @@
 
         if (isTopLevelContainer) {
           var rootItems  = panel.parent && panel.parent.items;
-          var pageNumber = rootItems ? rootItems.indexOf(panel) : null;
+          var pageNumber = rootItems ? rootItems.indexOf(panel) + 1 : null;
 
           var goBackBtn = document.createElement("button");
           goBackBtn.type = "button";
@@ -100,7 +110,22 @@
 
   // ─── Core renderer ────────────────────────────────────────────────────────
 
-  function render(root, guideBridge) {
+  /**
+   * Validates every visible field without moving focus and returns
+   * { som: errorText } for the fields that failed.
+   */
+  function collectErrors(guideBridge) {
+    var errorList = [];
+    var errorsBySom = {};
+    guideBridge.validate(errorList, null, false);
+    errorList.forEach(function (error) {
+      errorsBySom[error.som] = error.errorText || "";
+    });
+    return errorsBySom;
+  }
+
+  function render(root, guideBridge, errorsBySom) {
+    var body = root.querySelector(".validation-summary__body");
     var excludedFields = [];
 
     try {
@@ -128,7 +153,7 @@
       if (!allParentsVisible(node)) return;
       if (!node.parent) return;
       if (excludedFields.indexOf(node.name) >= 0) return;
-      if (node.valid !== false) return;
+      if (!errorsBySom.hasOwnProperty(node.somExpression)) return;
 
       // Panel chain from top-level panel down to node.parent,
       // stopping before the guideContainer root (no parent of its own).
@@ -149,24 +174,22 @@
       current.items.push({
         type:         "field",
         label:        node.title || node.name,
-        errorMessage: node.errorMessage || ""
+        errorMessage: errorsBySom[node.somExpression]
       });
     });
 
     // ── Render ────────────────────────────────────────────────────────────
     var $root = $(root);
     $root.off(".vs");
-    root.innerHTML = "";
+    body.innerHTML = "";
 
     if (!treeRoot.items.length) {
-      var empty = document.createElement("p");
-      empty.className = "validation-summary__empty";
-      empty.textContent = "No validation errors.";
-      root.appendChild(empty);
+      root.hidden = true;
       return;
     }
 
-    root.appendChild(buildSection(treeRoot, excludedFields, true));
+    body.appendChild(buildSection(treeRoot, excludedFields, true));
+    root.hidden = false;
 
     $root.on("click.vs", ".vs-page-goto-btn", function (e) {
       e.preventDefault();
@@ -181,19 +204,61 @@
     });
   }
 
+  // ─── Submit interception ──────────────────────────────────────────────────
+
+  // The summary root is hidden until a failed submit, so check its container.
+  function isOnCurrentPage(root) {
+    return !!root.parentElement && root.parentElement.offsetParent !== null;
+  }
+
+  function showSummary(root) {
+    window.scrollTo(0, 0);
+    var title = root.querySelector(".validation-summary__title");
+    if (title) title.focus({ preventScroll: true });
+  }
+
+  /**
+   * Runs in the capture phase so it fires before the submit button's own
+   * handler (guideBridge.submit), which would otherwise jump to the first
+   * invalid field on another page.
+   */
+  function onSubmitClick(roots, e) {
+    var guideBridge = window.guideBridge;
+    if (!guideBridge || !e.target.closest(SUBMIT_BUTTON_SELECTOR)) return;
+
+    var root = roots.filter(isOnCurrentPage)[0];
+    if (!root) return;
+
+    var errorsBySom = collectErrors(guideBridge);
+    if (!Object.keys(errorsBySom).length) {
+      root.hidden = true;
+      return;
+    }
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    root.dataset.vsActive = "true";
+    render(root, guideBridge, errorsBySom);
+    showSummary(root);
+  }
+
   // ─── Initialisation ───────────────────────────────────────────────────────
 
   function init() {
-    var roots = document.querySelectorAll(".validation-summary[id='validation-summary-root']");
+    var roots = Array.prototype.slice.call(
+      document.querySelectorAll(".validation-summary[id='validation-summary-root']"));
     if (!roots.length) return;
+
+    document.addEventListener("click", function (e) { onSubmitClick(roots, e); }, true);
 
     function attachBridge(guideBridge) {
       guideBridge.connect(function () {
         roots.forEach(function (root) {
+          // After a failed submit, keep the list current as errors are fixed.
           guideBridge.on("elementFocusChanged", function () {
-            if (root.offsetParent !== null) render(root, guideBridge);
+            if (root.dataset.vsActive && isOnCurrentPage(root)) render(root, guideBridge, collectErrors(guideBridge));
           });
-          if (root.offsetParent !== null) render(root, guideBridge);
         });
       });
     }
