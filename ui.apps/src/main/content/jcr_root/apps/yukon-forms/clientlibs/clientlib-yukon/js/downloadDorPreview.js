@@ -2,13 +2,19 @@
  * Downloads the submission PDF (Document of Record) for the data currently entered, without submitting the form
  * @name downloadDorPreview Download submission PDF before submitting
  * @param {string} [fileName] File name for the PDF, for example application.pdf. The date and time are added to it. If empty, the form name is used
+ * @param {boolean} [allowInvalid] Set to true to allow the PDF even when the form has errors
  * @return {string}
  */
 
 // Keep hyphens out of the JSDoc above: the Rule Editor cuts a parameter description at the first hyphen.
 // Posts the current form data to AEM's built-in DoR endpoint (/adobe/forms/af/dor/{id}, the one Core Components'
 // downloadDoR() uses) and saves the returned PDF. It renders the same PDF as the one emailed on submit (YUKONAEMF-80).
-function downloadDorPreview(fileName) {
+// Unless allowInvalid is true, an invalid form gets no PDF. It's compared as text because a Rule Editor input can pass
+// "true" or "false" as a string, and !"false" would wrongly skip the validation.
+function downloadDorPreview(fileName, allowInvalid) {
+    if (String(allowInvalid) !== "true" && !downloadDorPreviewHelpers.isValid()) {
+        return "";
+    }
     downloadDorPreviewHelpers.fetch(function (pdf) {
         downloadDorPreviewHelpers.save(pdf, fileName);
     });
@@ -18,12 +24,17 @@ function downloadDorPreview(fileName) {
 /**
  * Opens the submission PDF (Document of Record) for the data currently entered in a new browser tab, without submitting the form; downloads the PDF instead if the browser blocks the tab
  * @name previewDorInNewTab Preview submission PDF in a new tab before submitting
+ * @param {boolean} [allowInvalid] Set to true to allow the PDF even when the form has errors
  * @return {string}
  */
 
 // Same PDF as downloadDorPreview. Browsers only allow a new tab during the click itself, but the PDF arrives
-// later, so open an empty tab now and load the PDF into it when it's ready.
-function previewDorInNewTab() {
+// later, so open an empty tab now and load the PDF into it when it's ready. Validate first, so an invalid form
+// doesn't leave an empty tab; validate() is synchronous, so the tab still opens during the click.
+function previewDorInNewTab(allowInvalid) {
+    if (String(allowInvalid) !== "true" && !downloadDorPreviewHelpers.isValid()) {
+        return "";
+    }
     var tab = window.open("", "_blank");
     downloadDorPreviewHelpers.fetch(function (pdf) {
         if (!tab) {
@@ -48,6 +59,12 @@ function previewDorInNewTab() {
 // Helpers shared by the two functions above. They're object properties, not top-level function declarations,
 // because the Foundation Rule Editor lists every top-level function, even without JSDoc, and authors shouldn't pick these.
 var downloadDorPreviewHelpers = {
+    // Validates the whole form like Submit does: shows the inline errors and focuses the first invalid field,
+    // even on another panel. Returns true if the form is valid.
+    isValid: function () {
+        return guideBridge.validate([], null, true);
+    },
+
     // Saves the PDF blob as a file download.
     save: function (pdf, fileName) {
         var blobUrl = URL.createObjectURL(pdf);
