@@ -199,7 +199,7 @@
 
     if (!treeRoot.items.length) {
       root.hidden = true;
-      return;
+      return false;
     }
 
     body.appendChild(buildSection(treeRoot, excludedFields, true));
@@ -216,6 +216,7 @@
         if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 300);
     });
+    return true;
   }
 
   // ─── Submit interception ──────────────────────────────────────────────────
@@ -243,8 +244,10 @@
     var root = roots.filter(isOnCurrentPage)[0];
     if (!root) return;
 
+    // Only cancel the submit if the summary lists something; otherwise
+    // (e.g. only excluded fields fail) let guideBridge.submit handle it.
     var errorsBySom = collectErrors(guideBridge);
-    if (!Object.keys(errorsBySom).length) {
+    if (!Object.keys(errorsBySom).length || !render(root, guideBridge, errorsBySom)) {
       root.hidden = true;
       return;
     }
@@ -253,7 +256,6 @@
     e.stopImmediatePropagation();
 
     root.dataset.vsActive = "true";
-    render(root, guideBridge, errorsBySom);
     showSummary(root);
   }
 
