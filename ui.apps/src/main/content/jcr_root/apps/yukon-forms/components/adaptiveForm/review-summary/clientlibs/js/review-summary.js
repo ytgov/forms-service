@@ -60,6 +60,18 @@
     return value;
   }
 
+  // The page's position among the wizard pages the user can see (1-based),
+  // so pages hidden by rules don't throw the numbering off.
+  function pageNumber(panel) {
+    var pages = (panel.parent && panel.parent.items) || [];
+    var number = 0;
+    for (var i = 0; i < pages.length; i++) {
+      if (pages[i].visible !== false) number++;
+      if (pages[i] === panel) return number;
+    }
+    return null;
+  }
+
   // ─── Flat list rendering ──────────────────────────────────────────────────
 
   function buildSection(container, excludedFields, showEditLinks, isTopLevelContainer) {
@@ -94,13 +106,10 @@
         panelBlock.appendChild(childSection);
 
         if (isTopLevelContainer && showEditLinks) {
-          var rootItems  = panel.parent && panel.parent.items;
-          var pageNumber = rootItems ? rootItems.indexOf(panel) : null;
-
           var goBackBtn = document.createElement("button");
           goBackBtn.type = "button";
           goBackBtn.className = "rs-page-goto-btn";
-          goBackBtn.textContent = "Go back to page " + pageNumber + " to edit your " + title;
+          goBackBtn.textContent = "Go back to page " + pageNumber(panel) + " to edit your " + title;
           goBackBtn.dataset.rsPanel = panelName;
           goBackBtn.dataset.rsPanelSom = panelSom;
           panelBlock.appendChild(goBackBtn);
@@ -228,8 +237,12 @@
     function attachBridge(guideBridge) {
       guideBridge.connect(function () {
         roots.forEach(function (root) {
+          // Focus changes fire before the new page is shown, so render once
+          // navigation has finished and the root is visible.
           guideBridge.on("elementFocusChanged", function () {
-            if (root.offsetParent !== null) render(root, guideBridge);
+            setTimeout(function () {
+              if (root.offsetParent !== null) render(root, guideBridge);
+            }, 0);
           });
           if (root.offsetParent !== null) render(root, guideBridge);
         });
