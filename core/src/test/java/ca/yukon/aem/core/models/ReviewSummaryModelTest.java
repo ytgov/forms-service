@@ -15,17 +15,17 @@ class ReviewSummaryModelTest {
 
     @Test
     void testGetEditLinkText_notSet_returnsDefault() {
-        assertEquals("Go back to edit", model().getEditLinkText());
+        assertEquals("Go back to page {page} to edit", model().getEditLinkText());
     }
 
     @Test
     void testGetEditLinkText_blank_returnsDefault() {
-        assertEquals("Go back to edit", model("editLinkText", "   ").getEditLinkText());
+        assertEquals("Go back to page {page} to edit", model("editLinkText", "   ").getEditLinkText());
     }
 
     @Test
     void testGetEditLinkText_set_returnsTrimmedText() {
-        assertEquals("Retourner pour modifier", model("editLinkText", " Retourner pour modifier ").getEditLinkText());
+        assertEquals("Retourner à la page {page} pour modifier", model("editLinkText", " Retourner à la page {page} pour modifier ").getEditLinkText());
     }
 
     private ReviewSummaryModel model(Object... properties) {

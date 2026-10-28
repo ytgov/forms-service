@@ -46,9 +46,9 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                 fieldLabel="Edit Link Text"
-                                fieldDescription="Text of the button that goes back to a page, followed by the page title. Leave empty for &quot;Go back to edit&quot;. Set it in the form's language, e.g. &quot;Retourner pour modifier&quot;."
+                                fieldDescription="Text of the button that goes back to a page. {page} is replaced with the page number, counting only pages the user can see. Leave empty for &quot;Go back to page {page} to edit&quot;. Set it in the form's language, e.g. &quot;Retourner à la page {page} pour modifier&quot;."
                                 name="./editLinkText"
-                                emptyText="Go back to edit" />
+                                emptyText="Go back to page {page} to edit" />
                         </items>
                     </address>
                 </items>

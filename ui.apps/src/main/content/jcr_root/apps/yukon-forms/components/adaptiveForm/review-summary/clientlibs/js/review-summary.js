@@ -41,18 +41,17 @@
     var display = field.displayValue;
     if (raw === null || raw === undefined || raw === "") return null;
     if (field.className === "guideCheckBox" && field.jsonModel && field.jsonModel.options) {
-      var value = null;
-      field.jsonModel.options.forEach(item => {
-        var nameValues = item.split('=');
-        if (nameValues.length === 2) {
-          if (raw === nameValues[0]) {
-            value = nameValues[1];
-          }
-        }
+      // Several selected values arrive as one comma-separated string.
+      var selected = Array.isArray(raw) ? raw : String(raw).split(",");
+      var labels = selected.map(function (value) {
+        var label = value;
+        field.jsonModel.options.forEach(function (item) {
+          var nameValues = item.split("=");
+          if (nameValues.length === 2 && value === nameValues[0]) label = nameValues[1];
+        });
+        return label;
       });
-      if (value) {
-        return value;
-      }
+      return labels.join(", ") || null;
     }
     if (Array.isArray(raw) && raw.length === 0) return null;
     if (Array.isArray(display)) return display.join(", ") || null;
@@ -80,13 +79,35 @@
     return !(panel.jsonModel && String(panel.jsonModel.hideTitle) === "true");
   }
 
+  function isRepeatable(panel) {
+    var instanceManager = panel.instanceManager;
+    return !!instanceManager && instanceManager.maxOccur !== 1 && typeof panel.instanceIndex === "number";
+  }
+
   // Repeatable panel instances share a title, so number them (1-based).
   function panelTitle(panel) {
     var title = panel.title || panel.name;
-    var instanceManager = panel.instanceManager;
-    if (!instanceManager || instanceManager.maxOccur === 1) return title;
-    if (typeof panel.instanceIndex !== "number") return title;
-    return title + " " + (panel.instanceIndex + 1);
+    return isRepeatable(panel) ? title + " " + (panel.instanceIndex + 1) : title;
+  }
+
+  // Panels wrapping repeatable panels get no heading; only each numbered
+  // instance is labelled.
+  function containsRepeatable(treeNode) {
+    return treeNode.children.some(function (child) {
+      return isRepeatable(child.panel) || containsRepeatable(child.node);
+    });
+  }
+
+  // The page's position among the pages the user can see (1-based),
+  // so pages hidden by rules don't throw the numbering off.
+  function pageNumber(panel) {
+    var pages = (panel.parent && panel.parent.items) || [];
+    var number = 0;
+    for (var i = 0; i < pages.length; i++) {
+      if (pages[i].visible !== false) number++;
+      if (pages[i] === panel) return number;
+    }
+    return null;
   }
 
   // ─── Flat list rendering ──────────────────────────────────────────────────
@@ -105,7 +126,7 @@
         var title     = panelTitle(panel);
 
         var header = null;
-        if (hasVisibleTitle(panel)) {
+        if (hasVisibleTitle(panel) && (isTopLevelContainer || !containsRepeatable(item.node))) {
           header = document.createElement("div");
           header.className = "rs-section-header" + (isTopLevelContainer ? " rs-page-header" : "");
 
@@ -118,7 +139,7 @@
         var childSection = buildSection(item.node, excludedFields, showEditLinks, editLinkText, false);
 
         var panelBlock = document.createElement("div");
-        panelBlock.className = "rs-panel-block" + (header ? " rs-panel-block--titled" : "");
+        panelBlock.className = "rs-panel-block";
         if (header) panelBlock.appendChild(header);
         panelBlock.appendChild(childSection);
 
@@ -126,7 +147,7 @@
           var goBackBtn = document.createElement("button");
           goBackBtn.type = "button";
           goBackBtn.className = "rs-page-goto-btn";
-          goBackBtn.textContent = editLinkText + " " + title;
+          goBackBtn.textContent = editLinkText.replace("{page}", pageNumber(panel));
           goBackBtn.dataset.rsPanel = panelName;
           goBackBtn.dataset.rsPanelSom = panelSom;
           panelBlock.appendChild(goBackBtn);
@@ -160,7 +181,7 @@
   function render(root, guideBridge) {
     var excludedFields = [];
     var showEditLinks  = root.dataset.showEditLinks !== "false";
-    var editLinkText   = root.dataset.editLinkText || "Go back to edit";
+    var editLinkText   = root.dataset.editLinkText || "Go back to page {page} to edit";
 
     try {
       excludedFields = JSON.parse(root.dataset.excludedFields || "[]");
