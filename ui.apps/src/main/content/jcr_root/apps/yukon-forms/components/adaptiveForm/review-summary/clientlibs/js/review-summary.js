@@ -57,6 +57,7 @@
   }
 
   function maybeMask(field, value) {
+    if (field.className === "guidePasswordBox") return "••••••••";
     if (field.jsonModel && field.jsonModel.sensitive === true) return "••••••••";
     return value;
   }
