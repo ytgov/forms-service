@@ -32,6 +32,8 @@ public class ReviewSummaryModel {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    static final String DEFAULT_EDIT_LINK_TEXT = "Go back to edit";
+
     /** Comma-separated field names (or Somerset names) to suppress from the review. */
     @ValueMapValue
     private String[] excludedFields;
@@ -39,6 +41,10 @@ public class ReviewSummaryModel {
     /** Whether to render an "Edit" link next to each section heading. Default: true. */
     @ValueMapValue
     private boolean showEditLinks = true;
+
+    /** Text of the button that goes back to a page, followed by the page title. */
+    @ValueMapValue
+    private String editLinkText;
 
     private String excludedFieldsJson;
 
@@ -61,5 +67,11 @@ public class ReviewSummaryModel {
 
     public boolean isShowEditLinks() {
         return showEditLinks;
+    }
+
+    public String getEditLinkText() {
+        return (editLinkText != null && !editLinkText.trim().isEmpty())
+            ? editLinkText.trim()
+            : DEFAULT_EDIT_LINK_TEXT;
     }
 }

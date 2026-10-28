@@ -4,6 +4,7 @@
   // ─── Constants ────────────────────────────────────────────────────────────
 
   var BRIDGE_READY_EVENT = "bridgeInitializeStart";
+  var WIZARD_LAYOUT = "fd/af/layouts/panel/wizard";
 
   var INPUT_CLASSES = [
     "guideTextBox",
@@ -60,21 +61,30 @@
     return value;
   }
 
-  // The page's position among the wizard pages the user can see (1-based),
-  // so pages hidden by rules don't throw the numbering off.
-  function pageNumber(panel) {
-    var pages = (panel.parent && panel.parent.items) || [];
-    var number = 0;
-    for (var i = 0; i < pages.length; i++) {
-      if (pages[i].visible !== false) number++;
-      if (pages[i] === panel) return number;
-    }
-    return null;
+  // Go-back buttons only make sense when pages are shown one at a time.
+  function isWizard(rootPanel) {
+    var layout = rootPanel && rootPanel.jsonModel && rootPanel.jsonModel.layout;
+    return !!layout && layout["sling:resourceType"] === WIZARD_LAYOUT;
+  }
+
+  // Panels with no title, or with "hide title" set, get no heading.
+  function hasVisibleTitle(panel) {
+    if (!panel.title) return false;
+    return !(panel.jsonModel && String(panel.jsonModel.hideTitle) === "true");
+  }
+
+  // Repeatable panel instances share a title, so number them (1-based).
+  function panelTitle(panel) {
+    var title = panel.title || panel.name;
+    var instanceManager = panel.instanceManager;
+    if (!instanceManager || instanceManager.maxOccur === 1) return title;
+    if (typeof panel.instanceIndex !== "number") return title;
+    return title + " " + (panel.instanceIndex + 1);
   }
 
   // ─── Flat list rendering ──────────────────────────────────────────────────
 
-  function buildSection(container, excludedFields, showEditLinks, isTopLevelContainer) {
+  function buildSection(container, excludedFields, showEditLinks, editLinkText, isTopLevelContainer) {
     var section = document.createElement("div");
     section.className = "rs-section";
 
@@ -85,10 +95,10 @@
 
         var panelName = panel.name;
         var panelSom  = panel.somExpression || panelName;
-        var title     = panel.title || panelName;
+        var title     = panelTitle(panel);
 
         var header = null;
-        if (panel.title) {
+        if (hasVisibleTitle(panel)) {
           header = document.createElement("div");
           header.className = "rs-section-header" + (isTopLevelContainer ? " rs-page-header" : "");
 
@@ -98,18 +108,18 @@
           header.appendChild(heading);
         }
 
-        var childSection = buildSection(item.node, excludedFields, showEditLinks, false);
+        var childSection = buildSection(item.node, excludedFields, showEditLinks, editLinkText, false);
 
         var panelBlock = document.createElement("div");
-        panelBlock.className = "rs-panel-block";
+        panelBlock.className = "rs-panel-block" + (header ? " rs-panel-block--titled" : "");
         if (header) panelBlock.appendChild(header);
         panelBlock.appendChild(childSection);
 
-        if (isTopLevelContainer && showEditLinks) {
+        if (isTopLevelContainer && showEditLinks && isWizard(panel.parent)) {
           var goBackBtn = document.createElement("button");
           goBackBtn.type = "button";
           goBackBtn.className = "rs-page-goto-btn";
-          goBackBtn.textContent = "Go back to page " + pageNumber(panel) + " to edit your " + title;
+          goBackBtn.textContent = editLinkText + " " + title;
           goBackBtn.dataset.rsPanel = panelName;
           goBackBtn.dataset.rsPanelSom = panelSom;
           panelBlock.appendChild(goBackBtn);
@@ -143,6 +153,7 @@
   function render(root, guideBridge) {
     var excludedFields = [];
     var showEditLinks  = root.dataset.showEditLinks !== "false";
+    var editLinkText   = root.dataset.editLinkText || "Go back to edit";
 
     try {
       excludedFields = JSON.parse(root.dataset.excludedFields || "[]");
@@ -210,7 +221,7 @@
       return;
     }
 
-    root.appendChild(buildSection(treeRoot, excludedFields, showEditLinks, true));
+    root.appendChild(buildSection(treeRoot, excludedFields, showEditLinks, editLinkText, true));
 
     if (showEditLinks) {
       // Delegated handler on $root catches clicks regardless of DOM re-renders

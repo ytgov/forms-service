@@ -15,13 +15,6 @@
   --rs-font-size-panel: 1rem;
 }
 
-/* ── Loading state ── */
-.review-summary__loading {
-  color: var(--rs-label-color);
-  font-size: var(--rs-font-size-sm);
-  padding: 1rem 0;
-}
-
 /* ── Empty state ── */
 .review-summary__empty {
   color: var(--rs-label-color);
@@ -32,6 +25,12 @@
 .rs-panel-block + .rs-panel-block,
 .rs-panel-block .rs-panel-block {
   margin-top: 1rem;
+}
+
+/* Indent the contents of titled sections inside a page; nested ones indent further.
+ * Sections without a heading line up with the content around them. */
+.rs-panel-block .rs-panel-block--titled > .rs-section {
+  padding-left: 1.25rem;
 }
 
 .rs-section-header {
