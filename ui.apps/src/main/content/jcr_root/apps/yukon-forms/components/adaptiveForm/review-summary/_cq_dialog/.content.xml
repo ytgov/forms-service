@@ -35,11 +35,20 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                 text="Show Edit Links"
-                                fieldDescription="Display an Edit link next to each section heading to navigate back."
+                                fieldDescription="Show a button under each page to go back and edit it. Only shown on wizard and tabbed forms."
                                 name="./showEditLinks"
                                 checked="{Boolean}true"
                                 value="{Boolean}true"
                                 uncheckedValue="{Boolean}false" />
+
+                            <!-- Edit link text -->
+                            <editLinkText
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Edit Link Text"
+                                fieldDescription="Text of the button that goes back to a page. {page} is replaced with the page number, counting only pages the user can see. Leave empty for &quot;Go back to page {page} to edit&quot;. Set it in the form's language, e.g. &quot;Retourner à la page {page} pour modifier&quot;."
+                                name="./editLinkText"
+                                emptyText="Go back to page {page} to edit" />
                         </items>
                     </address>
                 </items>
