@@ -35,7 +35,7 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                 text="Show Edit Links"
-                                fieldDescription="Show a button under each page to go back and edit it. Only shown on wizard forms."
+                                fieldDescription="Show a button under each page to go back and edit it. Only shown on wizard and tabbed forms."
                                 name="./showEditLinks"
                                 checked="{Boolean}true"
                                 value="{Boolean}true"

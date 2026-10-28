@@ -4,7 +4,12 @@
   // ─── Constants ────────────────────────────────────────────────────────────
 
   var BRIDGE_READY_EVENT = "bridgeInitializeStart";
-  var WIZARD_LAYOUT = "fd/af/layouts/panel/wizard";
+  // Layouts that show one panel at a time, so a panel can be navigated back to.
+  var PAGED_LAYOUTS = [
+    "fd/af/layouts/panel/wizard",
+    "fd/af/layouts/panel/tabbedPanelLayout",
+    "fd/af/layouts/panel/verticalTabbedPanelLayout"
+  ];
 
   var INPUT_CLASSES = [
     "guideTextBox",
@@ -62,10 +67,11 @@
     return value;
   }
 
-  // Go-back buttons only make sense when pages are shown one at a time.
-  function isWizard(rootPanel) {
+  // Go-back buttons only make sense when pages (wizard steps or tabs) are
+  // shown one at a time.
+  function isPaged(rootPanel) {
     var layout = rootPanel && rootPanel.jsonModel && rootPanel.jsonModel.layout;
-    return !!layout && layout["sling:resourceType"] === WIZARD_LAYOUT;
+    return !!layout && PAGED_LAYOUTS.indexOf(layout["sling:resourceType"]) >= 0;
   }
 
   // Panels with no title, or with "hide title" set, get no heading.
@@ -116,7 +122,7 @@
         if (header) panelBlock.appendChild(header);
         panelBlock.appendChild(childSection);
 
-        if (isTopLevelContainer && showEditLinks && isWizard(panel.parent)) {
+        if (isTopLevelContainer && showEditLinks && isPaged(panel.parent)) {
           var goBackBtn = document.createElement("button");
           goBackBtn.type = "button";
           goBackBtn.className = "rs-page-goto-btn";
@@ -249,12 +255,19 @@
     function attachBridge(guideBridge) {
       guideBridge.connect(function () {
         roots.forEach(function (root) {
-          // Focus changes fire before the new page is shown, so render once
-          // navigation has finished and the root is visible.
-          guideBridge.on("elementFocusChanged", function () {
+          // Render once navigation has finished and the root is visible.
+          function refresh() {
             setTimeout(function () {
               if (root.offsetParent !== null) render(root, guideBridge);
             }, 0);
+          }
+          // Wizard navigation fires focus changes (before the page is shown).
+          guideBridge.on("elementFocusChanged", refresh);
+          // Switching tabs on a tabbed layout fires no GuideBridge event.
+          ["click", "keyup"].forEach(function (type) {
+            document.addEventListener(type, function (e) {
+              if (e.target.closest && e.target.closest("[role='tab']")) refresh();
+            });
           });
           if (root.offsetParent !== null) render(root, guideBridge);
         });
