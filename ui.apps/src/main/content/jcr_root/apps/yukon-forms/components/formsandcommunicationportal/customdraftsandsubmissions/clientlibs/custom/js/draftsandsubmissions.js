@@ -60,6 +60,21 @@
 		    		: op.title,
             };
 	},
+	// Hide "No drafts saved" span and show header
+        updateLayoutWithDrafts = function () {
+            var thead = document.querySelector(".cmp-portallister__results-list-head");
+	    if (!thead) {
+		console.error("No header found for drafts table");
+		return;
+	    }
+	    thead.style.display = "";
+	    var noDraftsRow = document.querySelector(".no-drafts-row");
+	    if (!noDraftsRow) {
+		console.error("No 'No drafts saved' row found");
+		return;
+	    }
+            noDraftsRow.style.display = "none";
+	},
         updateSearchResults = function (response, id) {
             var componentConfig = componentStore[id],
                 queryResults = response.elements;
@@ -80,6 +95,9 @@
 			}
 		   });
             }
+	    if (queryResults.data.length > 0) {
+		updateLayoutWithDrafts();
+	    }
             queryResults.data.forEach(function(item) {
                 ItemAPI.createAndInject(componentConfig, item);
             });
