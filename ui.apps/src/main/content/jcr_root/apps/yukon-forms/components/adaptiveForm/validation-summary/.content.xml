@@ -5,6 +5,6 @@
     xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
     jcr:primaryType="cq:Component"
     jcr:title="Validation Summary"
-    jcr:description="On a failed submit, lists all fields failing validation, grouped by section. Drop at the top of the Review / Finish and Submit panel."
+    jcr:description="On a failed submit, lists every error as a link to its field. Drop at the top of the Review / Finish and Submit panel."
     componentGroup="Adaptive Form"
     sling:resourceSuperType="wcm/foundation/components/responsivegrid" />

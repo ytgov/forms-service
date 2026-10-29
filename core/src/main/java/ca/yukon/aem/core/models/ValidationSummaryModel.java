@@ -24,9 +24,34 @@ public class ValidationSummaryModel {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    static final String DEFAULT_BADGE_TEXT = "New: error summary";
+    static final String DEFAULT_TITLE_TEXT = "There\u2019s a problem";
+    static final String DEFAULT_INTRO_TEXT = "Fix these {count} errors before you submit.";
+    static final String DEFAULT_INTRO_TEXT_ONE = "Fix this error before you submit.";
+
     /** Field names (Somerset/API) to suppress from the validation summary. */
     @ValueMapValue
     private String[] excludedFields;
+
+    /** Whether to show the badge above the summary. */
+    @ValueMapValue
+    private Boolean showBadge;
+
+    /** Badge text above the summary. */
+    @ValueMapValue
+    private String badgeText;
+
+    /** Summary heading. */
+    @ValueMapValue
+    private String titleText;
+
+    /** Line under the heading; "{count}" is replaced with the number of errors. */
+    @ValueMapValue
+    private String introText;
+
+    /** Line under the heading when there is only one error. */
+    @ValueMapValue
+    private String introTextOne;
 
     private String excludedFieldsJson;
 
@@ -45,5 +70,29 @@ public class ValidationSummaryModel {
 
     public String getExcludedFieldsJson() {
         return excludedFieldsJson;
+    }
+
+    public boolean isShowBadge() {
+        return showBadge == null || showBadge;
+    }
+
+    public String getBadgeText() {
+        return orDefault(badgeText, DEFAULT_BADGE_TEXT);
+    }
+
+    public String getTitleText() {
+        return orDefault(titleText, DEFAULT_TITLE_TEXT);
+    }
+
+    public String getIntroText() {
+        return orDefault(introText, DEFAULT_INTRO_TEXT);
+    }
+
+    public String getIntroTextOne() {
+        return orDefault(introTextOne, DEFAULT_INTRO_TEXT_ONE);
+    }
+
+    private static String orDefault(String value, String defaultValue) {
+        return (value != null && !value.trim().isEmpty()) ? value.trim() : defaultValue;
     }
 }

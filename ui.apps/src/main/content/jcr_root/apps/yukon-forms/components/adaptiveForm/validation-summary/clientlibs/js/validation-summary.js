@@ -5,6 +5,8 @@
 
   var BRIDGE_READY_EVENT = "bridgeInitializeStart";
   var SUBMIT_BUTTON_SELECTOR = "button.submit";
+  var ROOT_SELECTOR = "[id='validation-summary-root']";
+  var FOCUSABLE_SELECTOR = "input:not([type='hidden']):not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])";
 
   var INPUT_CLASSES = [
     "guideTextBox",
@@ -31,95 +33,10 @@
     return true;
   }
 
-  // Repeatable panel instances share a title, so number them (1-based).
-  function panelTitle(panel) {
-    var title = panel.title || panel.name;
-    var instanceManager = panel.instanceManager;
-    if (!instanceManager || instanceManager.maxOccur === 1) return title;
-    if (typeof panel.instanceIndex !== "number") return title;
-    return title + " " + (panel.instanceIndex + 1);
-  }
-
-  // The page's position among the wizard pages the user can see (1-based),
-  // so pages hidden by rules don't throw the numbering off.
-  function pageNumber(panel) {
-    var pages = (panel.parent && panel.parent.items) || [];
-    var number = 0;
-    for (var i = 0; i < pages.length; i++) {
-      if (pages[i].visible !== false) number++;
-      if (pages[i] === panel) return number;
-    }
-    return null;
-  }
-
-  // ─── Flat list rendering ──────────────────────────────────────────────────
-
-  function buildSection(container, excludedFields, isTopLevelContainer) {
-    var section = document.createElement("div");
-    section.className = "vs-section";
-
-    container.items.forEach(function (item) {
-      if (item.type === "panel") {
-        var panel = item.node.panel;
-        if (excludedFields.indexOf(panel.name) >= 0) return;
-
-        var panelName = panel.name;
-        var panelSom  = panel.somExpression || panelName;
-        var title     = panelTitle(panel);
-        var number    = isTopLevelContainer ? pageNumber(panel) : null;
-
-        if (number) {
-          title = panel.title ? "Page " + number + ": " + title : "Page " + number;
-        }
-
-        var header = null;
-        if (panel.title || number) {
-          header = document.createElement("div");
-          header.className = "vs-section-header" + (isTopLevelContainer ? " vs-page-header" : "");
-
-          var heading = document.createElement("h3");
-          heading.className = "vs-section-title";
-          heading.textContent = title;
-          header.appendChild(heading);
-        }
-
-        var childSection = buildSection(item.node, excludedFields, false);
-
-        var panelBlock = document.createElement("div");
-        panelBlock.className = "vs-panel-block";
-        if (header) panelBlock.appendChild(header);
-        panelBlock.appendChild(childSection);
-
-        if (isTopLevelContainer) {
-          var goBackBtn = document.createElement("button");
-          goBackBtn.type = "button";
-          goBackBtn.className = "vs-page-goto-btn";
-          goBackBtn.textContent = number ? "Go back to page " + number : "Go back to " + title;
-          goBackBtn.dataset.vsPanel = panelName;
-          goBackBtn.dataset.vsPanelSom = panelSom;
-          panelBlock.appendChild(goBackBtn);
-        }
-
-        section.appendChild(panelBlock);
-      } else {
-        var row = document.createElement("div");
-        row.className = "vs-field";
-
-        var label = document.createElement("div");
-        label.className = "vs-label";
-        label.textContent = item.label;
-
-        var error = document.createElement("div");
-        error.className = "vs-error";
-        error.textContent = item.errorMessage;
-
-        row.appendChild(label);
-        row.appendChild(error);
-        section.appendChild(row);
-      }
-    });
-
-    return section;
+  // Error messages can be rich text; show them as plain text only.
+  function plainText(html) {
+    var doc = new DOMParser().parseFromString(String(html || ""), "text/html");
+    return (doc.body.textContent || "").replace(/\s+/g, " ").trim();
   }
 
   // ─── Core renderer ────────────────────────────────────────────────────────
@@ -138,84 +55,74 @@
     return errorsBySom;
   }
 
-  function render(root, guideBridge, errorsBySom) {
-    var body = root.querySelector(".validation-summary__body");
+  /** Failing fields in form order, as { som, id, message }. */
+  function listErrors(root, guideBridge, errorsBySom) {
     var excludedFields = [];
-
     try {
       excludedFields = JSON.parse(root.dataset.excludedFields || "[]");
     } catch (e) { /* ignore */ }
 
-    // ── Collect invalid fields into tree structure ─────────────────────────
-    // children[] uses panel object identity so repeatable panel instances
-    // (same name, different object) each get their own tree node.
-    var treeRoot = { items: [], children: [] };
-
-    function findOrCreateChild(container, panel) {
-      for (var i = 0; i < container.children.length; i++) {
-        if (container.children[i].panel === panel) return container.children[i].node;
-      }
-      var treeNode = { panel: panel, items: [], children: [] };
-      container.children.push({ panel: panel, node: treeNode });
-      container.items.push({ type: "panel", node: treeNode });
-      return treeNode;
-    }
-
+    var errors = [];
     guideBridge.visit(function (node) {
       if (INPUT_CLASSES.indexOf(node.className) < 0) return;
       if (!node.visible) return;
       if (!allParentsVisible(node)) return;
-      if (!node.parent) return;
       if (excludedFields.indexOf(node.name) >= 0) return;
       if (!errorsBySom.hasOwnProperty(node.somExpression)) return;
 
-      // Panel chain from top-level panel down to node.parent,
-      // stopping before the guideContainer root (no parent of its own).
-      var chain = [];
-      var p = node.parent;
-      while (p) {
-        if (!p.parent) break;        // p is guideContainer — stop
-        if (!p.parent.parent) break; // p is root panel — stop
-        chain.unshift(p);
-        p = p.parent;
-      }
-
-      var current = treeRoot;
-      chain.forEach(function (panel) {
-        current = findOrCreateChild(current, panel);
-      });
-
-      current.items.push({
-        type:         "field",
-        label:        node.title || node.name,
-        errorMessage: errorsBySom[node.somExpression]
+      errors.push({
+        som:     node.somExpression,
+        id:      node.id,
+        message: plainText(errorsBySom[node.somExpression]) || node.title || node.name
       });
     });
+    return errors;
+  }
 
-    // ── Render ────────────────────────────────────────────────────────────
-    var $root = $(root);
-    $root.off(".vs");
-    body.innerHTML = "";
+  // Opens the field's panel, then focuses the field (first option of a group).
+  function goToField(guideBridge, error) {
+    guideBridge.setFocus(error.som);
+    setTimeout(function () {
+      var el = document.getElementById(error.id);
+      if (!el) return;
+      var input = el.querySelector(FOCUSABLE_SELECTOR);
+      el.scrollIntoView({ block: "center" });
+      if (input) input.focus({ preventScroll: true });
+    }, 300);
+  }
 
-    if (!treeRoot.items.length) {
+  /** Renders the list; returns whether there was anything to list. */
+  function render(root, guideBridge, errorsBySom) {
+    var errors = listErrors(root, guideBridge, errorsBySom);
+    var intro = root.querySelector(".validation-summary__intro");
+    var list = root.querySelector(".validation-summary__list");
+    list.innerHTML = "";
+
+    if (!errors.length) {
       root.hidden = true;
-      return;
+      return false;
     }
 
-    body.appendChild(buildSection(treeRoot, excludedFields, true));
-    root.hidden = false;
+    intro.textContent = errors.length === 1
+      ? root.dataset.introTextOne
+      : root.dataset.introText.replace("{count}", errors.length);
 
-    $root.on("click.vs", ".vs-page-goto-btn", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      var panelName = this.dataset.vsPanel;
-      var panelSom  = this.dataset.vsPanelSom || panelName;
-      guideBridge.setFocus(panelSom);
-      setTimeout(function () {
-        var el = document.getElementById(panelName);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 300);
+    errors.forEach(function (error) {
+      var link = document.createElement("a");
+      link.href = "#" + error.id;
+      link.textContent = error.message;
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        goToField(guideBridge, error);
+      });
+
+      var item = document.createElement("li");
+      item.appendChild(link);
+      list.appendChild(item);
     });
+
+    root.hidden = false;
+    return true;
   }
 
   // ─── Submit interception ──────────────────────────────────────────────────
@@ -225,10 +132,11 @@
     return !!root.parentElement && root.parentElement.offsetParent !== null;
   }
 
+  // Move focus to the summary so screen readers announce it.
   function showSummary(root) {
-    window.scrollTo(0, 0);
-    var title = root.querySelector(".validation-summary__title");
-    if (title) title.focus({ preventScroll: true });
+    var panel = root.querySelector(".validation-summary__panel");
+    root.scrollIntoView({ block: "start" });
+    if (panel) panel.focus({ preventScroll: true });
   }
 
   /**
@@ -243,8 +151,10 @@
     var root = roots.filter(isOnCurrentPage)[0];
     if (!root) return;
 
+    // Only cancel the submit if the summary lists something; otherwise
+    // (e.g. only excluded fields fail) let guideBridge.submit handle it.
     var errorsBySom = collectErrors(guideBridge);
-    if (!Object.keys(errorsBySom).length) {
+    if (!Object.keys(errorsBySom).length || !render(root, guideBridge, errorsBySom)) {
       root.hidden = true;
       return;
     }
@@ -253,15 +163,13 @@
     e.stopImmediatePropagation();
 
     root.dataset.vsActive = "true";
-    render(root, guideBridge, errorsBySom);
     showSummary(root);
   }
 
   // ─── Initialisation ───────────────────────────────────────────────────────
 
   function init() {
-    var roots = Array.prototype.slice.call(
-      document.querySelectorAll(".validation-summary[id='validation-summary-root']"));
+    var roots = Array.prototype.slice.call(document.querySelectorAll(ROOT_SELECTOR));
     if (!roots.length) return;
 
     document.addEventListener("click", function (e) { onSubmitClick(roots, e); }, true);
@@ -270,8 +178,19 @@
       guideBridge.connect(function () {
         roots.forEach(function (root) {
           // After a failed submit, keep the list current as errors are fixed.
-          guideBridge.on("elementFocusChanged", function () {
-            if (root.dataset.vsActive && isOnCurrentPage(root)) render(root, guideBridge, collectErrors(guideBridge));
+          // Refresh once navigation has finished and the page is shown.
+          function refresh() {
+            setTimeout(function () {
+              if (root.dataset.vsActive && isOnCurrentPage(root)) render(root, guideBridge, collectErrors(guideBridge));
+            }, 0);
+          }
+          // Wizard navigation fires focus changes (before the page is shown).
+          guideBridge.on("elementFocusChanged", refresh);
+          // Switching tabs on a tabbed layout fires no GuideBridge event.
+          ["click", "keyup"].forEach(function (type) {
+            document.addEventListener(type, function (e) {
+              if (e.target.closest && e.target.closest("[role='tab']")) refresh();
+            });
           });
         });
       });

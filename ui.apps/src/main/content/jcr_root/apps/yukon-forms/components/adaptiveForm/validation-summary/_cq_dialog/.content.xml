@@ -28,6 +28,45 @@
                                     name="./excludedFields"
                                     emptyText="e.g. trackingToken" />
                             </excludedFields>
+
+                            <!-- Summary text. Set it in the form's language. -->
+                            <titleText
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Heading"
+                                fieldDescription="Leave empty for &quot;There’s a problem&quot;. French: &quot;Il y a un problème&quot;."
+                                name="./titleText"
+                                emptyText="There’s a problem" />
+                            <introText
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Intro Text"
+                                fieldDescription="Line under the heading. {count} is replaced with the number of errors. Leave empty for &quot;Fix these {count} errors before you submit.&quot;"
+                                name="./introText"
+                                emptyText="Fix these {count} errors before you submit." />
+                            <introTextOne
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Intro Text (One Error)"
+                                fieldDescription="Line under the heading when there is only one error. Leave empty for &quot;Fix this error before you submit.&quot;"
+                                name="./introTextOne"
+                                emptyText="Fix this error before you submit." />
+                            <showBadge
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                text="Show Badge"
+                                fieldDescription="Show a badge above the summary."
+                                name="./showBadge"
+                                value="{Boolean}true"
+                                uncheckedValue="{Boolean}false"
+                                checked="{Boolean}true" />
+                            <badgeText
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Badge Text"
+                                fieldDescription="Leave empty for &quot;New: error summary&quot;."
+                                name="./badgeText"
+                                emptyText="New: error summary" />
                         </items>
                     </general>
                 </items>
