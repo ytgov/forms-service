@@ -20,6 +20,22 @@ function _findByName(node, name, visited) {
     return null;
 };
 
+function _getInstanceManagerSOM(containerSOM, repeatableName) {
+
+    var container = guideBridge.resolveNode(containerSOM);
+    if (!container) { console.warn("container not found:", containerSOM); return "[]"; }
+
+    var searchIn = container;
+    if (container.instanceManager && container.instanceManager.instances[0]) {
+        searchIn = container.instanceManager.instances[0];
+    }
+
+    var repeatable = (searchIn.children || []).find(function (c) { return c && c.name === repeatableName; });
+    if (!repeatable || !repeatable.instanceManager) { console.warn("no instanceManager on:", repeatableName); return "[]"; }
+
+    return repeatable.instanceManager;
+}
+
 function _getInstanceManager(containerName, repeatableName) {
 
     var root = guideBridge._guide && guideBridge._guide.rootPanel;
@@ -41,6 +57,14 @@ function _getInstanceManager(containerName, repeatableName) {
 
 function _findRepeatableInstances(containerName, repeatableName) {
     var instanceManager = _getInstanceManager(containerName, repeatableName);
+    if (instanceManager === "[]") {
+        return "[]";
+    }
+    return instanceManager.instances;
+}
+
+function _findRepeatableInstancesSOM(containerSOM, repeatableName) {
+    var instanceManager = _getInstanceManagerSOM(containerSOM, repeatableName);
     if (instanceManager === "[]") {
         return "[]";
     }
@@ -90,6 +114,34 @@ function getDataFromRepeatablePanelAsArray(containerName, repeatableName, fieldN
     return itemsArray.map(function (item) {
         return item[fieldName];
     });
+}
+
+/** Generic getter for a repeatable panel. Returns an array of objects,
+one per instance, with the fields you requested.
+ *
+@name getDataFromRepeatablePanelSOM Get specified fields from all instances of a repeatable panel
+@param {string} containerSOM SOM expression of the wrapper panel containing the repeatable
+@param {string} repeatableName Name of the repeatable child panel
+@param {string} fieldNamesCsv Comma-separated list of field names to pull from each instance. Example: "personServedFirstName,personServedLastName"
+@return {string} JSON string of the extracted data (array of objects)
+ */
+function getDataFromRepeatablePanelSOM(containerSOM, repeatableName, fieldNamesCsv) {
+
+    var fieldNames = fieldNamesCsv.split(",").map(function (s) { return s.trim(); });
+
+    var instances = _findRepeatableInstancesSOM(containerSOM, repeatableName);
+
+    var results = instances.map(function (inst, idx) {
+        var item = { _index: idx };
+        fieldNames.forEach(function (fieldName) {
+            // Search through descendants because fields may be in nested panels (e.g., address fields live inside personServedMailingAddress)
+            var field = _findByName(inst, fieldName);
+            item[fieldName] = field ? field.value : "";
+        });
+        return item;
+    });
+
+    return JSON.stringify(results);
 };
 
 /**
@@ -190,6 +242,29 @@ Convenience function that gets, filters, and formats repeatable panel data in on
 function getFilteredFormattedData(containerName, repeatableName, fieldNamesCsv, filterField, filterOperator, filterValue, itemTemplate, separator) {
 
     var data = getDataFromRepeatablePanel(containerName, repeatableName, fieldNamesCsv);
+    if (filterField.trim()) {
+        data = filterData(data, filterField, filterOperator, filterValue);
+    }
+    return formatData(data, itemTemplate, separator);
+};
+
+/**
+Convenience function that gets, filters, and formats repeatable panel data in one call.
+ *
+@name getFilteredFormattedDataSOM Get filtered and formatted data from a repeatable panel
+@param {string} containerSOM SOM expression of the wrapper panel
+@param {string} repeatableName Name of the repeatable child, e.g. personToBeServed
+@param {string} fieldNamesCsv Fields to pull (comma-separated), e.g. personServedFirstName,personServedLastName,personServedMailingProvince
+@param {string} filterField Field to filter by (empty string to skip filtering), e.g.personServedMailingProvince
+@param {string} filterOperator "equals" or "notEquals", e.g. notEquals
+@param {string} filterValue Value to compare against, e.g. YT
+@param {string} itemTemplate Template per item, e.g. {personServedFirstName} {personServedLastName}
+@param {string} separator Separator for joining, e.g. ,
+@return {string}
+ */
+function getFilteredFormattedDataSOM(containerSOM, repeatableName, fieldNamesCsv, filterField, filterOperator, filterValue, itemTemplate, separator) {
+
+    var data = getDataFromRepeatablePanelSOM(containerSOM, repeatableName, fieldNamesCsv);
     if (filterField.trim()) {
         data = filterData(data, filterField, filterOperator, filterValue);
     }
