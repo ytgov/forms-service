@@ -74,34 +74,6 @@ function _findRepeatableInstancesSOM(containerSOM, repeatableName) {
 /** Generic getter for a repeatable panel. Returns an array of objects,
 one per instance, with the fields you requested.
  *
-@name getDataFromRepeatablePanelSOM Get specified fields from all instances of a repeatable panel
-@param {string} containerSOM SOM expression of the wrapper panel containing the repeatable
-@param {string} repeatableName Name of the repeatable child panel
-@param {string} fieldNamesCsv Comma-separated list of field names to pull from each instance. Example: "personServedFirstName,personServedLastName"
-@return {string} JSON string of the extracted data (array of objects)
- */
-function getDataFromRepeatablePanelSOM(containerNameSOM, repeatableName, fieldNamesCsv) {
-
-    var fieldNames = fieldNamesCsv.split(",").map(function (s) { return s.trim(); });
-
-    var instances = _findRepeatableInstancesSOM(containerSOM, repeatableName);
-
-    var results = instances.map(function (inst, idx) {
-        var item = { _index: idx };
-        fieldNames.forEach(function (fieldName) {
-            // Search through descendants because fields may be in nested panels (e.g., address fields live inside personServedMailingAddress)
-            var field = _findByName(inst, fieldName);
-            item[fieldName] = field ? field.value : "";
-        });
-        return item;
-    });
-
-    return JSON.stringify(results);
-};
-
-/** Generic getter for a repeatable panel. Returns an array of objects,
-one per instance, with the fields you requested.
- *
 @name getDataFromRepeatablePanel Get specified fields from all instances of a repeatable panel
 @param {string} containerName Name of the wrapper panel containing the repeatable
 @param {string} repeatableName Name of the repeatable child panel
@@ -127,7 +99,6 @@ function getDataFromRepeatablePanel(containerName, repeatableName, fieldNamesCsv
     return JSON.stringify(results);
 };
 
-<<<<<<< Updated upstream
 /** Single-field getter for a repeatable panel. Returns an array containing
 the values of the field specified.
  *
@@ -143,7 +114,8 @@ function getDataFromRepeatablePanelAsArray(containerName, repeatableName, fieldN
     return itemsArray.map(function (item) {
         return item[fieldName];
     });
-=======
+}
+
 /** Generic getter for a repeatable panel. Returns an array of objects,
 one per instance, with the fields you requested.
  *
@@ -170,7 +142,6 @@ function getDataFromRepeatablePanelSOM(containerSOM, repeatableName, fieldNamesC
     });
 
     return JSON.stringify(results);
->>>>>>> Stashed changes
 };
 
 /**
