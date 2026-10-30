@@ -105,7 +105,7 @@
 
     intro.textContent = errors.length === 1
       ? root.dataset.introTextOne
-      : root.dataset.introText.replace("{count}", errors.length);
+      : root.dataset.introText.replace(/\{count\}/g, errors.length);
 
     errors.forEach(function (error) {
       var link = document.createElement("a");

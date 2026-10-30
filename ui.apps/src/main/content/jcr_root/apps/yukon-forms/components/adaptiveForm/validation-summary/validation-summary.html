@@ -9,12 +9,13 @@
 
   Authoring dialog properties (set on the component node):
     - excludedFields : String[] — field names to suppress (e.g. hidden tokens)
-    - showBadge      : Boolean  — whether to show the badge above the summary
+    - showBadge      : Boolean  — whether to show the badge above the summary (default off)
     - badgeText      : String   — badge text (default "New: error summary")
     - titleText      : String   — heading (default "There's a problem")
     - introText      : String   — line under the heading; {count} is replaced
                                   with the number of errors
     - introTextOne   : String   — the same line when there is only one error
+  Empty text properties fall back to English, or French on French forms.
 -->
 <sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
      data-sly-call="${clientlib.all @ categories='yukon-forms.components.validation-summary'}"/>

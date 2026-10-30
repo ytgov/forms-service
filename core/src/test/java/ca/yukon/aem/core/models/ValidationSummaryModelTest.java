@@ -6,6 +6,8 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,7 +20,7 @@ class ValidationSummaryModelTest {
     @Test
     void testTexts_notSet_returnDefaults() {
         ValidationSummaryModel model = model();
-        assertTrue(model.isShowBadge());
+        assertFalse(model.isShowBadge());
         assertEquals("New: error summary", model.getBadgeText());
         assertEquals("There’s a problem", model.getTitleText());
         assertEquals("Fix these {count} errors before you submit.", model.getIntroText());
@@ -46,12 +48,61 @@ class ValidationSummaryModelTest {
     }
 
     @Test
+    void testShowBadge_true_showsBadge() {
+        assertTrue(model("showBadge", true).isShowBadge());
+    }
+
+    @Test
     void testShowBadge_false_hidesBadge() {
         assertFalse(model("showBadge", false).isShowBadge());
     }
 
+    @Test
+    void testTexts_frenchParameter_returnFrenchDefaults() {
+        context.request().setParameterMap(Collections.singletonMap("afAcceptLang", "fr-CA"));
+        assertFrenchDefaults(model());
+    }
+
+    @Test
+    void testTexts_frenchSelector_returnFrenchDefaults() {
+        context.requestPathInfo().setSelectorString("fr");
+        assertFrenchDefaults(model());
+    }
+
+    @Test
+    void testTexts_frenchFormLanguage_returnFrenchDefaults() {
+        context.create().resource(FORM_CONTENT, "jcr:language", "fr");
+        assertFrenchDefaults(model());
+    }
+
+    @Test
+    void testTexts_englishParameterOnFrenchForm_returnEnglishDefaults() {
+        context.create().resource(FORM_CONTENT, "jcr:language", "fr");
+        context.request().setParameterMap(Collections.singletonMap("afAcceptLang", "en"));
+        assertEquals("There\u2019s a problem", model().getTitleText());
+    }
+
+    @Test
+    void testTexts_frenchFormWithAuthoredText_returnAuthoredText() {
+        context.create().resource(FORM_CONTENT, "jcr:language", "fr");
+        assertEquals("Erreurs", model("titleText", "Erreurs").getTitleText());
+    }
+
+    private static final String FORM_CONTENT = "/content/forms/af/test-form/jcr:content";
+
+    private void assertFrenchDefaults(ValidationSummaryModel model) {
+        assertEquals("Il y a un probl\u00e8me", model.getTitleText());
+        assertEquals("Corrigez ces {count}\u00a0erreurs avant de soumettre le formulaire.", model.getIntroText());
+        assertEquals("Corrigez cette erreur avant de soumettre le formulaire.", model.getIntroTextOne());
+        assertEquals("Nouveau\u00a0: r\u00e9sum\u00e9 des erreurs", model.getBadgeText());
+    }
+
     private ValidationSummaryModel model(Object... properties) {
-        context.currentResource(context.create().resource("/content/validation-summary", properties));
+        if (context.resourceResolver().getResource(FORM_CONTENT) == null) {
+            context.create().resource(FORM_CONTENT);
+        }
+        context.currentResource(context.create().resource(
+            FORM_CONTENT + "/guideContainer/validationsummary", properties));
         return context.request().adaptTo(ValidationSummaryModel.class);
     }
 }
