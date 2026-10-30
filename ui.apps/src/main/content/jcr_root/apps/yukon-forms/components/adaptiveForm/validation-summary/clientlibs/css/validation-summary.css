@@ -1,0 +1,87 @@
+/*
+ * validation-summary.css
+ *
+ * Styles for the Validation Summary component: a Yukon warning alert
+ * (without the icon) listing every error as a link, after a failed submit.
+ */
+
+/* ── Design tokens ── */
+.validation-summary__wrapper {
+  --vs-text-color:   #563B00;
+  --vs-background:   #FFE9C3;
+  --vs-badge-color:  #D3337F;
+}
+
+/* ── Wrapper (shown only after a failed submit) ── */
+.validation-summary__wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.validation-summary__wrapper[hidden] {
+  display: none;
+}
+
+.validation-summary__badge {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  background: var(--vs-badge-color);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Alert ──
+ * Scoped to __panel because AEM also puts .validation-summary on the
+ * component's wrapper div. */
+.validation-summary__panel {
+  padding: 1.5rem 1.5rem 1.5rem 2rem;
+  border-left: 12px solid var(--vs-text-color);
+  background: var(--vs-background);
+  color: var(--vs-text-color);
+}
+
+.validation-summary__panel:focus {
+  outline: 3px solid var(--vs-text-color);
+  outline-offset: 2px;
+}
+
+.validation-summary__title {
+  margin: 0 0 0.25rem;
+  color: var(--vs-text-color);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.validation-summary__intro {
+  margin: 0 0 1rem;
+  color: var(--vs-text-color);
+}
+
+/* ── Error links ── */
+.validation-summary__list {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.validation-summary__list li {
+  margin: 0.5rem 0;
+  color: var(--vs-text-color);
+}
+
+.validation-summary__list a,
+.validation-summary__list a:visited,
+.validation-summary__list a:hover {
+  color: var(--vs-text-color);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.validation-summary__list a:focus {
+  outline: 3px solid var(--vs-text-color);
+  outline-offset: 2px;
+}
