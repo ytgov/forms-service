@@ -4,19 +4,32 @@
   Drop this component at the top of an Adaptive Form's Review/Finish panel.
   It stays hidden until the user clicks Submit with errors in the form. The
   client-side JS (validation-summary.js) then validates the whole form via
-  GuideBridge, cancels the submit, lists every field failing validation
-  grouped by section, and scrolls to the top of the page.
+  GuideBridge, cancels the submit, lists every error as a link to its field
+  in form order, and moves focus to the summary.
 
   Authoring dialog properties (set on the component node):
     - excludedFields : String[] — field names to suppress (e.g. hidden tokens)
+    - showBadge      : Boolean  — whether to show the badge above the summary (default off)
+    - badgeText      : String   — badge text (default "New: error summary")
+    - titleText      : String   — heading (default "There's a problem")
+    - introText      : String   — line under the heading; {count} is replaced
+                                  with the number of errors
+    - introTextOne   : String   — the same line when there is only one error
+  Empty text properties fall back to English, or French on French forms.
 -->
 <sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
      data-sly-call="${clientlib.all @ categories='yukon-forms.components.validation-summary'}"/>
-<div data-sly-use.model="ca.yukon.aem.core.models.ValidationSummaryModel"
-     class="validation-summary validation-summary__panel"
+<sly data-sly-use.model="ca.yukon.aem.core.models.ValidationSummaryModel"/>
+<div class="validation-summary__wrapper" id="validation-summary-root"
      data-excluded-fields="${model.excludedFieldsJson}"
-     id="validation-summary-root"
+     data-intro-text="${model.introText}"
+     data-intro-text-one="${model.introTextOne}"
      hidden>
-  <h2 class="validation-summary__title" tabindex="-1">${'Please correct the following errors before submitting' @ i18n}</h2>
-  <div class="validation-summary__body"></div>
+  <span data-sly-test="${model.showBadge}" class="validation-summary__badge">${model.badgeText}</span>
+  <div class="validation-summary validation-summary__panel" tabindex="-1"
+       aria-labelledby="validation-summary-title">
+    <h2 class="validation-summary__title" id="validation-summary-title">${model.titleText}</h2>
+    <p class="validation-summary__intro"></p>
+    <ul class="validation-summary__list"></ul>
+  </div>
 </div>
