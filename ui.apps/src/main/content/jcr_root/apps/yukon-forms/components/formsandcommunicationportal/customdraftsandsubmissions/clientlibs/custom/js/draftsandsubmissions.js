@@ -14,6 +14,16 @@
  * limitations under the License.
  ******************************************************************************/
 
+/*
+ * Fork of Adobe's Core Forms Components file
+ * core/fd/components/formsportal/draftsandsubmissions/v1/draftsandsubmissions/clientlibs/site/js/draftsandsubmissions.js
+ * (identical in 3.0.172; upstream unchanged since a1c569ce, 2021-09-06).
+ * Adobe's script has no hook to change items before they're rendered, so it is copied. Our changes:
+ * filter to the form embedded on the page, page title as item title, French operation labels,
+ * "No drafts saved" row, and resume drafts in this page (openDraftInPage).
+ * On a Core Forms Components or Forms add-on upgrade: diff against upstream and retest list, open, resume.
+ */
+
 (function($) {
     var NS = 'cmp',
         IS = 'draftsandsubmissions',
@@ -36,6 +46,10 @@
     var componentStore = {}, ItemAPI;
 
     var formURL = null;
+
+    // Replaces Adobe's "openDraft" operation, which opens the standalone form page in a new tab
+    var RESUME_OPERATION = "openDraftInPage";
+    var DRAFT_DATA_REF_PREFIX = "service://FP/draft/";
 
     var cleanup = function (id) {
             var componentConfig = componentStore[id];
@@ -60,6 +74,31 @@
 		    		: op.title,
             };
 	},
+	// Resume a draft in this page, same tab. The inline-embedded form reads dataRef from the page URL;
+	// EmbeddedFormPrefillServlet forwards its prefill request to the form's guideContainer.
+	draftResumeUrl = function (draftId) {
+	    var url = new URL(window.location.href);
+	    url.searchParams.set("dataRef", DRAFT_DATA_REF_PREFIX + draftId);
+	    return url.toString();
+	},
+	toResumeOperation = function (op) {
+	    return op.name === "openDraft" ? { ...op, name: RESUME_OPERATION } : op;
+	},
+	// Hide "No drafts saved" span and show header
+        updateLayoutWithDrafts = function () {
+            var thead = document.querySelector(".cmp-portallister__results-list-head");
+	    if (!thead) {
+		console.error("No header found for drafts table");
+		return;
+	    }
+	    thead.style.display = "";
+	    var noDraftsRow = document.querySelector(".no-drafts-row");
+	    if (!noDraftsRow) {
+		console.error("No 'No drafts saved' row found");
+		return;
+	    }
+            noDraftsRow.style.display = "none";
+	},
         updateSearchResults = function (response, id) {
             var componentConfig = componentStore[id],
                 queryResults = response.elements;
@@ -71,15 +110,23 @@
 		        return item.formLink.includes(formURL);
 		    })
 		    .map(function(item) {
+			var isDraft = item.operations.some(function(op) {
+			    return op.name === "openDraft";
+			});
 			return {
 			    ...item,
 			    // Replace form title with page title
 			    title: document.title,
+			    // Resume drafts in this page instead of the standalone form page
+			    formLink: isDraft ? draftResumeUrl(item.id) : item.formLink,
 			    // Translate operations if the page is in French
-			    operations: item.operations.map(translateOperation)
+			    operations: item.operations.map(translateOperation).map(toResumeOperation)
 			}
 		   });
             }
+	    if (queryResults.data.length > 0) {
+		updateLayoutWithDrafts();
+	    }
             queryResults.data.forEach(function(item) {
                 ItemAPI.createAndInject(componentConfig, item);
             });
@@ -142,6 +189,17 @@
             componentConfig.loadmoreNode.addEventListener("click", (event) => {
                 paginateNext(event, config.id)
             });
+            // Draft title links resume in this page. Capture phase, so Adobe's link handler
+            // (window.open(link, "_blank")) never runs for them.
+            componentConfig.componentNode.addEventListener("click", (event) => {
+                var link = event.target.closest(".item-link");
+                var dataRef = link && new URL(link.getAttribute("link"), window.location.href).searchParams.get("dataRef");
+                if (dataRef && dataRef.startsWith(DRAFT_DATA_REF_PREFIX)) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    window.location.assign(link.getAttribute("link"));
+                }
+            }, true);
 
             ItemAPI.init(componentConfig);
 
@@ -186,6 +244,12 @@
     // wait for window load to prevent any race condition
     $(function() {
         $(window).trigger("core-forms-itemapi-onload", tmpEvent);
+        $(window).trigger("core-forms-register-operation", {
+            name: RESUME_OPERATION,
+            handler: function (event, operationData) {
+                window.location.assign(draftResumeUrl(operationData.operation_model_id));
+            }
+        });
     });
 
 }(jQuery));

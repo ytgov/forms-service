@@ -1,7 +1,6 @@
 package ca.yukon.aem.core.forms.services.impl;
 
 import com.adobe.forms.common.service.*;
-import com.google.gson.Gson;
 import org.apache.jackrabbit.api.JackrabbitSession;
 import org.apache.jackrabbit.api.security.user.Authorizable;
 import org.apache.jackrabbit.api.security.user.UserManager;
@@ -11,11 +10,14 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 @Component
 public class MyCustomPrefillService implements DataProvider {
@@ -50,32 +52,34 @@ public class MyCustomPrefillService implements DataProvider {
             UserManager um = ((JackrabbitSession) session).getUserManager();
             Authorizable loggedinUser = um.getAuthorizable(session.getUserID());
 
-            String givenName = "Given Name Undefined";
-            String familyName = "Family Name Undefined";
-            String email = "Email Undefined";
+            JsonObjectBuilder fields = Json.createObjectBuilder()
+                    .add("MyYukon_FirstName", profileValue(loggedinUser, "profile/givenName", "Given Name Undefined"))
+                    .add("MyYukon_LastName", profileValue(loggedinUser, "profile/familyName", "Family Name Undefined"))
+                    .add("MyYukon_Email", profileValue(loggedinUser, "profile/email", "Email Undefined"))
+                    // Same default as VerificationStatusGateFilter: no synced status means unverified.
+                    .add("MyYukon_VerificationStatus", profileValue(loggedinUser, "profile/verificationStatus", "0"))
+                    .add("MyYukon_Birthdate", profileValue(loggedinUser, "profile/birthDate", ""))
+                    .add("MyYukon_FullName", profileValue(loggedinUser, "profile/fullName", ""))
+                    .add("MyYukon_Nickname", profileValue(loggedinUser, "profile/nickname", ""));
+            String json = Json.createObjectBuilder().add("simple_submission", fields).build().toString();
 
-            if (loggedinUser.hasProperty("profile/givenName")) {
-                givenName = loggedinUser.getProperty("profile/givenName")[0].getString();
-            }
-            if (loggedinUser.hasProperty("profile/familyName")) {
-                familyName = loggedinUser.getProperty("profile/familyName")[0].getString();
-            }
-            if (loggedinUser.hasProperty("profile/email")) {
-                email = loggedinUser.getProperty("profile/email")[0].getString();
-            }
-
-            Gson gson = new Gson();
-            String jsonStr = "{\n  \"simple_submission\": {\n    \"Title\": \"" +familyName+" \",\n    \"Name\": \""+givenName+"\",\n    \"Email\": \""+email+ "\"\n  }\n}";
-            HashMap myPojo = gson.fromJson(jsonStr, HashMap.class);
-            String outputStr = gson.toJson(myPojo);
-
-            InputStream inputStream = new ByteArrayInputStream(outputStr.getBytes(StandardCharsets.UTF_8));
-            return inputStream;
+            return new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
 
         } catch (Exception e) {
             logger.error("Error while creating prefill data", e);
             throw new FormsException(e);
         }
+    }
+
+    private static String profileValue(Authorizable user, String property, String defaultValue)
+            throws RepositoryException {
+        if (user.hasProperty(property)) {
+            Value[] values = user.getProperty(property);
+            if (values != null && values.length > 0) {
+                return values[0].getString();
+            }
+        }
+        return defaultValue;
     }
 }
 

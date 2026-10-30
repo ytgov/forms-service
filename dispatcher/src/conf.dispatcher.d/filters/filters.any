@@ -12,6 +12,10 @@ $include "./default_filters.any"
 # Allow manifest.webmanifest files located in the content
 /0102 { /type "allow" /extension "webmanifest" /path "/content/*/manifest" }
 
+# Allow prefill (e.g. resuming a Forms Portal draft) for forms embedded in Sites pages;
+# handled by EmbeddedFormPrefillServlet, which forwards to the form's guideContainer
+/0110 { /type "allow" /method "POST" /path "/content/yukon-forms/*" /selectors "af.prefilldata" /extension "json" }
+
 # Allow SAML HTTP POST to ../saml_login end points
 /0190 { /type "allow" /method "POST" /url "*/saml_login" }
 
@@ -20,3 +24,9 @@ $include "./default_filters.any"
 
 # Allow POST-based SAML authentication invocation
 /0192 { /type "allow" /method "POST" /url "/system/sling/login" }
+
+# Allow Sling logout (drops the AEM login-token, then redirects to the "resource" param)
+/0193 { /type "allow" /method "GET" /url "/system/sling/logout" /query "*" }
+
+# Allow the current user info debug endpoint
+/0200 { /type "allow" /method "GET" /url "/bin/yukon-forms/userinfo.json" }

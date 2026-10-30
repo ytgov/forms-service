@@ -112,3 +112,4 @@ ui.apps/src/main/content/jcr_root/apps/yukon-forms/clientlibs/clientlib-forms-re
 .DS_Store
 .aio
 aio/
+.playwright-mcp/
