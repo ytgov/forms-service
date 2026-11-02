@@ -55,7 +55,8 @@ import org.slf4j.LoggerFactory;
  * are gated the same way, by the strictest level among their embedded forms. The embed renders the
  * form through a server-side include, which request-scoped filters never see, so the page request
  * itself has to be checked. This covers anything requested under the page, e.g. the embed's
- * {@code .iframe.html} or the page's {@code .model.json}. Users are redirected in the page's language.
+ * {@code .iframe.html} or the page's {@code .model.json}. Users are redirected in the form's tagged
+ * language, or the page's language if the form has no language tag.
  *
  * <p>This filter is the sole enforcement point for yukon-forms access - there is no repository
  * ACL backing it up, so it must cover the public-facing {@code /content/forms/af/...} path, the
@@ -272,27 +273,29 @@ public class VerificationStatusGateFilter implements Filter {
     }
 
     /**
-     * The language to redirect in. A request through a Sites page uses the page's language folder (e.g.
-     * {@code /content/yukon-forms/ca/fr/...}), since an English page and its French language copy can embed
-     * the same form. Otherwise it's the form's {@code language} tag (set in its properties in Forms &amp;
-     * Documents, stored on the DAM asset's {@code jcr:content/metadata}): a form tagged with any other
-     * supported language, e.g. {@code language:fr}, gets that language; a form tagged
-     * {@code language:en}, or with no language tag, gets the first supported language.
+     * The language to redirect in. The form's {@code language} tag (set in its properties in Forms &amp;
+     * Documents, stored on the DAM asset's {@code jcr:content/metadata}) comes first: a form tagged with a
+     * supported language, e.g. {@code language:fr}, gets that language. An untagged form embedded in a
+     * Sites page uses the page's language folder, e.g. {@code /content/yukon-forms/ca/fr/...}. Anything
+     * else gets the first supported language.
      */
     String resolveLanguage(ResourceResolver resolver, String requestPath, String contentPath) {
+        Resource metadata = resolver.getResource(contentPath + "/jcr:content/metadata");
+        String[] tags = metadata != null ? metadata.getValueMap().get(TAGS_PROPERTY, String[].class) : null;
+        List<String> tagIds = tags != null ? Arrays.asList(tags) : Collections.emptyList();
+        // The other languages are checked before the first, so a form tagged with both isn't sent to the first.
+        List<String> tagOrder = new ArrayList<>(supportedLanguages.subList(1, supportedLanguages.size()));
+        tagOrder.add(supportedLanguages.get(0));
+        for (String language : tagOrder) {
+            if (tagIds.contains(LANGUAGE_TAG_PREFIX + language)) {
+                return language;
+            }
+        }
         if (isAtOrUnder(requestPath, SITES_PREFIX)) {
             for (String segment : requestPath.substring(SITES_PREFIX.length()).split("/")) {
                 if (supportedLanguages.contains(segment)) {
                     return segment;
                 }
-            }
-        }
-        Resource metadata = resolver.getResource(contentPath + "/jcr:content/metadata");
-        String[] tags = metadata != null ? metadata.getValueMap().get(TAGS_PROPERTY, String[].class) : null;
-        List<String> tagIds = tags != null ? Arrays.asList(tags) : Collections.emptyList();
-        for (String language : supportedLanguages.subList(1, supportedLanguages.size())) {
-            if (tagIds.contains(LANGUAGE_TAG_PREFIX + language)) {
-                return language;
             }
         }
         return supportedLanguages.get(0);
