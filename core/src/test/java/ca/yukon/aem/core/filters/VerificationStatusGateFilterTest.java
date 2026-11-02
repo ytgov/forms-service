@@ -30,7 +30,7 @@ class VerificationStatusGateFilterTest {
 
     private static final String REDIRECT_PATTERN = "/content/yukon-forms/ca/{lang}/verification-required.html";
     /** Redirect for the user at level 1 trying a form in a level-5 folder, as used throughout these tests. */
-    private static final String REDIRECT_QUERY = "?u_loa=1&f_low=5&form_name=some-department%2Fsensitive-form";
+    private static final String REDIRECT_QUERY = "?u_loa=1&f_low=5&form_path=some-department%2Fsensitive-form";
     private static final String REDIRECT_PAGE =
             "/content/yukon-forms/ca/en/verification-required.html" + REDIRECT_QUERY;
     private static final String REDIRECT_PAGE_FR =
@@ -491,9 +491,9 @@ class VerificationStatusGateFilterTest {
     }
 
     @Test
-    void testToFormName() {
+    void testToFormPath() {
         assertEquals("eco/youth-fund/application-f",
-                VerificationStatusGateFilter.toFormName("/content/dam/formsanddocuments/yukon-forms/eco/youth-fund/application-f"));
+                VerificationStatusGateFilter.toFormPath("/content/dam/formsanddocuments/yukon-forms/eco/youth-fund/application-f"));
     }
 
     private static VerificationStatusGateConfig config() {

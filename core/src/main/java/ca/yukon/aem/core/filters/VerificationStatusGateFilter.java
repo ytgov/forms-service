@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
  *   <li>Property {@code > 0} and the requester's synced {@code profile/verificationStatus} is lower
  *       than required: redirected to the configurable {@code redirect.page}, in the form's language
  *       (see {@link #resolveLanguage}), with the user's level ({@code u_loa}), the folder's required
- *       level ({@code f_low}), the form's path under yukon-forms ({@code form_name}) and the form's
+ *       level ({@code f_low}), the form's path under yukon-forms ({@code form_path}) and the form's
  *       title ({@code form_title}, left out when the form has none) as query parameters.
  * </ul>
  *
@@ -99,7 +99,7 @@ public class VerificationStatusGateFilter implements Filter {
     static final String LANGUAGE_PLACEHOLDER = "{lang}";
     static final String USER_LEVEL_PARAMETER = "u_loa";
     static final String FOLDER_LEVEL_PARAMETER = "f_low";
-    static final String FORM_NAME_PARAMETER = "form_name";
+    static final String FORM_PATH_PARAMETER = "form_path";
     static final String FORM_TITLE_PARAMETER = "form_title";
 
     private String redirectPage;
@@ -160,7 +160,7 @@ public class VerificationStatusGateFilter implements Filter {
                     redirectPage.replace(LANGUAGE_PLACEHOLDER, resolveLanguage(resolver, requestPath, contentPath)),
                     USER_LEVEL_PARAMETER, formatLevel(userStatus),
                     FOLDER_LEVEL_PARAMETER, formatLevel(requiredStatus),
-                    FORM_NAME_PARAMETER, toFormName(contentPath),
+                    FORM_PATH_PARAMETER, toFormPath(contentPath),
                     FORM_TITLE_PARAMETER, resolveFormTitle(resolver, contentPath));
             log.debug(
                     "Redirecting user {} to {} - verification status {} is below required {} for {}",
@@ -331,7 +331,7 @@ public class VerificationStatusGateFilter implements Filter {
     }
 
     /** The form's path relative to the yukon-forms folder, e.g. "eco/some-folder/some-form". */
-    static String toFormName(String contentPath) {
+    static String toFormPath(String contentPath) {
         String relative = contentPath.substring(CONTENT_SOURCE_PREFIX.length());
         return relative.startsWith("/") ? relative.substring(1) : relative;
     }
