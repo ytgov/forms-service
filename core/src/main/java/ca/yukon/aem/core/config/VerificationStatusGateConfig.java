@@ -14,8 +14,8 @@ public @interface VerificationStatusGateConfig {
     @AttributeDefinition(
             name = "Redirect Page",
             description = "Page users are redirected to when their verification status is below the "
-                    + "level required by the form's folder. {lang} is replaced with the language from the form's "
-                    + "language tag, "
+                    + "level required by the form's folder. {lang} is replaced with the Sites page's language for "
+                    + "embedded forms, or the language from the form's language tag, "
                     + "e.g. /content/yukon-forms/ca/{lang}/verification-required.html."
     )
     String redirect_page() default "/content/yukon-forms/ca/{lang}/verification-required.html";

@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
  * are gated the same way, by the strictest level among their embedded forms. The embed renders the
  * form through a server-side include, which request-scoped filters never see, so the page request
  * itself has to be checked. This covers anything requested under the page, e.g. the embed's
- * {@code .iframe.html} or the page's {@code .model.json}.
+ * {@code .iframe.html} or the page's {@code .model.json}. Users are redirected in the page's language.
  *
  * <p>This filter is the sole enforcement point for yukon-forms access - there is no repository
  * ACL backing it up, so it must cover the public-facing {@code /content/forms/af/...} path, the
@@ -156,7 +156,7 @@ public class VerificationStatusGateFilter implements Filter {
         double userStatus = getUserVerificationStatus(resolver);
         if (userStatus < requiredStatus) {
             String target = withQueryParameters(
-                    redirectPage.replace(LANGUAGE_PLACEHOLDER, resolveLanguage(resolver, contentPath)),
+                    redirectPage.replace(LANGUAGE_PLACEHOLDER, resolveLanguage(resolver, requestPath, contentPath)),
                     USER_LEVEL_PARAMETER, formatLevel(userStatus),
                     FOLDER_LEVEL_PARAMETER, formatLevel(requiredStatus),
                     FORM_NAME_PARAMETER, toFormName(contentPath),
@@ -272,12 +272,21 @@ public class VerificationStatusGateFilter implements Filter {
     }
 
     /**
-     * The form's language, from the {@code language} tag on the form (set in its properties in Forms &amp;
+     * The language to redirect in. A request through a Sites page uses the page's language folder (e.g.
+     * {@code /content/yukon-forms/ca/fr/...}), since an English page and its French language copy can embed
+     * the same form. Otherwise it's the form's {@code language} tag (set in its properties in Forms &amp;
      * Documents, stored on the DAM asset's {@code jcr:content/metadata}): a form tagged with any other
      * supported language, e.g. {@code language:fr}, gets that language; a form tagged
      * {@code language:en}, or with no language tag, gets the first supported language.
      */
-    String resolveLanguage(ResourceResolver resolver, String contentPath) {
+    String resolveLanguage(ResourceResolver resolver, String requestPath, String contentPath) {
+        if (isAtOrUnder(requestPath, SITES_PREFIX)) {
+            for (String segment : requestPath.substring(SITES_PREFIX.length()).split("/")) {
+                if (supportedLanguages.contains(segment)) {
+                    return segment;
+                }
+            }
+        }
         Resource metadata = resolver.getResource(contentPath + "/jcr:content/metadata");
         String[] tags = metadata != null ? metadata.getValueMap().get(TAGS_PROPERTY, String[].class) : null;
         List<String> tagIds = tags != null ? Arrays.asList(tags) : Collections.emptyList();

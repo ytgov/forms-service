@@ -335,13 +335,47 @@ class VerificationStatusGateFilterTest {
     }
 
     @Test
-    void testDoFilter_sitesPageEmbeddingFrenchTaggedForm_redirectsToFrenchPage(AemContext context)
+    void testDoFilter_frenchSitesPageEmbeddingUntaggedForm_redirectsToFrenchPage(AemContext context)
             throws IOException, ServletException {
         String frenchPage = "/content/yukon-forms/ca/fr/some-department/formulaire-sensible";
         withProperty(context, FORM_PATH, 5d);
-        withTags(context, FORM_PATH, "language:fr");
         withEmbeddedForm(context, frenchPage, FORM_PATH);
         context.requestPathInfo().setResourcePath(frenchPage);
+
+        assertEquals(REDIRECT_PAGE_FR, redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_englishSitesPageEmbeddingFrenchTaggedForm_redirectsToEnglishPage(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        withTags(context, FORM_PATH, "language:fr");
+        withEmbeddedForm(context, SITES_PAGE_PATH, FORM_PATH);
+        context.requestPathInfo().setResourcePath(SITES_PAGE_PATH);
+
+        assertEquals(REDIRECT_PAGE, redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_frenchSitesPageIframeRequest_redirectsToFrenchPage(AemContext context)
+            throws IOException, ServletException {
+        String frenchPage = "/content/yukon-forms/ca/fr/some-department/formulaire-sensible";
+        withProperty(context, FORM_PATH, 5d);
+        withEmbeddedForm(context, frenchPage, FORM_PATH);
+        context.requestPathInfo().setResourcePath(frenchPage + EMBED_PATH);
+        context.requestPathInfo().setSelectorString("iframe.fr");
+
+        assertEquals(REDIRECT_PAGE_FR, redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_sitesPageOutsideLanguageFolder_usesFormTag(AemContext context)
+            throws IOException, ServletException {
+        String page = "/content/yukon-forms/some-page";
+        withProperty(context, FORM_PATH, 5d);
+        withTags(context, FORM_PATH, "language:fr");
+        withEmbeddedForm(context, page, FORM_PATH);
+        context.requestPathInfo().setResourcePath(page);
 
         assertEquals(REDIRECT_PAGE_FR, redirectBelowStatus(context));
     }
