@@ -39,6 +39,8 @@ class VerificationStatusGateFilterTest {
             "/content/dam/formsanddocuments/yukon-forms/some-department";
     private static final String FORM_PATH = FOLDER_PATH + "/sensitive-form";
     private static final String REQUEST_PATH = "/content/forms/af/yukon-forms/some-department/sensitive-form";
+    private static final String SITES_PAGE_PATH = "/content/yukon-forms/ca/en/some-department/sensitive-form";
+    private static final String EMBED_PATH = "/jcr:content/root/container/container/aemformscontainer";
 
     private VerificationStatusGateFilter filter;
     private FilterChain filterChain;
@@ -188,41 +190,63 @@ class VerificationStatusGateFilterTest {
     }
 
     @Test
-    void testDoFilter_userBelowRequiredStatus_frenchParameter_redirectsToFrenchPage(AemContext context)
+    void testDoFilter_userBelowRequiredStatus_frenchTag_redirectsToFrenchPage(AemContext context)
             throws IOException, ServletException {
         withProperty(context, FORM_PATH, 5d);
+        withTags(context, FORM_PATH, "language:fr");
         context.requestPathInfo().setResourcePath(REQUEST_PATH);
-        context.request().setParameterMap(Map.of("afAcceptLang", "fr-CA"));
 
         assertEquals(REDIRECT_PAGE_FR, redirectBelowStatus(context));
     }
 
     @Test
-    void testDoFilter_userBelowRequiredStatus_frenchSelector_redirectsToFrenchPage(AemContext context)
+    void testDoFilter_userBelowRequiredStatus_englishTag_redirectsToEnglishPage(AemContext context)
             throws IOException, ServletException {
         withProperty(context, FORM_PATH, 5d);
+        withTags(context, FORM_PATH, "language:en");
         context.requestPathInfo().setResourcePath(REQUEST_PATH);
-        context.requestPathInfo().setSelectorString("fr");
+
+        assertEquals(REDIRECT_PAGE, redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_userBelowRequiredStatus_bothLanguageTags_redirectsToFrenchPage(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        withTags(context, FORM_PATH, "language:en", "language:fr");
+        context.requestPathInfo().setResourcePath(REQUEST_PATH);
 
         assertEquals(REDIRECT_PAGE_FR, redirectBelowStatus(context));
     }
 
     @Test
-    void testDoFilter_userBelowRequiredStatus_frenchFormPage_redirectsToFrenchPage(AemContext context)
+    void testDoFilter_userBelowRequiredStatus_noLanguageTag_redirectsToEnglishPage(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        withTags(context, FORM_PATH, "some-namespace:fr");
+        context.requestPathInfo().setResourcePath(REQUEST_PATH);
+
+        assertEquals(REDIRECT_PAGE, redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_userBelowRequiredStatus_untaggedFormRequestedInFrench_redirectsToEnglishPage(AemContext context)
             throws IOException, ServletException {
         withProperty(context, FORM_PATH, 5d);
         context.create().resource(REQUEST_PATH + "/jcr:content", Map.of("jcr:language", "fr"));
         context.requestPathInfo().setResourcePath(REQUEST_PATH);
+        context.requestPathInfo().setSelectorString("fr");
+        context.request().setParameterMap(Map.of("afAcceptLang", "fr"));
 
-        assertEquals(REDIRECT_PAGE_FR, redirectBelowStatus(context));
+        assertEquals(REDIRECT_PAGE, redirectBelowStatus(context));
     }
 
     @Test
-    void testDoFilter_userBelowRequiredStatus_unsupportedLanguage_redirectsToDefaultPage(AemContext context)
+    void testDoFilter_userBelowRequiredStatus_unsupportedLanguageTag_redirectsToEnglishPage(AemContext context)
             throws IOException, ServletException {
         withProperty(context, FORM_PATH, 5d);
+        withTags(context, FORM_PATH, "language:de");
         context.requestPathInfo().setResourcePath(REQUEST_PATH);
-        context.request().setParameterMap(Map.of("afAcceptLang", "de"));
 
         assertEquals(REDIRECT_PAGE, redirectBelowStatus(context));
     }
@@ -284,6 +308,137 @@ class VerificationStatusGateFilterTest {
     }
 
     @Test
+    void testDoFilter_sitesPageEmbeddingGatedForm_anonymousUser_redirectsToSamlLogin(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        withEmbeddedForm(context, SITES_PAGE_PATH, FORM_PATH);
+        context.requestPathInfo().setResourcePath(SITES_PAGE_PATH);
+        MockSlingHttpServletRequest request = context.request();
+        request.setMethod("GET");
+
+        filter.doFilter(request, context.response(), filterChain);
+
+        String location = context.response().getHeader("Location");
+        assertTrue(location.startsWith("/system/sling/login?"));
+        assertTrue(location.contains("resource=%2Fcontent%2Fyukon-forms"));
+        verifyNoInteractions(filterChain);
+    }
+
+    @Test
+    void testDoFilter_sitesPageEmbeddingGatedForm_userBelowRequiredStatus_redirects(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        withEmbeddedForm(context, SITES_PAGE_PATH, FORM_PATH);
+        context.requestPathInfo().setResourcePath(SITES_PAGE_PATH);
+
+        assertEquals(REDIRECT_PAGE, redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_sitesPageEmbeddingFrenchTaggedForm_redirectsToFrenchPage(AemContext context)
+            throws IOException, ServletException {
+        String frenchPage = "/content/yukon-forms/ca/fr/some-department/formulaire-sensible";
+        withProperty(context, FORM_PATH, 5d);
+        withTags(context, FORM_PATH, "language:fr");
+        withEmbeddedForm(context, frenchPage, FORM_PATH);
+        context.requestPathInfo().setResourcePath(frenchPage);
+
+        assertEquals(REDIRECT_PAGE_FR, redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_embeddedFormIframeRequest_gated(AemContext context) throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        withEmbeddedForm(context, SITES_PAGE_PATH, FORM_PATH);
+        context.requestPathInfo().setResourcePath(SITES_PAGE_PATH + EMBED_PATH);
+        context.requestPathInfo().setSelectorString("iframe.en");
+
+        assertEquals(REDIRECT_PAGE, redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_sitesPageEmbeddingSeveralForms_usesStrictestForm(AemContext context)
+            throws IOException, ServletException {
+        String publicForm = FOLDER_PATH + "/public-form";
+        withProperty(context, publicForm, 0d);
+        withProperty(context, FORM_PATH, 5d);
+        withEmbeddedForm(context, SITES_PAGE_PATH, publicForm);
+        context.create().resource(SITES_PAGE_PATH + "/jcr:content/root/sidebar/aemformscontainer",
+                Map.of("formRef", FORM_PATH));
+        context.requestPathInfo().setResourcePath(SITES_PAGE_PATH);
+
+        assertEquals(REDIRECT_PAGE, redirectBelowStatus(context));
+    }
+
+    @Test
+    void testDoFilter_sitesPageEmbeddingPublicForm_allowsThrough(AemContext context)
+            throws IOException, ServletException {
+        context.create().resource(FORM_PATH);
+        withEmbeddedForm(context, SITES_PAGE_PATH, FORM_PATH);
+        context.requestPathInfo().setResourcePath(SITES_PAGE_PATH);
+        MockSlingHttpServletRequest request = context.request();
+        request.setMethod("GET");
+
+        filter.doFilter(request, context.response(), filterChain);
+
+        verify(filterChain).doFilter(any(ServletRequest.class), any(ServletResponse.class));
+    }
+
+    @Test
+    void testDoFilter_sitesPageWithoutEmbeddedForm_allowsThrough(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        context.create().resource(SITES_PAGE_PATH + "/jcr:content/root/text", Map.of("text", "Hello"));
+        context.requestPathInfo().setResourcePath(SITES_PAGE_PATH);
+        MockSlingHttpServletRequest request = context.request();
+        request.setMethod("GET");
+
+        filter.doFilter(request, context.response(), filterChain);
+
+        verify(filterChain).doFilter(any(ServletRequest.class), any(ServletResponse.class));
+    }
+
+    @Test
+    void testDoFilter_sitesPageEmbeddingFormOutsideYukonForms_allowsThrough(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, "/content/dam/formsanddocuments/other-forms/form", 5d);
+        withEmbeddedForm(context, SITES_PAGE_PATH, "/content/dam/formsanddocuments/other-forms/form");
+        context.requestPathInfo().setResourcePath(SITES_PAGE_PATH);
+        MockSlingHttpServletRequest request = context.request();
+        request.setMethod("GET");
+
+        filter.doFilter(request, context.response(), filterChain);
+
+        verify(filterChain).doFilter(any(ServletRequest.class), any(ServletResponse.class));
+    }
+
+    @Test
+    void testDoFilter_sitesPageEmbeddingGatedForm_userMeetsRequiredStatus_allowsThrough(AemContext context)
+            throws IOException, ServletException {
+        withProperty(context, FORM_PATH, 5d);
+        withEmbeddedForm(context, SITES_PAGE_PATH, FORM_PATH);
+        VerificationStatusGateFilter gate = new VerificationStatusGateFilter() {
+            @Override
+            boolean isLoggedIn(ResourceResolver resolver) {
+                return true;
+            }
+
+            @Override
+            double getUserVerificationStatus(ResourceResolver resolver) {
+                return 5d;
+            }
+        };
+        gate.activate(config());
+        context.requestPathInfo().setResourcePath(SITES_PAGE_PATH);
+        MockSlingHttpServletRequest request = context.request();
+        request.setMethod("GET");
+
+        gate.doFilter(request, context.response(), filterChain);
+
+        verify(filterChain).doFilter(any(ServletRequest.class), any(ServletResponse.class));
+    }
+
+    @Test
     void testFormatLevel() {
         assertEquals("2", VerificationStatusGateFilter.formatLevel(2d));
         assertEquals("0", VerificationStatusGateFilter.formatLevel(0d));
@@ -323,6 +478,17 @@ class VerificationStatusGateFilterTest {
 
         verifyNoInteractions(filterChain);
         return context.response().getHeader("Location");
+    }
+
+    /** Tags the form at {@code formPath} (a DAM path) with {@code tagIds}, as Forms &amp; Documents does. */
+    private static void withTags(AemContext context, String formPath, String... tagIds) {
+        context.create().resource(formPath + "/jcr:content/metadata", Map.of("cq:tags", tagIds));
+    }
+
+    /** Adds an Adaptive Form - Embed component for {@code formPath} to the Sites page at {@code pagePath}. */
+    private static void withEmbeddedForm(AemContext context, String pagePath, String formPath) {
+        context.create().resource(pagePath + EMBED_PATH,
+                Map.of("sling:resourceType", "yukon-forms/components/aemformscontainer", "formRef", formPath));
     }
 
     private static void withProperty(AemContext context, String path, double requiredStatus) {

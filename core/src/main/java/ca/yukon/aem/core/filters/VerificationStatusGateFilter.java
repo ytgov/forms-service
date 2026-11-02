@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import javax.servlet.Filter;
@@ -50,10 +50,17 @@ import org.slf4j.LoggerFactory;
  *       title ({@code form_title}, left out when the form has none) as query parameters.
  * </ul>
  *
+ * <p>Sites pages under {@code /content/yukon-forms} that embed forms (any node in the page's content
+ * with a {@code formRef} into the yukon-forms DAM folder, e.g. the Adaptive Form - Embed component)
+ * are gated the same way, by the strictest level among their embedded forms. The embed renders the
+ * form through a server-side include, which request-scoped filters never see, so the page request
+ * itself has to be checked. This covers anything requested under the page, e.g. the embed's
+ * {@code .iframe.html} or the page's {@code .model.json}.
+ *
  * <p>This filter is the sole enforcement point for yukon-forms access - there is no repository
- * ACL backing it up, so it must cover both the public-facing {@code /content/forms/af/...} path and
- * the underlying DAM path (which is directly GET-able, e.g. for {@code jcr:content.json} model
- * fetches) to avoid a bypass.
+ * ACL backing it up, so it must cover the public-facing {@code /content/forms/af/...} path, the
+ * underlying DAM path (which is directly GET-able, e.g. for {@code jcr:content.json} model
+ * fetches) and the Sites pages that embed the forms to avoid a bypass.
  *
  * <p>The component requires its configuration, which only ships in {@code config.publish}, so it is
  * inactive on author - otherwise it would also gate authors, e.g. the Forms &amp; Documents folder
@@ -72,6 +79,9 @@ public class VerificationStatusGateFilter implements Filter {
 
     static final String PROTECTED_PATH_PREFIX = "/content/forms/af/yukon-forms";
     static final String CONTENT_SOURCE_PREFIX = "/content/dam/formsanddocuments/yukon-forms";
+    static final String SITES_PREFIX = "/content/yukon-forms";
+    /** Property the Adaptive Form - Embed component stores the embedded form's DAM path in. */
+    static final String FORM_REF_PROPERTY = "formRef";
     static final String REQUIRED_STATUS_PROPERTY = "required_verification_status";
     static final String USER_STATUS_PROPERTY = "profile/verificationStatus";
     static final String SAML_LOGIN_PATH = "/system/sling/login";
@@ -82,8 +92,9 @@ public class VerificationStatusGateFilter implements Filter {
      * points at the one root the handler is still registered for.
      */
     static final String SAML_AUTH_RESOURCE_PATH = "/content/yukon-forms";
-    /** AEM Forms' own parameter for showing an adaptive form in another language. */
-    static final String LANGUAGE_PARAMETER = "afAcceptLang";
+    static final String TAGS_PROPERTY = "cq:tags";
+    /** Tags in the {@code language} namespace pick the redirect page's language, e.g. {@code language:fr}. */
+    static final String LANGUAGE_TAG_PREFIX = "language:";
     static final String LANGUAGE_PLACEHOLDER = "{lang}";
     static final String USER_LEVEL_PARAMETER = "u_loa";
     static final String FOLDER_LEVEL_PARAMETER = "f_low";
@@ -125,11 +136,13 @@ public class VerificationStatusGateFilter implements Filter {
 
         ResourceResolver resolver = slingRequest.getResourceResolver();
         String requestPath = slingRequest.getRequestPathInfo().getResourcePath();
-        String contentPath = resolveContentPath(requestPath);
+        String contentPath = isAtOrUnder(requestPath, SITES_PREFIX)
+                ? findStrictestEmbeddedForm(resolver, requestPath)
+                : resolveContentPath(requestPath);
 
-        Double requiredStatus = findRequiredVerificationStatus(resolver, contentPath);
+        Double requiredStatus = contentPath != null ? findRequiredVerificationStatus(resolver, contentPath) : null;
         if (requiredStatus == null || requiredStatus <= 0) {
-            // Folder does not declare a required status, or is marked public - nothing to gate here.
+            // No embedded form, folder does not declare a required status, or is marked public - nothing to gate here.
             filterChain.doFilter(request, response);
             return;
         }
@@ -143,7 +156,7 @@ public class VerificationStatusGateFilter implements Filter {
         double userStatus = getUserVerificationStatus(resolver);
         if (userStatus < requiredStatus) {
             String target = withQueryParameters(
-                    redirectPage.replace(LANGUAGE_PLACEHOLDER, resolveLanguage(slingRequest, contentPath)),
+                    redirectPage.replace(LANGUAGE_PLACEHOLDER, resolveLanguage(resolver, contentPath)),
                     USER_LEVEL_PARAMETER, formatLevel(userStatus),
                     FOLDER_LEVEL_PARAMETER, formatLevel(requiredStatus),
                     FORM_NAME_PARAMETER, toFormName(contentPath),
@@ -165,7 +178,9 @@ public class VerificationStatusGateFilter implements Filter {
         }
         String resourcePath = request.getRequestPathInfo().getResourcePath();
         return resourcePath != null
-                && (isAtOrUnder(resourcePath, PROTECTED_PATH_PREFIX) || isAtOrUnder(resourcePath, CONTENT_SOURCE_PREFIX));
+                && (isAtOrUnder(resourcePath, PROTECTED_PATH_PREFIX)
+                        || isAtOrUnder(resourcePath, CONTENT_SOURCE_PREFIX)
+                        || isAtOrUnder(resourcePath, SITES_PREFIX));
     }
 
     /**
@@ -194,6 +209,44 @@ public class VerificationStatusGateFilter implements Filter {
     }
 
     /**
+     * The DAM path of the form with the highest required status among those embedded in the Sites
+     * page containing {@code requestPath}, or {@code null} if it embeds none. When none of them
+     * declares a status, any embedded form is returned; it then isn't gated.
+     */
+    String findStrictestEmbeddedForm(ResourceResolver resolver, String requestPath) {
+        int contentIndex = requestPath.indexOf("/jcr:content");
+        String pagePath = contentIndex >= 0 ? requestPath.substring(0, contentIndex) : requestPath;
+        List<String> formPaths = new ArrayList<>();
+        collectEmbeddedForms(resolver.getResource(pagePath + "/jcr:content"), formPaths);
+
+        String strictest = null;
+        double strictestStatus = Double.NEGATIVE_INFINITY;
+        for (String formPath : formPaths) {
+            Double status = findRequiredVerificationStatus(resolver, formPath);
+            double level = status != null ? status : 0d;
+            if (strictest == null || level > strictestStatus) {
+                strictest = formPath;
+                strictestStatus = level;
+            }
+        }
+        return strictest;
+    }
+
+    /** Adds the yukon-forms {@code formRef} of {@code resource} and its descendants to {@code formPaths}. */
+    private static void collectEmbeddedForms(Resource resource, List<String> formPaths) {
+        if (resource == null) {
+            return;
+        }
+        String formRef = resource.getValueMap().get(FORM_REF_PROPERTY, String.class);
+        if (formRef != null && isAtOrUnder(formRef, CONTENT_SOURCE_PREFIX)) {
+            formPaths.add(formRef);
+        }
+        for (Resource child : resource.getChildren()) {
+            collectEmbeddedForms(child, formPaths);
+        }
+    }
+
+    /**
      * Walks up from {@code contentPath} to {@code CONTENT_SOURCE_PREFIX} (inclusive), returning the
      * {@code required_verification_status} property of the first {@code jcr:content} node found that
      * declares it, or {@code null} if none of them do.
@@ -219,29 +272,21 @@ public class VerificationStatusGateFilter implements Filter {
     }
 
     /**
-     * The form's language, as the first supported language found in: the {@code afAcceptLang} parameter
-     * (e.g. {@code ?afAcceptLang=fr}), a selector (e.g. {@code form.fr.html}), then {@code jcr:language}
-     * on the form page. Falls back to the first supported language. Regional variants such as
-     * {@code fr-CA} or {@code fr_CA} count as their base language.
+     * The form's language, from the {@code language} tag on the form (set in its properties in Forms &amp;
+     * Documents, stored on the DAM asset's {@code jcr:content/metadata}): a form tagged with any other
+     * supported language, e.g. {@code language:fr}, gets that language; a form tagged
+     * {@code language:en}, or with no language tag, gets the first supported language.
      */
-    String resolveLanguage(SlingHttpServletRequest request, String contentPath) {
-        String language = supportedLanguage(request.getParameter(LANGUAGE_PARAMETER));
-        if (language == null) {
-            for (String selector : request.getRequestPathInfo().getSelectors()) {
-                language = supportedLanguage(selector);
-                if (language != null) {
-                    break;
-                }
+    String resolveLanguage(ResourceResolver resolver, String contentPath) {
+        Resource metadata = resolver.getResource(contentPath + "/jcr:content/metadata");
+        String[] tags = metadata != null ? metadata.getValueMap().get(TAGS_PROPERTY, String[].class) : null;
+        List<String> tagIds = tags != null ? Arrays.asList(tags) : Collections.emptyList();
+        for (String language : supportedLanguages.subList(1, supportedLanguages.size())) {
+            if (tagIds.contains(LANGUAGE_TAG_PREFIX + language)) {
+                return language;
             }
         }
-        if (language == null) {
-            Resource formContent = request.getResourceResolver()
-                    .getResource(toFormPagePath(contentPath) + "/jcr:content");
-            if (formContent != null) {
-                language = supportedLanguage(formContent.getValueMap().get("jcr:language", String.class));
-            }
-        }
-        return language != null ? language : supportedLanguages.get(0);
+        return supportedLanguages.get(0);
     }
 
     /** The {@code jcr:title} of the adaptive form page, or {@code null} if it has none. */
@@ -252,14 +297,6 @@ public class VerificationStatusGateFilter implements Filter {
         }
         String title = formContent.getValueMap().get("jcr:title", String.class);
         return title != null && !title.trim().isEmpty() ? title : null;
-    }
-
-    private String supportedLanguage(String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        String base = value.split("[-_]")[0].toLowerCase(Locale.ROOT);
-        return supportedLanguages.contains(base) ? base : null;
     }
 
     /** Appends name/value pairs to {@code url}, URL-encoding the values and skipping {@code null} ones. */
