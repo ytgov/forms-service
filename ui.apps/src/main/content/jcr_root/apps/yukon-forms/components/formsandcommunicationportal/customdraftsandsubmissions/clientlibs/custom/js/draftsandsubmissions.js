@@ -22,7 +22,7 @@
  * filter to the form embedded on the page, page title as item title, French operation labels,
  * "No drafts saved" row, resume drafts in this page (openDraftInPage), newest first, full date and
  * time instead of relative dates, keyboard access to the item link and actions menu, a confirm before Discard,
- * and a table refresh when the embedded form saves a draft.
+ * a table refresh when the embedded form saves a draft, and alignment with the form's content column.
  * On a Core Forms Components or Forms add-on upgrade: diff against upstream and retest list, open, resume.
  */
 
@@ -112,7 +112,7 @@
 	    if (time && item.lastModified) {
 		// Include the time so drafts saved on the same day can be told apart
 		time.textContent = new Date(Number(item.lastModified))
-		    .toLocaleString(document.documentElement.lang || undefined, { dateStyle: "long", timeStyle: "short" });
+		    .toLocaleString(document.documentElement.lang || undefined, { dateStyle: "medium", timeStyle: "short" });
 	    }
 	},
 	menuButton = function (cell) {
@@ -296,11 +296,32 @@
                 }
             });
 
+            alignWithForm(componentConfig.componentNode);
             ItemAPI.init(componentConfig);
 
             componentStore[config.id] = componentConfig;
             cleanup(config.id);
             queryFPRecords(config.id);
+        },
+        // Line the component up with the embedded form's content column (right of its page menu)
+        // by setting --ds-inset-start/end, used as margins in the CSS. Measured rather than copied
+        // from the theme so it follows the form's layout at every width. No form: no inset.
+        alignWithForm = function (componentNode) {
+            var formContent = document.querySelector("#guideContainerForm .afTabLeftPanel .tab-content");
+            var wrapper = componentNode.parentElement;
+            if (!formContent || !window.ResizeObserver) {
+                return;
+            }
+            var update = function () {
+                var area = wrapper.getBoundingClientRect(),
+                    column = formContent.getBoundingClientRect(),
+                    visible = column.width > 0;
+                componentNode.style.setProperty("--ds-inset-start", (visible ? Math.max(0, column.left - area.left) : 0) + "px");
+                componentNode.style.setProperty("--ds-inset-end", (visible ? Math.max(0, area.right - column.right) : 0) + "px");
+            };
+            var observer = new ResizeObserver(update);
+            observer.observe(formContent);
+            observer.observe(wrapper);
         },
         // Reload every drafts table, e.g. after the embedded form saves a draft
         refreshAllInstances = function () {

@@ -31,7 +31,16 @@
     --ds-border-radius:        4px;
     --ds-cell-padding:         0.75rem 1rem;
     --ds-font-size-heading:    1.75rem;
+
+    /* Line up with the embedded form's content column (right of its page menu).
+     * draftsandsubmissions.js measures the form and sets the insets; 0 when there's no form. */
+    margin-left: var(--ds-inset-start, 0);
+    margin-right: var(--ds-inset-end, 0);
 }
+
+/* Long form names end in "…" on one line; the full name stays in the link's tooltip and is
+ * read in full by screen readers. On phones (the AEM layout grid's phone breakpoint,
+ * clientlib-grid/grid.less) names and dates wrap instead. */
 
 /* ── Heading ── */
 h1.cmp-drafts-and-submissions__heading {
@@ -76,12 +85,24 @@ table.cmp-portallister__results-list-container {
     display: none;
 }
 
+/* Date and actions shrink to their content; the name fills the rest */
+.cmp-portallister__item-list-time-head,
 .cmp-portallister__item-list-time {
+    width: 1%;
     white-space: nowrap;
 }
 
-/* ── Form name link ── */
+/* ── Form name link ──
+ * max-width: 0 lets the name cell fill the remaining width without growing past it */
+.cmp-portallister__item-list-title {
+    max-width: 0;
+}
+
 .cmp-portallister__item-list-link {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     color: var(--ds-link-color);
     text-decoration: underline;
     cursor: pointer;
@@ -95,8 +116,27 @@ table.cmp-portallister__results-list-container {
 .cmp-portallister__item-list-operations,
 .cmp-portallister__item-list-operations-head {
     position: relative;
-    width: 3rem;
+    width: 1%;
+    padding-left: 0;
     text-align: right;
+}
+
+/* Phone: wrap instead of truncating, since the date leaves too little room */
+@media (max-width: 768px) {
+    .cmp-portallister__item-list-title {
+        max-width: none;
+    }
+
+    .cmp-portallister__item-list-link {
+        display: inline;
+        overflow: visible;
+        white-space: normal;
+    }
+
+    .cmp-portallister__item-list-time-head,
+    .cmp-portallister__item-list-time {
+        white-space: normal;
+    }
 }
 
 /* Scoped to the component to outrank the form theme's global button:not(.af-icon-button) styles */
