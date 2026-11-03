@@ -20,7 +20,8 @@
  * (identical in 3.0.172; upstream unchanged since a1c569ce, 2021-09-06).
  * Adobe's script has no hook to change items before they're rendered, so it is copied. Our changes:
  * filter to the form embedded on the page, page title as item title, French operation labels,
- * "No drafts saved" row, and resume drafts in this page (openDraftInPage).
+ * "No drafts saved" row, resume drafts in this page (openDraftInPage), full dates instead of
+ * relative ones, keyboard access to the item link and actions menu, and a confirm before Discard.
  * On a Core Forms Components or Forms add-on upgrade: diff against upstream and retest list, open, resume.
  */
 
@@ -99,6 +100,75 @@
 	    }
             noDraftsRow.style.display = "none";
 	},
+	// Adobe's injector renders a relative date ("2 weeks ago") and a link without href.
+	// Show the full date in the page language and make the link reachable by keyboard.
+	decorateItem = function (row, item) {
+	    var link = row.querySelector(".item-link");
+	    if (link) {
+		link.setAttribute("href", link.getAttribute("link"));
+	    }
+	    var time = row.querySelector(".cmp-portallister__item-list-time");
+	    if (time && item.lastModified) {
+		time.textContent = new Date(Number(item.lastModified))
+		    .toLocaleDateString(document.documentElement.lang || undefined, { dateStyle: "long" });
+	    }
+	},
+	menuButton = function (cell) {
+	    return cell && cell.querySelector(".cmp-portallister__item-list-operations-button");
+	},
+	// Adobe's menu opens and closes on click only; keep aria-expanded in sync and move focus into it
+	syncMenuState = function (componentNode) {
+	    componentNode.querySelectorAll(".cmp-portallister__item-list-operations").forEach(function (cell) {
+		var menuItem = cell.querySelector(".cmp-portallister__menu-item"),
+		    button = menuButton(cell);
+		if (button) {
+		    button.setAttribute("aria-expanded", menuItem ? "true" : "false");
+		}
+		if (menuItem && !cell.contains(document.activeElement.closest(".cmp-portallister__menu"))) {
+		    menuItem.focus();
+		}
+	    });
+	},
+	// Close any open menu that doesn't contain the given node. Adobe's menu has no close-on-outside-click,
+	// so this clicks its own toggle (the operations cell) to keep Adobe's menu state consistent.
+	closeMenusOutside = function (componentNode, node) {
+	    componentNode.querySelectorAll(".cmp-portallister__item-list-operations").forEach(function (cell) {
+		if (cell.querySelector(".cmp-portallister__menu") && !cell.contains(node)) {
+		    menuButton(cell).click();
+		}
+	    });
+	},
+	// Adobe's Discard deletes the draft at once. Ask first; cancelling stops the click before
+	// it reaches Adobe's handler on the menu item, so the draft and the open menu stay.
+	confirmDiscard = function (event) {
+	    var menuItem = event.target.closest(".cmp-portallister__menu-item");
+	    var operation = menuItem && JSON.parse(menuItem.getAttribute("operation_data"));
+	    if (!operation || operation.name !== "discardDraft") {
+		return;
+	    }
+	    var isFrench = navigator.language === "fr" || navigator.userLanguage === "fr";
+	    var message = isFrench
+		? "Supprimer ce brouillon? Cette action est irréversible."
+		: "Discard this draft? This can't be undone.";
+	    if (!window.confirm(message)) {
+		event.preventDefault();
+		event.stopPropagation();
+	    }
+	},
+	handleMenuKeys = function (event) {
+	    var menuItem = event.target.closest(".cmp-portallister__menu-item");
+	    if (!menuItem) {
+		return;
+	    }
+	    if (event.key === "Enter" || event.key === " ") {
+		event.preventDefault();
+		menuItem.click();
+	    } else if (event.key === "Escape") {
+		var button = menuButton(menuItem.closest(".cmp-portallister__item-list-operations"));
+		button.click();
+		button.focus();
+	    }
+	},
         updateSearchResults = function (response, id) {
             var componentConfig = componentStore[id],
                 queryResults = response.elements;
@@ -127,8 +197,10 @@
 	    if (queryResults.data.length > 0) {
 		updateLayoutWithDrafts();
 	    }
+            var itemContainer = componentConfig.resultsNode.querySelector("[data-cmp-hook-item-template=\"container\"]");
             queryResults.data.forEach(function(item) {
                 ItemAPI.createAndInject(componentConfig, item);
+                decorateItem(itemContainer.lastElementChild, item);
             });
             if (componentConfig.nextOffset < 0) {
                 hideLoadMore(id);
@@ -194,12 +266,29 @@
             componentConfig.componentNode.addEventListener("click", (event) => {
                 var link = event.target.closest(".item-link");
                 var dataRef = link && new URL(link.getAttribute("link"), window.location.href).searchParams.get("dataRef");
-                if (dataRef && dataRef.startsWith(DRAFT_DATA_REF_PREFIX)) {
+                if (link) {
+                    // The href is only there for keyboard access; Adobe's handler or ours navigates
                     event.preventDefault();
+                }
+                if (dataRef && dataRef.startsWith(DRAFT_DATA_REF_PREFIX)) {
                     event.stopPropagation();
                     window.location.assign(link.getAttribute("link"));
                 }
             }, true);
+            componentConfig.componentNode.addEventListener("click", function () {
+                syncMenuState(componentConfig.componentNode);
+            });
+            componentConfig.componentNode.addEventListener("click", confirmDiscard, true);
+            componentConfig.componentNode.addEventListener("keydown", handleMenuKeys);
+            document.addEventListener("click", function (event) {
+                closeMenusOutside(componentConfig.componentNode, event.target);
+            });
+            // Tabbing out of the menu closes it too
+            componentConfig.componentNode.addEventListener("focusout", function (event) {
+                if (event.relatedTarget) {
+                    closeMenusOutside(componentConfig.componentNode, event.relatedTarget);
+                }
+            });
 
             ItemAPI.init(componentConfig);
 
