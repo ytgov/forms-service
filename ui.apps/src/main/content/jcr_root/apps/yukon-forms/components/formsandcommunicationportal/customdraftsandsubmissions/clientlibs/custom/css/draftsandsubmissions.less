@@ -14,6 +14,206 @@
  * limitations under the License.
  ******************************************************************************/
 
+/* ── Design tokens ──
+ * Yukon palette, taken from the yg-theme-02_2026 form theme and clientlib-yukon
+ * (style.less) so the table matches the form above it. */
+.cmp-drafts-and-submissions {
+    --ds-text-color:           #000;    /* clientlib-yukon @text-color */
+    --ds-link-color:           #005a65; /* clientlib-yukon @link-text-color */
+    --ds-link-color-hover:     #008392; /* clientlib-yukon @link-text-color-hover */
+    --ds-primary-color:        #00616d; /* theme primary button */
+    --ds-primary-color-dark:   #00454e; /* theme primary button hover */
+    --ds-on-primary-color:     #fff;
+    --ds-surface-color:        #fff;
+    --ds-neutral-color:        #e6e6e6; /* theme borders and inactive backgrounds */
+    --ds-focus-color:          #f2a900; /* theme focus/accent yellow */
+    --ds-danger-color:         #c4302b; /* theme error red, darkened to meet WCAG AA on white */
+    --ds-border-radius:        4px;
+    --ds-cell-padding:         0.75rem 1rem;
+    --ds-font-size-heading:    1.75rem;
+
+    /* Line up with the embedded form's content column (right of its page menu).
+     * draftsandsubmissions.js measures the form and sets the insets; 0 when there's no form. */
+    margin-left: var(--ds-inset-start, 0);
+    margin-right: var(--ds-inset-end, 0);
+}
+
+/* Long form names end in "…" on one line; the full name stays in the link's tooltip and is
+ * read in full by screen readers. On phones (the AEM layout grid's phone breakpoint,
+ * clientlib-grid/grid.less) names and dates wrap instead. */
+
+/* ── Heading ── */
+h1.cmp-drafts-and-submissions__heading {
+    margin: 2rem 0 1rem;
+    color: var(--ds-text-color);
+    font-size: var(--ds-font-size-heading);
+    text-align: left;
+}
+
+/* ── Table ── */
+.cmp-drafts-and-submissions table.cmp-portallister__results-list-container {
+    width: 100%;
+    margin-bottom: 2rem;
+    border: 1px solid var(--ds-neutral-color);
+    border-collapse: collapse;
+    color: var(--ds-text-color);
+}
+
+.cmp-drafts-and-submissions .cmp-portallister__results-list-head th {
+    padding: var(--ds-cell-padding);
+    background: var(--ds-primary-color);
+    color: var(--ds-on-primary-color);
+    font-weight: 700;
+    text-align: left;
+}
+
+.cmp-drafts-and-submissions .cmp-portallister__item-list > td {
+    padding: var(--ds-cell-padding);
+    background: var(--ds-surface-color);
+    vertical-align: middle;
+}
+
+.cmp-drafts-and-submissions .cmp-portallister__item-list:nth-child(odd) > td {
+    background: var(--ds-neutral-color);
+}
+
+/* The thumbnail is the same Yukon logo on every row, and Details is always empty */
+.cmp-drafts-and-submissions .cmp-portallister__item-list-image-wrapper-head,
+.cmp-drafts-and-submissions .cmp-portallister__item-list-image-wrapper,
+.cmp-drafts-and-submissions .cmp-portallister__item-list-body-head,
+.cmp-drafts-and-submissions .cmp-portallister__item-list-body {
+    display: none;
+}
+
+/* Date and actions shrink to their content; the name fills the rest */
+.cmp-drafts-and-submissions .cmp-portallister__item-list-time-head,
+.cmp-drafts-and-submissions .cmp-portallister__item-list-time {
+    width: 1%;
+    white-space: nowrap;
+}
+
+/* ── Form name link ──
+ * max-width: 0 lets the name cell fill the remaining width without growing past it */
+.cmp-drafts-and-submissions .cmp-portallister__item-list-title {
+    max-width: 0;
+}
+
+.cmp-drafts-and-submissions .cmp-portallister__item-list-link {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--ds-link-color);
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--ds-link-color-hover);
+    }
+}
+
+/* ── Actions button and menu ── */
+.cmp-drafts-and-submissions .cmp-portallister__item-list-operations,
+.cmp-drafts-and-submissions .cmp-portallister__item-list-operations-head {
+    position: relative;
+    width: 1%;
+    padding-left: 0;
+    text-align: right;
+}
+
+/* Phone: wrap instead of truncating, since the date leaves too little room */
+@media (max-width: 768px) {
+    .cmp-drafts-and-submissions .cmp-portallister__item-list-title {
+        max-width: none;
+    }
+
+    .cmp-drafts-and-submissions .cmp-portallister__item-list-link {
+        display: inline;
+        overflow: visible;
+        white-space: normal;
+    }
+
+    .cmp-drafts-and-submissions .cmp-portallister__item-list-time-head,
+    .cmp-drafts-and-submissions .cmp-portallister__item-list-time {
+        white-space: normal;
+    }
+}
+
+/* Scoped to the component to outrank the form theme's global button:not(.af-icon-button) styles */
+.cmp-drafts-and-submissions .cmp-portallister__item-list-operations-button {
+    padding: 0.25rem 0.5rem;
+    border: 0;
+    border-radius: var(--ds-border-radius);
+    background: transparent;
+    color: var(--ds-text-color);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover,
+    &:active,
+    &:focus {
+        background: var(--ds-surface-color);
+        color: var(--ds-text-color);
+    }
+}
+
+.cmp-drafts-and-submissions .cmp-portallister__item-list-link:focus-visible,
+.cmp-drafts-and-submissions .cmp-portallister__item-list-operations-button:focus-visible,
+.cmp-drafts-and-submissions .cmp-portallister__menu-item:focus-visible {
+    outline: 3px solid var(--ds-focus-color);
+    outline-offset: 2px;
+}
+
+.cmp-drafts-and-submissions .cmp-portallister__menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 10;
+    min-width: 8rem;
+    border: 1px solid var(--ds-neutral-color);
+    border-radius: var(--ds-border-radius);
+    background: var(--ds-surface-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    font-size: inherit; /* Adobe's menu CSS sets 14px */
+    text-align: left;
+}
+
+.cmp-drafts-and-submissions .cmp-portallister__menu-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cmp-drafts-and-submissions .cmp-portallister__menu-item {
+    padding: var(--ds-cell-padding);
+    color: var(--ds-link-color);
+    cursor: pointer;
+
+    &:hover {
+        background: var(--ds-neutral-color);
+    }
+
+    & + .cmp-portallister__menu-item {
+        border-top: 1px solid var(--ds-neutral-color);
+    }
+}
+
+/* Destructive action. The menu item has no class per operation, only its JSON data. */
+.cmp-drafts-and-submissions .cmp-portallister__menu-item[operation_data*='"name":"discardDraft"'] {
+    color: var(--ds-danger-color);
+}
+
+.cmp-drafts-and-submissions__visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* ── Load more ── */
 .cmp-drafts-and-submissions__more {
     color: #455A64;
     font-size: 16px;
@@ -37,54 +237,3 @@
     text-align: center;
     display: block;
 }
-
-.cmp-portallister__item-list-image {
-    max-height: 6rem;
-}
-
-.cmp-portallister__item-list-body-head, .cmp-portallister__item-list-body {
-    display: none;
-}
-
-.cmp-portallister__item-list > td {
-    padding: 0 2rem;
-    background: #f9f9f9;
-    border-bottom: 1px solid #dadada;
-}
-
-.cmp-portallister__results-list-head tr {
-    border-bottom: 2px solid #dadada;
-}
-
-.cmp-portallister__results-list-head th {
-    padding: 0 2rem;
-    text-align: left;
-}
-
-table.cmp-portallister__results-list-container {
-    border-collapse: collapse;
-    margin-bottom: 2rem;
-}
-
-td.cmp-portallister__item-list-image-wrapper {
-    padding: 0;
-}
-
-.cmp-portallister__item-list-operations-icon {
-    background-image: url("https://img.icons8.com/?size=100&id=98963&format=png&color=787878");
-    width: 20px;
-    height: 20px;
-    background-size: 20px;
-    cursor: pointer;
-}
-
-h1.cmp-drafts-and-submissions__heading {
-   text-align: center;
-}
-
-.cmp-drafts-and-submissions__results {
-   display: flex;
-   flex-direction: row;
-   justify-content: center;
-}
-

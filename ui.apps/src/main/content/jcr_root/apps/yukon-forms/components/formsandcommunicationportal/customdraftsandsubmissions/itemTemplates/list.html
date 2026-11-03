@@ -3,10 +3,10 @@
         <thead class="cmp-portallister__results-list-head" style="display: none;">
             <tr>
                 <th class="cmp-portallister__item-list-image-wrapper-head"></th>
-                <th class="cmp-portallister__item-list-title-head">Name</th>
-                <th class="cmp-portallister__item-list-body-head">Details</th>
-                <th class="cmp-portallister__item-list-time-head" data-sly-test="${!hideTime}">Last Modified</th>
-                <th class="cmp-portallister__item-list-operations-head"></th>
+                <th scope="col" class="cmp-portallister__item-list-title-head">Online form name</th>
+                <th scope="col" class="cmp-portallister__item-list-body-head">Details</th>
+                <th scope="col" class="cmp-portallister__item-list-time-head" data-sly-test="${!hideTime}">Date last modified</th>
+                <th scope="col" class="cmp-portallister__item-list-operations-head"><span class="cmp-drafts-and-submissions__visually-hidden">Actions</span></th>
             </tr>
         </thead>
 	<tr class="no-drafts-row">
@@ -16,17 +16,19 @@
     <table>
         <tr class="cmp-portallister__item cmp-portallister__item-list" data-cmp-hook-item-template="item">
             <td class="cmp-portallister__item-list-image-wrapper">
-                <img class="cmp-portallister__item-list-image" data-cmp-hook-item-template="thumbnail"/>
+                <img class="cmp-portallister__item-list-image" alt="" data-cmp-hook-item-template="thumbnail"/>
             </td>
             <td class="cmp-portallister__item-list-title">
-                <div data-cmp-hook-item-template="formLink">
-                    <div data-cmp-hook-item-template="itemTitle"></div>
-                </div>
+                <a class="cmp-portallister__item-list-link" data-cmp-hook-item-template="formLink">
+                    <span data-cmp-hook-item-template="itemTitle"></span>
+                </a>
             </td>
             <td class="cmp-portallister__item-list-body" data-cmp-hook-item-template="description"></td>
             <td data-sly-test="${!hideTime}" class="cmp-portallister__item-list-time" data-cmp-hook-item-template="timeinfo"></td>
             <td class="cmp-portallister__item-list-operations" data-cmp-hook-item-template="operations">
-                <div class="cmp-portallister__item-list-operations-icon"></div>
+                <button type="button" class="cmp-portallister__item-list-operations-button" aria-haspopup="menu" aria-expanded="false" aria-label="Actions">
+                    <span class="cmp-portallister__item-list-operations-icon" aria-hidden="true">&#8942;</span>
+                </button>
             </td>
         </tr>
     </table>

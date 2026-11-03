@@ -20,7 +20,9 @@
  * (identical in 3.0.172; upstream unchanged since a1c569ce, 2021-09-06).
  * Adobe's script has no hook to change items before they're rendered, so it is copied. Our changes:
  * filter to the form embedded on the page, page title as item title, French operation labels,
- * "No drafts saved" row, and resume drafts in this page (openDraftInPage).
+ * "No drafts saved" row, resume drafts in this page (openDraftInPage), newest first (across Load more), full date and
+ * time instead of relative dates, keyboard access to the item link and actions menu, a confirm before Discard,
+ * a table refresh when the embedded form saves a draft, and alignment with the form's content column.
  * On a Core Forms Components or Forms add-on upgrade: diff against upstream and retest list, open, resume.
  */
 
@@ -55,6 +57,8 @@
             var componentConfig = componentStore[id];
             ItemAPI.clear(componentConfig.itemTemplate, componentConfig.resultsNode);
             componentConfig.loadmoreNode.style.display = "inline-block";
+            // Responses to queries sent before this reset are ignored (see queryFPRecords)
+            componentConfig.generation = (componentConfig.generation || 0) + 1;
         },
         hideLoadMore = function (id) {
             var componentConfig = componentStore[id];
@@ -62,10 +66,14 @@
                 componentConfig.loadmoreNode.style.display = "none";
             }
         },
+	// The page's language (fr-CA on French pages), the same source as the dates
+	isFrenchPage = function () {
+	    return (document.documentElement.lang || "").toLowerCase().startsWith("fr");
+	},
 	translateOperation = function (op) {
 	    return {
                 ...op,
-                title: navigator.language !== "fr" && navigator.userLanguage !== "fr"
+                title: !isFrenchPage()
 		    ? op.title
 		    : op.title === "Open"
 		    	? "Ouvrir"
@@ -99,6 +107,91 @@
 	    }
             noDraftsRow.style.display = "none";
 	},
+	// Adobe's injector renders a relative date ("2 weeks ago") and a link without href.
+	// Show the full date in the page language and make the link reachable by keyboard.
+	decorateItem = function (row, item) {
+	    var link = row.querySelector(".item-link");
+	    // Only same-origin links become real hrefs; anything else (another site, javascript:) stays
+	    // click-only through Adobe's handler, as before
+	    var url = link && new URL(link.getAttribute("link"), window.location.href);
+	    if (url && url.origin === window.location.origin) {
+		link.setAttribute("href", url.href);
+	    }
+	    var time = row.querySelector(".cmp-portallister__item-list-time");
+	    if (time && item.lastModified) {
+		// Include the time so drafts saved on the same day can be told apart
+		time.textContent = new Date(Number(item.lastModified))
+		    .toLocaleString(document.documentElement.lang || undefined, { dateStyle: "medium", timeStyle: "short" });
+	    }
+	},
+	// Newest first across the whole table. The API returns drafts in draft-id order and may page them
+	// (Load more), so each new row moves in front of the first older row already shown.
+	placeNewestFirst = function (container, row, item) {
+	    var lastModified = Number(item.lastModified) || 0;
+	    row.setAttribute("data-last-modified", lastModified);
+	    var older = Array.prototype.find.call(container.querySelectorAll("tr.cmp-portallister__item"), function (other) {
+		return other !== row && Number(other.getAttribute("data-last-modified")) < lastModified;
+	    });
+	    if (older) {
+		container.insertBefore(row, older);
+	    }
+	},
+	menuButton = function (cell) {
+	    return cell && cell.querySelector(".cmp-portallister__item-list-operations-button");
+	},
+	// Adobe's menu opens and closes on click only; keep aria-expanded in sync and move focus into it
+	syncMenuState = function (componentNode) {
+	    componentNode.querySelectorAll(".cmp-portallister__item-list-operations").forEach(function (cell) {
+		var menuItem = cell.querySelector(".cmp-portallister__menu-item"),
+		    button = menuButton(cell);
+		if (button) {
+		    button.setAttribute("aria-expanded", menuItem ? "true" : "false");
+		}
+		if (menuItem && !cell.contains(document.activeElement.closest(".cmp-portallister__menu"))) {
+		    menuItem.focus();
+		}
+	    });
+	},
+	// Close any open menu that doesn't contain the given node. Adobe's menu has no close-on-outside-click,
+	// so this clicks its own toggle (the operations cell) to keep Adobe's menu state consistent.
+	closeMenusOutside = function (componentNode, node) {
+	    componentNode.querySelectorAll(".cmp-portallister__item-list-operations").forEach(function (cell) {
+		if (cell.querySelector(".cmp-portallister__menu") && !cell.contains(node)) {
+		    menuButton(cell).click();
+		}
+	    });
+	},
+	// Adobe's Discard deletes the draft at once. Ask first; cancelling stops the click before
+	// it reaches Adobe's handler on the menu item, so the draft and the open menu stay.
+	confirmDiscard = function (event) {
+	    var menuItem = event.target.closest(".cmp-portallister__menu-item");
+	    var operation = menuItem && JSON.parse(menuItem.getAttribute("operation_data"));
+	    if (!operation || operation.name !== "discardDraft") {
+		return;
+	    }
+	    var message = isFrenchPage()
+		?"Supprimer ce brouillon? Cette action est irréversible."
+		: "Discard this draft? This can't be undone.";
+	    if (!window.confirm(message)) {
+		event.preventDefault();
+		event.stopPropagation();
+	    }
+	},
+	handleMenuKeys = function (event) {
+	    var menuItem = event.target.closest(".cmp-portallister__menu-item");
+	    if (menuItem && (event.key === "Enter" || event.key === " ")) {
+		event.preventDefault();
+		menuItem.click();
+	    } else if (event.key === "Escape") {
+		// From a menu item or from the ⋮ button itself: close an open menu and focus its button
+		var cell = event.target.closest(".cmp-portallister__item-list-operations"),
+		    button = menuButton(cell);
+		if (button && cell.querySelector(".cmp-portallister__menu")) {
+		    button.click();
+		    button.focus();
+		}
+	    }
+	},
         updateSearchResults = function (response, id) {
             var componentConfig = componentStore[id],
                 queryResults = response.elements;
@@ -127,11 +220,19 @@
 	    if (queryResults.data.length > 0) {
 		updateLayoutWithDrafts();
 	    }
+            var itemContainer = componentConfig.resultsNode.querySelector("[data-cmp-hook-item-template=\"container\"]");
             queryResults.data.forEach(function(item) {
                 ItemAPI.createAndInject(componentConfig, item);
+                var row = itemContainer.lastElementChild;
+                decorateItem(row, item);
+                placeNewestFirst(itemContainer, row, item);
             });
             if (componentConfig.nextOffset < 0) {
                 hideLoadMore(id);
+            }
+            if (componentConfig.restoreState) {
+                restoreState(componentConfig.componentNode, componentConfig.restoreState);
+                componentConfig.restoreState = null;
             }
         },
         queryFPRecords = function (id, offset) {
@@ -143,10 +244,16 @@
             if (offset) {
                 parameters.append("offset", offset);
             }
-            var queryPath = componentConfig.queryPath + "?" + parameters.toString();
+            var queryPath = componentConfig.queryPath + "?" + parameters.toString(),
+                generation = componentConfig.generation;
             fetch(queryPath)
                 .then(response => response.json())
-                .then(data => updateSearchResults(data, id));
+                .then(function (data) {
+                    // A newer reset (e.g. another draft save) happened meanwhile; its own query will render
+                    if (generation === componentConfig.generation) {
+                        updateSearchResults(data, id);
+                    }
+                });
         },
         handleKeyPresses = function (event, id) {
             switch (event.keyCode) {
@@ -194,18 +301,154 @@
             componentConfig.componentNode.addEventListener("click", (event) => {
                 var link = event.target.closest(".item-link");
                 var dataRef = link && new URL(link.getAttribute("link"), window.location.href).searchParams.get("dataRef");
-                if (dataRef && dataRef.startsWith(DRAFT_DATA_REF_PREFIX)) {
+                if (link) {
+                    // The href is only there for keyboard access; Adobe's handler or ours navigates
                     event.preventDefault();
+                }
+                if (dataRef && dataRef.startsWith(DRAFT_DATA_REF_PREFIX)) {
                     event.stopPropagation();
                     window.location.assign(link.getAttribute("link"));
                 }
             }, true);
+            componentConfig.componentNode.addEventListener("click", function () {
+                syncMenuState(componentConfig.componentNode);
+            });
+            componentConfig.componentNode.addEventListener("click", confirmDiscard, true);
+            componentConfig.componentNode.addEventListener("keydown", handleMenuKeys);
+            document.addEventListener("click", function (event) {
+                closeMenusOutside(componentConfig.componentNode, event.target);
+            });
+            // Tabbing out of the menu closes it too
+            componentConfig.componentNode.addEventListener("focusout", function (event) {
+                if (event.relatedTarget) {
+                    closeMenusOutside(componentConfig.componentNode, event.relatedTarget);
+                }
+            });
 
+            alignWithForm(componentConfig.componentNode);
             ItemAPI.init(componentConfig);
 
             componentStore[config.id] = componentConfig;
             cleanup(config.id);
             queryFPRecords(config.id);
+        },
+        // Line the component up with the embedded form's content column (right of its page menu)
+        // by setting --ds-inset-start/end, used as margins in the CSS. Measured rather than copied
+        // from the theme so it follows the form's layout at every width. No form: no inset.
+        alignWithForm = function (componentNode) {
+            if (!window.ResizeObserver) {
+                return;
+            }
+            var wrapper = componentNode.parentElement,
+                formContent = null,
+                observer = null;
+            var update = function () {
+                var area = wrapper.getBoundingClientRect(),
+                    column = formContent.getBoundingClientRect(),
+                    visible = column.width > 0;
+                componentNode.style.setProperty("--ds-inset-start", (visible ? Math.max(0, column.left - area.left) : 0) + "px");
+                componentNode.style.setProperty("--ds-inset-end", (visible ? Math.max(0, area.right - column.right) : 0) + "px");
+            };
+            // Watch the form's column, or the new one if the form re-rendered it, and measure now
+            var attach = function () {
+                var found = document.querySelector("#guideContainerForm .afTabLeftPanel .tab-content");
+                if (found && found !== formContent) {
+                    if (observer) {
+                        observer.disconnect();
+                    }
+                    formContent = found;
+                    observer = new ResizeObserver(update);
+                    observer.observe(formContent);
+                    observer.observe(wrapper);
+                }
+                if (formContent) {
+                    update();
+                }
+            };
+            attach();
+            // The form may render after this component initializes: try again once it's ready.
+            // connect() runs at once if the form is already ready, or when it finishes otherwise.
+            onGuideBridge(function (bridge) {
+                bridge.connect(attach);
+            });
+        },
+        // Reload every drafts table, e.g. after the embedded form saves a draft
+        refreshAllInstances = function () {
+            Object.keys(componentStore).forEach(function (id) {
+                var componentConfig = componentStore[id];
+                // Keep a pending state if refreshes overlap: the table is already empty by then
+                componentConfig.restoreState = componentConfig.restoreState || captureState(componentConfig.componentNode);
+                cleanup(id);
+                queryFPRecords(id);
+            });
+        },
+        // The refresh rebuilds every row. Remember which draft's link, ⋮ button or menu item had
+        // keyboard focus, and which draft's menu was open, so they can be put back afterwards.
+        captureState = function (componentNode) {
+            var draftId = function (node) {
+                    var row = node && node.closest("tr.cmp-portallister__item"),
+                        cell = row && row.querySelector(".cmp-portallister__item-list-operations");
+                    return cell && cell.getAttribute("operation_model_id");
+                },
+                active = componentNode.contains(document.activeElement) ? document.activeElement : null,
+                openMenu = componentNode.querySelector(".cmp-portallister__menu"),
+                menuItem = active && active.closest(".cmp-portallister__menu-item");
+            if (!openMenu && !(active && active.closest("tr.cmp-portallister__item"))) {
+                return null;
+            }
+            return {
+                openMenuId: openMenu ? draftId(openMenu) : null,
+                focusId: active && active.closest("tr.cmp-portallister__item") ? draftId(active) : null,
+                focus: menuItem ? "menuItem"
+                    : active && active.closest(".item-link") ? "link"
+                    : active && active.closest(".cmp-portallister__item-list-operations-button") ? "button"
+                    : null,
+                menuItemIndex: menuItem ? Array.prototype.indexOf.call(menuItem.parentElement.children, menuItem) : -1
+            };
+        },
+        restoreState = function (componentNode, state) {
+            var cellFor = function (draftId) {
+                    return draftId && componentNode.querySelector(".cmp-portallister__item-list-operations[operation_model_id=\"" + draftId + "\"]");
+                },
+                menuCell = cellFor(state.openMenuId),
+                focusCell = cellFor(state.focusId),
+                previousFocus = document.activeElement;
+            if (menuCell) {
+                // Adobe's toggle; our click listener then syncs aria-expanded (and moves focus into the menu)
+                menuButton(menuCell).click();
+            }
+            if (!focusCell) {
+                // Focus wasn't in the table: don't let reopening the menu take it from elsewhere
+                if (previousFocus && previousFocus !== document.activeElement) {
+                    previousFocus.focus();
+                }
+                return;
+            }
+            var target = state.focus === "menuItem"
+                    ? focusCell.querySelectorAll(".cmp-portallister__menu-item")[state.menuItemIndex]
+                : state.focus === "link"
+                    ? focusCell.closest("tr.cmp-portallister__item").querySelector(".item-link")
+                : state.focus === "button" ? menuButton(focusCell) : null;
+            if (target) {
+                target.focus();
+            }
+        },
+        // guideBridge fires saveCompleted after Save draft (and autosave) once the server returns the draft id.
+        // The form may initialize before or after this script, so handle both.
+        listenForDraftSaves = function () {
+            onGuideBridge(function (bridge) {
+                bridge.on("saveCompleted", refreshAllInstances);
+            });
+        },
+        // Call back with the embedded form's guideBridge, whether it loaded before or after this script
+        onGuideBridge = function (callback) {
+            if (window.guideBridge) {
+                callback(window.guideBridge);
+            } else {
+                window.addEventListener("bridgeInitializeStart", function (event) {
+                    callback(event.detail.guideBridge);
+                });
+            }
         },
         queryDomForAllInstances = function () {
             // This function should execute after DOM is safe to manipulate
@@ -244,6 +487,7 @@
     // wait for window load to prevent any race condition
     $(function() {
         $(window).trigger("core-forms-itemapi-onload", tmpEvent);
+        listenForDraftSaves();
         $(window).trigger("core-forms-register-operation", {
             name: RESUME_OPERATION,
             handler: function (event, operationData) {
