@@ -20,7 +20,7 @@
  * (identical in 3.0.172; upstream unchanged since a1c569ce, 2021-09-06).
  * Adobe's script has no hook to change items before they're rendered, so it is copied. Our changes:
  * filter to the form embedded on the page, page title as item title, French operation labels,
- * "No drafts saved" row, resume drafts in this page (openDraftInPage), newest first, full date and
+ * "No drafts saved" row, resume drafts in this page (openDraftInPage), newest first (across Load more), full date and
  * time instead of relative dates, keyboard access to the item link and actions menu, a confirm before Discard,
  * a table refresh when the embedded form saves a draft, and alignment with the form's content column.
  * On a Core Forms Components or Forms add-on upgrade: diff against upstream and retest list, open, resume.
@@ -124,6 +124,18 @@
 		    .toLocaleString(document.documentElement.lang || undefined, { dateStyle: "medium", timeStyle: "short" });
 	    }
 	},
+	// Newest first across the whole table. The API returns drafts in draft-id order and may page them
+	// (Load more), so each new row moves in front of the first older row already shown.
+	placeNewestFirst = function (container, row, item) {
+	    var lastModified = Number(item.lastModified) || 0;
+	    row.setAttribute("data-last-modified", lastModified);
+	    var older = Array.prototype.find.call(container.querySelectorAll("tr.cmp-portallister__item"), function (other) {
+		return other !== row && Number(other.getAttribute("data-last-modified")) < lastModified;
+	    });
+	    if (older) {
+		container.insertBefore(row, older);
+	    }
+	},
 	menuButton = function (cell) {
 	    return cell && cell.querySelector(".cmp-portallister__item-list-operations-button");
 	},
@@ -205,17 +217,15 @@
 			}
 		   });
             }
-	    // Newest first. The API returns every draft in one response, in draft-id order.
-	    queryResults.data.sort(function (a, b) {
-		return Number(b.lastModified) - Number(a.lastModified);
-	    });
 	    if (queryResults.data.length > 0) {
 		updateLayoutWithDrafts();
 	    }
             var itemContainer = componentConfig.resultsNode.querySelector("[data-cmp-hook-item-template=\"container\"]");
             queryResults.data.forEach(function(item) {
                 ItemAPI.createAndInject(componentConfig, item);
-                decorateItem(itemContainer.lastElementChild, item);
+                var row = itemContainer.lastElementChild;
+                decorateItem(row, item);
+                placeNewestFirst(itemContainer, row, item);
             });
             if (componentConfig.nextOffset < 0) {
                 hideLoadMore(id);
