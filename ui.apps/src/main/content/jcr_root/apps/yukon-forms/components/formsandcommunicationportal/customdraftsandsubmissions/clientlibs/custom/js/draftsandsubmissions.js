@@ -57,6 +57,8 @@
             var componentConfig = componentStore[id];
             ItemAPI.clear(componentConfig.itemTemplate, componentConfig.resultsNode);
             componentConfig.loadmoreNode.style.display = "inline-block";
+            // Responses to queries sent before this reset are ignored (see queryFPRecords)
+            componentConfig.generation = (componentConfig.generation || 0) + 1;
         },
         hideLoadMore = function (id) {
             var componentConfig = componentStore[id];
@@ -64,10 +66,14 @@
                 componentConfig.loadmoreNode.style.display = "none";
             }
         },
+	// The page's language (fr-CA on French pages), the same source as the dates
+	isFrenchPage = function () {
+	    return (document.documentElement.lang || "").toLowerCase().startsWith("fr");
+	},
 	translateOperation = function (op) {
 	    return {
                 ...op,
-                title: navigator.language !== "fr" && navigator.userLanguage !== "fr"
+                title: !isFrenchPage()
 		    ? op.title
 		    : op.title === "Open"
 		    	? "Ouvrir"
@@ -148,9 +154,8 @@
 	    if (!operation || operation.name !== "discardDraft") {
 		return;
 	    }
-	    var isFrench = navigator.language === "fr" || navigator.userLanguage === "fr";
-	    var message = isFrench
-		? "Supprimer ce brouillon? Cette action est irréversible."
+	    var message = isFrenchPage()
+		?"Supprimer ce brouillon? Cette action est irréversible."
 		: "Discard this draft? This can't be undone.";
 	    if (!window.confirm(message)) {
 		event.preventDefault();
@@ -221,10 +226,16 @@
             if (offset) {
                 parameters.append("offset", offset);
             }
-            var queryPath = componentConfig.queryPath + "?" + parameters.toString();
+            var queryPath = componentConfig.queryPath + "?" + parameters.toString(),
+                generation = componentConfig.generation;
             fetch(queryPath)
                 .then(response => response.json())
-                .then(data => updateSearchResults(data, id));
+                .then(function (data) {
+                    // A newer reset (e.g. another draft save) happened meanwhile; its own query will render
+                    if (generation === componentConfig.generation) {
+                        updateSearchResults(data, id);
+                    }
+                });
         },
         handleKeyPresses = function (event, id) {
             switch (event.keyCode) {
