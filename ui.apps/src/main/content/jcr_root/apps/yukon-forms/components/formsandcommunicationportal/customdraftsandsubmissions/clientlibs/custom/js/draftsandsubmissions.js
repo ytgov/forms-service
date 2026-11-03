@@ -336,11 +336,12 @@
         // by setting --ds-inset-start/end, used as margins in the CSS. Measured rather than copied
         // from the theme so it follows the form's layout at every width. No form: no inset.
         alignWithForm = function (componentNode) {
-            var formContent = document.querySelector("#guideContainerForm .afTabLeftPanel .tab-content");
-            var wrapper = componentNode.parentElement;
-            if (!formContent || !window.ResizeObserver) {
+            if (!window.ResizeObserver) {
                 return;
             }
+            var wrapper = componentNode.parentElement,
+                formContent = null,
+                observer = null;
             var update = function () {
                 var area = wrapper.getBoundingClientRect(),
                     column = formContent.getBoundingClientRect(),
@@ -348,9 +349,28 @@
                 componentNode.style.setProperty("--ds-inset-start", (visible ? Math.max(0, column.left - area.left) : 0) + "px");
                 componentNode.style.setProperty("--ds-inset-end", (visible ? Math.max(0, area.right - column.right) : 0) + "px");
             };
-            var observer = new ResizeObserver(update);
-            observer.observe(formContent);
-            observer.observe(wrapper);
+            // Watch the form's column, or the new one if the form re-rendered it, and measure now
+            var attach = function () {
+                var found = document.querySelector("#guideContainerForm .afTabLeftPanel .tab-content");
+                if (found && found !== formContent) {
+                    if (observer) {
+                        observer.disconnect();
+                    }
+                    formContent = found;
+                    observer = new ResizeObserver(update);
+                    observer.observe(formContent);
+                    observer.observe(wrapper);
+                }
+                if (formContent) {
+                    update();
+                }
+            };
+            attach();
+            // The form may render after this component initializes: try again once it's ready.
+            // connect() runs at once if the form is already ready, or when it finishes otherwise.
+            onGuideBridge(function (bridge) {
+                bridge.connect(attach);
+            });
         },
         // Reload every drafts table, e.g. after the embedded form saves a draft
         refreshAllInstances = function () {
@@ -416,14 +436,17 @@
         // guideBridge fires saveCompleted after Save draft (and autosave) once the server returns the draft id.
         // The form may initialize before or after this script, so handle both.
         listenForDraftSaves = function () {
-            var listen = function (bridge) {
+            onGuideBridge(function (bridge) {
                 bridge.on("saveCompleted", refreshAllInstances);
-            };
+            });
+        },
+        // Call back with the embedded form's guideBridge, whether it loaded before or after this script
+        onGuideBridge = function (callback) {
             if (window.guideBridge) {
-                listen(window.guideBridge);
+                callback(window.guideBridge);
             } else {
                 window.addEventListener("bridgeInitializeStart", function (event) {
-                    listen(event.detail.guideBridge);
+                    callback(event.detail.guideBridge);
                 });
             }
         },
