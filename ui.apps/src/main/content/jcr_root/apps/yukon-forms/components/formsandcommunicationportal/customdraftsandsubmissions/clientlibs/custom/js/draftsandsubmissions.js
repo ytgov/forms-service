@@ -220,6 +220,10 @@
             if (componentConfig.nextOffset < 0) {
                 hideLoadMore(id);
             }
+            if (componentConfig.restoreState) {
+                restoreState(componentConfig.componentNode, componentConfig.restoreState);
+                componentConfig.restoreState = null;
+            }
         },
         queryFPRecords = function (id, offset) {
             var parameters = new URLSearchParams(),
@@ -341,9 +345,63 @@
         // Reload every drafts table, e.g. after the embedded form saves a draft
         refreshAllInstances = function () {
             Object.keys(componentStore).forEach(function (id) {
+                var componentConfig = componentStore[id];
+                // Keep a pending state if refreshes overlap: the table is already empty by then
+                componentConfig.restoreState = componentConfig.restoreState || captureState(componentConfig.componentNode);
                 cleanup(id);
                 queryFPRecords(id);
             });
+        },
+        // The refresh rebuilds every row. Remember which draft's link, ⋮ button or menu item had
+        // keyboard focus, and which draft's menu was open, so they can be put back afterwards.
+        captureState = function (componentNode) {
+            var draftId = function (node) {
+                    var row = node && node.closest("tr.cmp-portallister__item"),
+                        cell = row && row.querySelector(".cmp-portallister__item-list-operations");
+                    return cell && cell.getAttribute("operation_model_id");
+                },
+                active = componentNode.contains(document.activeElement) ? document.activeElement : null,
+                openMenu = componentNode.querySelector(".cmp-portallister__menu"),
+                menuItem = active && active.closest(".cmp-portallister__menu-item");
+            if (!openMenu && !(active && active.closest("tr.cmp-portallister__item"))) {
+                return null;
+            }
+            return {
+                openMenuId: openMenu ? draftId(openMenu) : null,
+                focusId: active && active.closest("tr.cmp-portallister__item") ? draftId(active) : null,
+                focus: menuItem ? "menuItem"
+                    : active && active.closest(".item-link") ? "link"
+                    : active && active.closest(".cmp-portallister__item-list-operations-button") ? "button"
+                    : null,
+                menuItemIndex: menuItem ? Array.prototype.indexOf.call(menuItem.parentElement.children, menuItem) : -1
+            };
+        },
+        restoreState = function (componentNode, state) {
+            var cellFor = function (draftId) {
+                    return draftId && componentNode.querySelector(".cmp-portallister__item-list-operations[operation_model_id=\"" + draftId + "\"]");
+                },
+                menuCell = cellFor(state.openMenuId),
+                focusCell = cellFor(state.focusId),
+                previousFocus = document.activeElement;
+            if (menuCell) {
+                // Adobe's toggle; our click listener then syncs aria-expanded (and moves focus into the menu)
+                menuButton(menuCell).click();
+            }
+            if (!focusCell) {
+                // Focus wasn't in the table: don't let reopening the menu take it from elsewhere
+                if (previousFocus && previousFocus !== document.activeElement) {
+                    previousFocus.focus();
+                }
+                return;
+            }
+            var target = state.focus === "menuItem"
+                    ? focusCell.querySelectorAll(".cmp-portallister__menu-item")[state.menuItemIndex]
+                : state.focus === "link"
+                    ? focusCell.closest("tr.cmp-portallister__item").querySelector(".item-link")
+                : state.focus === "button" ? menuButton(focusCell) : null;
+            if (target) {
+                target.focus();
+            }
         },
         // guideBridge fires saveCompleted after Save draft (and autosave) once the server returns the draft id.
         // The form may initialize before or after this script, so handle both.
