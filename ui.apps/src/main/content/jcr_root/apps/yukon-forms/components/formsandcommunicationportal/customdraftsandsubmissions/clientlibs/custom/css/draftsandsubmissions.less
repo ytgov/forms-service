@@ -51,7 +51,7 @@ h1.cmp-drafts-and-submissions__heading {
 }
 
 /* ── Table ── */
-table.cmp-portallister__results-list-container {
+.cmp-drafts-and-submissions table.cmp-portallister__results-list-container {
     width: 100%;
     margin-bottom: 2rem;
     border: 1px solid var(--ds-neutral-color);
@@ -59,7 +59,7 @@ table.cmp-portallister__results-list-container {
     color: var(--ds-text-color);
 }
 
-.cmp-portallister__results-list-head th {
+.cmp-drafts-and-submissions .cmp-portallister__results-list-head th {
     padding: var(--ds-cell-padding);
     background: var(--ds-primary-color);
     color: var(--ds-on-primary-color);
@@ -67,38 +67,38 @@ table.cmp-portallister__results-list-container {
     text-align: left;
 }
 
-.cmp-portallister__item-list > td {
+.cmp-drafts-and-submissions .cmp-portallister__item-list > td {
     padding: var(--ds-cell-padding);
     background: var(--ds-surface-color);
     vertical-align: middle;
 }
 
-.cmp-portallister__item-list:nth-child(odd) > td {
+.cmp-drafts-and-submissions .cmp-portallister__item-list:nth-child(odd) > td {
     background: var(--ds-neutral-color);
 }
 
 /* The thumbnail is the same Yukon logo on every row, and Details is always empty */
-.cmp-portallister__item-list-image-wrapper-head,
-.cmp-portallister__item-list-image-wrapper,
-.cmp-portallister__item-list-body-head,
-.cmp-portallister__item-list-body {
+.cmp-drafts-and-submissions .cmp-portallister__item-list-image-wrapper-head,
+.cmp-drafts-and-submissions .cmp-portallister__item-list-image-wrapper,
+.cmp-drafts-and-submissions .cmp-portallister__item-list-body-head,
+.cmp-drafts-and-submissions .cmp-portallister__item-list-body {
     display: none;
 }
 
 /* Date and actions shrink to their content; the name fills the rest */
-.cmp-portallister__item-list-time-head,
-.cmp-portallister__item-list-time {
+.cmp-drafts-and-submissions .cmp-portallister__item-list-time-head,
+.cmp-drafts-and-submissions .cmp-portallister__item-list-time {
     width: 1%;
     white-space: nowrap;
 }
 
 /* ── Form name link ──
  * max-width: 0 lets the name cell fill the remaining width without growing past it */
-.cmp-portallister__item-list-title {
+.cmp-drafts-and-submissions .cmp-portallister__item-list-title {
     max-width: 0;
 }
 
-.cmp-portallister__item-list-link {
+.cmp-drafts-and-submissions .cmp-portallister__item-list-link {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -113,8 +113,8 @@ table.cmp-portallister__results-list-container {
 }
 
 /* ── Actions button and menu ── */
-.cmp-portallister__item-list-operations,
-.cmp-portallister__item-list-operations-head {
+.cmp-drafts-and-submissions .cmp-portallister__item-list-operations,
+.cmp-drafts-and-submissions .cmp-portallister__item-list-operations-head {
     position: relative;
     width: 1%;
     padding-left: 0;
@@ -123,18 +123,18 @@ table.cmp-portallister__results-list-container {
 
 /* Phone: wrap instead of truncating, since the date leaves too little room */
 @media (max-width: 768px) {
-    .cmp-portallister__item-list-title {
+    .cmp-drafts-and-submissions .cmp-portallister__item-list-title {
         max-width: none;
     }
 
-    .cmp-portallister__item-list-link {
+    .cmp-drafts-and-submissions .cmp-portallister__item-list-link {
         display: inline;
         overflow: visible;
         white-space: normal;
     }
 
-    .cmp-portallister__item-list-time-head,
-    .cmp-portallister__item-list-time {
+    .cmp-drafts-and-submissions .cmp-portallister__item-list-time-head,
+    .cmp-drafts-and-submissions .cmp-portallister__item-list-time {
         white-space: normal;
     }
 }
@@ -158,9 +158,9 @@ table.cmp-portallister__results-list-container {
     }
 }
 
-.cmp-portallister__item-list-link:focus-visible,
-.cmp-portallister__item-list-operations-button:focus-visible,
-.cmp-portallister__menu-item:focus-visible {
+.cmp-drafts-and-submissions .cmp-portallister__item-list-link:focus-visible,
+.cmp-drafts-and-submissions .cmp-portallister__item-list-operations-button:focus-visible,
+.cmp-drafts-and-submissions .cmp-portallister__menu-item:focus-visible {
     outline: 3px solid var(--ds-focus-color);
     outline-offset: 2px;
 }

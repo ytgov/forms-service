@@ -111,8 +111,11 @@
 	// Show the full date in the page language and make the link reachable by keyboard.
 	decorateItem = function (row, item) {
 	    var link = row.querySelector(".item-link");
-	    if (link) {
-		link.setAttribute("href", link.getAttribute("link"));
+	    // Only same-origin links become real hrefs; anything else (another site, javascript:) stays
+	    // click-only through Adobe's handler, as before
+	    var url = link && new URL(link.getAttribute("link"), window.location.href);
+	    if (url && url.origin === window.location.origin) {
+		link.setAttribute("href", url.href);
 	    }
 	    var time = row.querySelector(".cmp-portallister__item-list-time");
 	    if (time && item.lastModified) {
@@ -164,16 +167,17 @@
 	},
 	handleMenuKeys = function (event) {
 	    var menuItem = event.target.closest(".cmp-portallister__menu-item");
-	    if (!menuItem) {
-		return;
-	    }
-	    if (event.key === "Enter" || event.key === " ") {
+	    if (menuItem && (event.key === "Enter" || event.key === " ")) {
 		event.preventDefault();
 		menuItem.click();
 	    } else if (event.key === "Escape") {
-		var button = menuButton(menuItem.closest(".cmp-portallister__item-list-operations"));
-		button.click();
-		button.focus();
+		// From a menu item or from the ⋮ button itself: close an open menu and focus its button
+		var cell = event.target.closest(".cmp-portallister__item-list-operations"),
+		    button = menuButton(cell);
+		if (button && cell.querySelector(".cmp-portallister__menu")) {
+		    button.click();
+		    button.focus();
+		}
 	    }
 	},
         updateSearchResults = function (response, id) {
