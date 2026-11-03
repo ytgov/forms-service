@@ -20,8 +20,9 @@
  * (identical in 3.0.172; upstream unchanged since a1c569ce, 2021-09-06).
  * Adobe's script has no hook to change items before they're rendered, so it is copied. Our changes:
  * filter to the form embedded on the page, page title as item title, French operation labels,
- * "No drafts saved" row, resume drafts in this page (openDraftInPage), full dates instead of
- * relative ones, keyboard access to the item link and actions menu, and a confirm before Discard.
+ * "No drafts saved" row, resume drafts in this page (openDraftInPage), newest first, full date and
+ * time instead of relative dates, keyboard access to the item link and actions menu, a confirm before Discard,
+ * and a table refresh when the embedded form saves a draft.
  * On a Core Forms Components or Forms add-on upgrade: diff against upstream and retest list, open, resume.
  */
 
@@ -109,8 +110,9 @@
 	    }
 	    var time = row.querySelector(".cmp-portallister__item-list-time");
 	    if (time && item.lastModified) {
+		// Include the time so drafts saved on the same day can be told apart
 		time.textContent = new Date(Number(item.lastModified))
-		    .toLocaleDateString(document.documentElement.lang || undefined, { dateStyle: "long" });
+		    .toLocaleString(document.documentElement.lang || undefined, { dateStyle: "long", timeStyle: "short" });
 	    }
 	},
 	menuButton = function (cell) {
@@ -194,6 +196,10 @@
 			}
 		   });
             }
+	    // Newest first. The API returns every draft in one response, in draft-id order.
+	    queryResults.data.sort(function (a, b) {
+		return Number(b.lastModified) - Number(a.lastModified);
+	    });
 	    if (queryResults.data.length > 0) {
 		updateLayoutWithDrafts();
 	    }
@@ -296,6 +302,27 @@
             cleanup(config.id);
             queryFPRecords(config.id);
         },
+        // Reload every drafts table, e.g. after the embedded form saves a draft
+        refreshAllInstances = function () {
+            Object.keys(componentStore).forEach(function (id) {
+                cleanup(id);
+                queryFPRecords(id);
+            });
+        },
+        // guideBridge fires saveCompleted after Save draft (and autosave) once the server returns the draft id.
+        // The form may initialize before or after this script, so handle both.
+        listenForDraftSaves = function () {
+            var listen = function (bridge) {
+                bridge.on("saveCompleted", refreshAllInstances);
+            };
+            if (window.guideBridge) {
+                listen(window.guideBridge);
+            } else {
+                window.addEventListener("bridgeInitializeStart", function (event) {
+                    listen(event.detail.guideBridge);
+                });
+            }
+        },
         queryDomForAllInstances = function () {
             // This function should execute after DOM is safe to manipulate
             // and we've received ItemAPI, i.e some equivalent of $.ready
@@ -333,6 +360,7 @@
     // wait for window load to prevent any race condition
     $(function() {
         $(window).trigger("core-forms-itemapi-onload", tmpEvent);
+        listenForDraftSaves();
         $(window).trigger("core-forms-register-operation", {
             name: RESUME_OPERATION,
             handler: function (event, operationData) {
