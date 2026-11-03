@@ -41,6 +41,14 @@
 	cursor: pointer;
 }
 
+.afLikertScale input[type="radio"]:checked {
+       background-color: #005a65;
+}
+
+.afLikertScale .guideFieldWidget.left:has(> input[type="radio"]:checked)+.likertWidgetLabel.right label {
+       color: white;
+}
+
 .afLikertScale .likertWidgetLabel {
 	position: absolute;
 	top: 0;
