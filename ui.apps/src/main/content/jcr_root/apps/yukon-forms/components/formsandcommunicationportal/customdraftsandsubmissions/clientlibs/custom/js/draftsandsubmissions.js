@@ -66,6 +66,10 @@
             ItemAPI.clear(componentConfig.itemTemplate, componentConfig.resultsNode);
             componentConfig.loadmoreNode.style.display = "inline-block";
         },
+        hideUpdating = function (componentConfig) {
+            clearTimeout(componentConfig.updatingTimer);
+            componentConfig.updatingNote.textContent = "";
+        },
         hideLoadMore = function (id) {
             var componentConfig = componentStore[id];
             if (componentConfig.loadmoreNode) {
@@ -272,11 +276,17 @@
                             }, 500);
                             return;
                         }
-                        clearTimeout(componentConfig.updatingTimer);
-                        componentConfig.updatingNote.textContent = "";
+                        hideUpdating(componentConfig);
                         clearResults(componentConfig);
                     }
                     updateSearchResults(data, id);
+                })
+                .catch(function (error) {
+                    console.error("Drafts list request failed", error);
+                    // A failed refresh keeps the rows already shown; don't leave "Updating…" up for good
+                    if (refresh && generation === componentConfig.generation) {
+                        hideUpdating(componentConfig);
+                    }
                 });
         },
         handleKeyPresses = function (event, id) {
