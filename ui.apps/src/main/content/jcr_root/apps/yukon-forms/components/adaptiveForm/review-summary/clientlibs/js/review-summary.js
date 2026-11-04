@@ -36,20 +36,39 @@
     return true;
   }
 
+  // Disabled fields, and fields inside disabled panels, aren't summarised.
+  function isEnabled(node) {
+    while (node) {
+      if (node.enabled === false) return false;
+      node = node.parent;
+    }
+    return true;
+  }
+
+  // The text shown for an option value. Options are "value=Display text"
+  // (split on the first "=" only, so the text may contain "="); an option
+  // with no "=" shows its value. On a translated form only the text is
+  // translated, so a French form can store English values.
+  function optionText(options, value) {
+    for (var i = 0; i < options.length; i++) {
+      var option = String(options[i]);
+      var separator = option.indexOf("=");
+      var optionValue = separator < 0 ? option : option.substring(0, separator);
+      if (optionValue === value) return separator < 0 ? option : option.substring(separator + 1);
+    }
+    return value;
+  }
+
   function getDisplayValue(field) {
     var raw     = field.value;
     var display = field.displayValue;
     if (raw === null || raw === undefined || raw === "") return null;
-    if (field.className === "guideCheckBox" && field.jsonModel && field.jsonModel.options) {
-      // Several selected values arrive as one comma-separated string.
+    if ((field.className === "guideCheckBox" || field.className === "guideRadioButton") &&
+        field.jsonModel && field.jsonModel.options) {
+      // Several selected checkbox values arrive as one comma-separated string.
       var selected = Array.isArray(raw) ? raw : String(raw).split(",");
       var labels = selected.map(function (value) {
-        var label = value;
-        field.jsonModel.options.forEach(function (item) {
-          var nameValues = item.split("=");
-          if (nameValues.length === 2 && value === nameValues[0]) label = nameValues[1];
-        });
-        return label;
+        return optionText(field.jsonModel.options, String(value));
       });
       return labels.join(", ") || null;
     }
@@ -206,6 +225,7 @@
       if (INPUT_CLASSES.indexOf(node.className) < 0) return;
       if (!node.visible) return;
       if (!allParentsVisible(node)) return;
+      if (!isEnabled(node)) return;
       if (!node.parent) return;
       if (excludedFields.indexOf(node.name) >= 0) return;
 
