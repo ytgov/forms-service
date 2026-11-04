@@ -58,10 +58,17 @@
 
     var cleanup = function (id) {
             var componentConfig = componentStore[id];
-            ItemAPI.clear(componentConfig.itemTemplate, componentConfig.resultsNode);
-            componentConfig.loadmoreNode.style.display = "inline-block";
+            clearResults(componentConfig);
             // Responses to queries sent before this reset are ignored (see queryFPRecords)
             componentConfig.generation = (componentConfig.generation || 0) + 1;
+        },
+        clearResults = function (componentConfig) {
+            ItemAPI.clear(componentConfig.itemTemplate, componentConfig.resultsNode);
+            componentConfig.loadmoreNode.style.display = "inline-block";
+        },
+        hideUpdating = function (componentConfig) {
+            clearTimeout(componentConfig.updatingTimer);
+            componentConfig.updatingNote.textContent = "";
         },
         hideLoadMore = function (id) {
             var componentConfig = componentStore[id];
@@ -235,7 +242,8 @@
                 componentConfig.restoreState = null;
             }
         },
-        queryFPRecords = function (id, offset) {
+        // refresh (after a draft save): { draftId, attempt }. The current rows stay until the new list is in.
+        queryFPRecords = function (id, offset, refresh) {
             var parameters = new URLSearchParams(),
                 componentConfig = componentStore[id];
             if (componentConfig.limit) {
@@ -250,8 +258,34 @@
                 .then(response => response.json())
                 .then(function (data) {
                     // A newer reset (e.g. another draft save) happened meanwhile; its own query will render
-                    if (generation === componentConfig.generation) {
-                        updateSearchResults(data, id);
+                    if (generation !== componentConfig.generation) {
+                        return;
+                    }
+                    if (refresh) {
+                        // On publish a new draft reaches the list up to ~1 s after saveCompleted: ask again
+                        // (every 0.5 s, for up to 3 s) rather than show a list without it.
+                        // shortcut: with paging, a draft on a later page is waited for in vain; fine while the list fits one page.
+                        var listed = data.elements.data.some(function (item) {
+                            return item.id === refresh.draftId;
+                        });
+                        if (refresh.draftId && !listed && refresh.attempt < 6) {
+                            setTimeout(function () {
+                                if (generation === componentConfig.generation) {
+                                    queryFPRecords(id, offset, { draftId: refresh.draftId, attempt: refresh.attempt + 1 });
+                                }
+                            }, 500);
+                            return;
+                        }
+                        hideUpdating(componentConfig);
+                        clearResults(componentConfig);
+                    }
+                    updateSearchResults(data, id);
+                })
+                .catch(function (error) {
+                    console.error("Drafts list request failed", error);
+                    // A failed refresh keeps the rows already shown; don't leave "Updating…" up for good
+                    if (refresh && generation === componentConfig.generation) {
+                        hideUpdating(componentConfig);
                     }
                 });
         },
@@ -289,6 +323,11 @@
             var template = document.createElement("template");
             template.innerHTML = componentConfig.itemTemplate;
             labels = template.content.querySelector("[data-label-open]").dataset;
+            // Live region next to the heading, empty until a refresh is slow (see refreshAllInstances)
+            componentConfig.updatingNote = document.createElement("span");
+            componentConfig.updatingNote.className = "cmp-drafts-and-submissions__updating";
+            componentConfig.updatingNote.setAttribute("aria-live", "polite");
+            componentConfig.componentNode.querySelector(".cmp-drafts-and-submissions__heading").after(componentConfig.updatingNote);
 
             // input node, sort button and filter button are rendered conditionally
             if (componentConfig.inputNode) {
@@ -381,12 +420,19 @@
         },
         // Reload every drafts table, e.g. after the embedded form saves a draft
         refreshAllInstances = function () {
+            var savedDraftId = window.guideBridge && guideBridge.customContextProperty("draftId");
             Object.keys(componentStore).forEach(function (id) {
                 var componentConfig = componentStore[id];
-                // Keep a pending state if refreshes overlap: the table is already empty by then
+                // Keep the first pending state if refreshes overlap
                 componentConfig.restoreState = componentConfig.restoreState || captureState(componentConfig.componentNode);
-                cleanup(id);
-                queryFPRecords(id);
+                // Ignore older responses now, but keep the rows on screen until the new list arrives
+                componentConfig.generation = (componentConfig.generation || 0) + 1;
+                // Say "Updating…" only if the new list is slow (it can be on publish), so quick refreshes don't flicker
+                clearTimeout(componentConfig.updatingTimer);
+                componentConfig.updatingTimer = setTimeout(function () {
+                    componentConfig.updatingNote.textContent = labels.labelUpdating;
+                }, 500);
+                queryFPRecords(id, null, { draftId: savedDraftId, attempt: 0 });
             });
         },
         // The refresh rebuilds every row. Remember which draft's link, ⋮ button or menu item had

@@ -44,10 +44,17 @@
 
 /* ── Heading ── */
 h1.cmp-drafts-and-submissions__heading {
-    margin: 2rem 0 1rem;
+    display: inline-block; /* so the "Updating…" note can sit beside it */
+    margin: 2rem 1rem 1rem 0;
     color: var(--ds-text-color);
     font-size: var(--ds-font-size-heading);
     text-align: left;
+}
+
+/* "Updating…" while the list refreshes after a save; empty (and silent) otherwise */
+.cmp-drafts-and-submissions__updating {
+    color: var(--ds-text-color);
+    font-size: 1rem;
 }
 
 /* ── Table ── */
