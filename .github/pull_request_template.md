@@ -1,6 +1,6 @@
 ## Summary
 
-<!-- What does this change do, and why? Link the Jira ticket (e.g. YUKONAEMF-123). -->
+<!-- What does this change do, and why? Link the Jira ticket (e.g. YUKONAEMF-123 or WEBPLAN-123). -->
 
 ## How it was verified
 
