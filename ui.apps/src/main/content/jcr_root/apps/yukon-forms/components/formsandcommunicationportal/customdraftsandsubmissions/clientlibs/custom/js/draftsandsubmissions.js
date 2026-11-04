@@ -89,20 +89,22 @@
 	toResumeOperation = function (op) {
 	    return op.name === "openDraft" ? { ...op, name: RESUME_OPERATION } : op;
 	},
-	// Hide "No drafts saved" span and show header
-        updateLayoutWithDrafts = function () {
-            var thead = document.querySelector(".cmp-portallister__results-list-head");
+	// Show the header when there are rows, and the "No drafts saved" row when there are none.
+	// Runs on every change to the results (see init), because Adobe's Discard removes a row without telling us.
+        syncEmptyState = function (resultsNode) {
+            var hasItems = !!resultsNode.querySelector("[data-cmp-hook-item-template=\"item\"]");
+            var thead = resultsNode.querySelector(".cmp-portallister__results-list-head");
 	    if (!thead) {
 		console.error("No header found for drafts table");
 		return;
 	    }
-	    thead.style.display = "";
-	    var noDraftsRow = document.querySelector(".no-drafts-row");
+	    thead.style.display = hasItems ? "" : "none";
+	    var noDraftsRow = resultsNode.querySelector(".no-drafts-row");
 	    if (!noDraftsRow) {
 		console.error("No 'No drafts saved' row found");
 		return;
 	    }
-            noDraftsRow.style.display = "none";
+            noDraftsRow.style.display = hasItems ? "none" : "";
 	},
 	// Adobe's injector renders a relative date ("2 weeks ago") and a link without href.
 	// Show the full date in the page language and make the link reachable by keyboard.
@@ -169,6 +171,13 @@
 	    if (!window.confirm(labels.labelDiscardConfirm)) {
 		event.preventDefault();
 		event.stopPropagation();
+		return;
+	    }
+	    // Discarding the draft the embedded form is saving to: unlink the form, or its next save would
+	    // send the deleted draft's id and fail (500, AEM-FMP-001-004 "Unable to get the draft").
+	    var cell = menuItem.closest(".cmp-portallister__item-list-operations");
+	    if (window.guideBridge && cell && guideBridge.customContextProperty("draftId") === cell.getAttribute("operation_model_id")) {
+		guideBridge.customContextProperty("draftId", "");
 	    }
 	},
 	handleMenuKeys = function (event) {
@@ -211,9 +220,6 @@
 			}
 		   });
             }
-	    if (queryResults.data.length > 0) {
-		updateLayoutWithDrafts();
-	    }
             var itemContainer = componentConfig.resultsNode.querySelector("[data-cmp-hook-item-template=\"container\"]");
             queryResults.data.forEach(function(item) {
                 ItemAPI.createAndInject(componentConfig, item);
@@ -321,6 +327,10 @@
                     closeMenusOutside(componentConfig.componentNode, event.relatedTarget);
                 }
             });
+
+            new MutationObserver(function () {
+                syncEmptyState(componentConfig.resultsNode);
+            }).observe(componentConfig.resultsNode, { childList: true, subtree: true });
 
             alignWithForm(componentConfig.componentNode);
             ItemAPI.init(componentConfig);
