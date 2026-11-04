@@ -19,7 +19,7 @@
  * core/fd/components/formsportal/draftsandsubmissions/v1/draftsandsubmissions/clientlibs/site/js/draftsandsubmissions.js
  * (identical in 3.0.172; upstream unchanged since a1c569ce, 2021-09-06).
  * Adobe's script has no hook to change items before they're rendered, so it is copied. Our changes:
- * filter to the form embedded on the page, page title as item title, French operation labels,
+ * filter to the form embedded on the page, page title as item title, translated operation labels,
  * "No drafts saved" row, resume drafts in this page (openDraftInPage), newest first (across Load more), full date and
  * time instead of relative dates, keyboard access to the item link and actions menu, a confirm before Discard,
  * a table refresh when the embedded form saves a draft, and alignment with the form's content column.
@@ -49,6 +49,9 @@
 
     var formURL = null;
 
+    // Translated by the page's i18n dictionary; read from the item template (list.html) at init
+    var labels = {};
+
     // Replaces Adobe's "openDraft" operation, which opens the standalone form page in a new tab
     var RESUME_OPERATION = "openDraftInPage";
     var DRAFT_DATA_REF_PREFIX = "service://FP/draft/";
@@ -66,20 +69,14 @@
                 componentConfig.loadmoreNode.style.display = "none";
             }
         },
-	// The page's language (fr-CA on French pages), the same source as the dates
-	isFrenchPage = function () {
-	    return (document.documentElement.lang || "").toLowerCase().startsWith("fr");
-	},
 	translateOperation = function (op) {
 	    return {
                 ...op,
-                title: !isFrenchPage()
-		    ? op.title
-		    : op.title === "Open"
-		    	? "Ouvrir"
-		    	: op.title === "Discard"
-		    		? "Supprimer"
-		    		: op.title,
+                title: op.title === "Open"
+		    ? labels.labelOpen
+		    : op.title === "Discard"
+		    	? labels.labelDiscard
+		    	: op.title,
             };
 	},
 	// Resume a draft in this page, same tab. The inline-embedded form reads dataRef from the page URL;
@@ -169,10 +166,7 @@
 	    if (!operation || operation.name !== "discardDraft") {
 		return;
 	    }
-	    var message = isFrenchPage()
-		?"Supprimer ce brouillon? Cette action est irréversible."
-		: "Discard this draft? This can't be undone.";
-	    if (!window.confirm(message)) {
+	    if (!window.confirm(labels.labelDiscardConfirm)) {
 		event.preventDefault();
 		event.stopPropagation();
 	    }
@@ -212,7 +206,7 @@
 			    title: document.title,
 			    // Resume drafts in this page instead of the standalone form page
 			    formLink: isDraft ? draftResumeUrl(item.id) : item.formLink,
-			    // Translate operations if the page is in French
+			    // Translate operations to the page language
 			    operations: item.operations.map(translateOperation).map(toResumeOperation)
 			}
 		   });
@@ -286,6 +280,9 @@
             componentConfig.loadmoreNode = componentConfig.componentNode.querySelector(selectors.loadMore);
             componentConfig.itemTemplate = componentConfig.componentNode.querySelector(selectors.itemTemplate).innerHTML;
             componentConfig.menuTemplate = componentConfig.componentNode.querySelector(selectors.menuTemplate).innerHTML;
+            var template = document.createElement("template");
+            template.innerHTML = componentConfig.itemTemplate;
+            labels = template.content.querySelector("[data-label-open]").dataset;
 
             // input node, sort button and filter button are rendered conditionally
             if (componentConfig.inputNode) {

@@ -43,6 +43,10 @@
                             value="SUBMISSION"/>
                 </items>
             </type>
+            <!-- One layout only (list.html, translated by page language), so there is nothing to choose -->
+            <layout
+                    jcr:primaryType="nt:unstructured"
+                    sling:hideResource="true"/>
             <totalResult
                     jcr:primaryType="nt:unstructured"
                     sling:hideResource="true"/>
