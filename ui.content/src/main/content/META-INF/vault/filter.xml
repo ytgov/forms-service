@@ -2,7 +2,6 @@
 <workspaceFilter version="1.0">
     <filter root="/conf/yukon-forms" mode="merge"/>
     <filter root="/content/yukon-forms" mode="merge"/>
-    <filter root="/content/cq:tags/language" mode="merge"/>
     <filter root="/content/dam/yukon-forms" mode="merge">
         <exclude pattern="/content/dam/yukon-forms(/.*)?"/>
         <include pattern="/content/dam/yukon-forms/jcr:content(/.*)?"/>
