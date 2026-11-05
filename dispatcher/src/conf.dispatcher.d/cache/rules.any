@@ -5,9 +5,3 @@
 #
 
 $include "./default_rules.any"
-
-# Never cache the current-user info endpoint - its response is per-session
-/0100 {
-    /glob "/bin/yukon-forms/userinfo.json"
-    /type "deny"
-}

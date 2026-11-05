@@ -4,6 +4,12 @@
   // ─── Constants ────────────────────────────────────────────────────────────
 
   var BRIDGE_READY_EVENT = "bridgeInitializeStart";
+  // Layouts that show one panel at a time, so a panel can be navigated back to.
+  var PAGED_LAYOUTS = [
+    "fd/af/layouts/panel/wizard",
+    "fd/af/layouts/panel/tabbedPanelLayout",
+    "fd/af/layouts/panel/verticalTabbedPanelLayout"
+  ];
 
   var INPUT_CLASSES = [
     "guideTextBox",
@@ -30,23 +36,41 @@
     return true;
   }
 
+  // Disabled fields, and fields inside disabled panels, aren't summarised.
+  function isEnabled(node) {
+    while (node) {
+      if (node.enabled === false) return false;
+      node = node.parent;
+    }
+    return true;
+  }
+
+  // The text shown for an option value. Options are "value=Display text"
+  // (split on the first "=" only, so the text may contain "="); an option
+  // with no "=" shows its value. On a translated form only the text is
+  // translated, so a French form can store English values.
+  function optionText(options, value) {
+    for (var i = 0; i < options.length; i++) {
+      var option = String(options[i]);
+      var separator = option.indexOf("=");
+      var optionValue = separator < 0 ? option : option.substring(0, separator);
+      if (optionValue === value) return separator < 0 ? option : option.substring(separator + 1);
+    }
+    return value;
+  }
+
   function getDisplayValue(field) {
     var raw     = field.value;
     var display = field.displayValue;
     if (raw === null || raw === undefined || raw === "") return null;
-    if (field.className === "guideCheckBox" && field.jsonModel && field.jsonModel.options) {
-      var value = null;
-      field.jsonModel.options.forEach(item => {
-        var nameValues = item.split('=');
-        if (nameValues.length === 2) {
-          if (raw === nameValues[0]) {
-            value = nameValues[1];
-          }
-        }
+    if ((field.className === "guideCheckBox" || field.className === "guideRadioButton") &&
+        field.jsonModel && field.jsonModel.options) {
+      // Several selected checkbox values arrive as one comma-separated string.
+      var selected = Array.isArray(raw) ? raw : String(raw).split(",");
+      var labels = selected.map(function (value) {
+        return optionText(field.jsonModel.options, String(value));
       });
-      if (value) {
-        return value;
-      }
+      return labels.join(", ") || null;
     }
     if (Array.isArray(raw) && raw.length === 0) return null;
     if (Array.isArray(display)) return display.join(", ") || null;
@@ -56,13 +80,58 @@
   }
 
   function maybeMask(field, value) {
+    if (field.className === "guidePasswordBox") return "••••••••";
     if (field.jsonModel && field.jsonModel.sensitive === true) return "••••••••";
     return value;
   }
 
+  // Go-back buttons only make sense when pages (wizard steps or tabs) are
+  // shown one at a time.
+  function isPaged(rootPanel) {
+    var layout = rootPanel && rootPanel.jsonModel && rootPanel.jsonModel.layout;
+    return !!layout && PAGED_LAYOUTS.indexOf(layout["sling:resourceType"]) >= 0;
+  }
+
+  // Panels with no title, or with "hide title" set, get no heading.
+  function hasVisibleTitle(panel) {
+    if (!panel.title) return false;
+    return !(panel.jsonModel && String(panel.jsonModel.hideTitle) === "true");
+  }
+
+  function isRepeatable(panel) {
+    var instanceManager = panel.instanceManager;
+    return !!instanceManager && instanceManager.maxOccur !== 1 && typeof panel.instanceIndex === "number";
+  }
+
+  // Repeatable panel instances share a title, so number them (1-based).
+  function panelTitle(panel) {
+    var title = panel.title || panel.name;
+    return isRepeatable(panel) ? title + " " + (panel.instanceIndex + 1) : title;
+  }
+
+  // Panels wrapping repeatable panels get no heading; only each numbered
+  // instance is labelled.
+  function containsRepeatable(treeNode) {
+    return treeNode.children.some(function (child) {
+      return isRepeatable(child.panel) || containsRepeatable(child.node);
+    });
+  }
+
+  // The page's position among the pages the user can see (1-based),
+  // so pages hidden by rules don't throw the numbering off.
+  function pageNumber(panel) {
+    var pages = (panel.parent && panel.parent.items) || [];
+    var number = 0;
+    for (var i = 0; i < pages.length; i++) {
+      if (pages[i].visible !== false) number++;
+      if (pages[i] === panel) return number;
+    }
+    return null;
+  }
+
   // ─── Flat list rendering ──────────────────────────────────────────────────
 
-  function buildSection(container, excludedFields, showEditLinks, isTopLevelContainer) {
+  function buildSection(container, excludedFields, showEditLinks, editLinkText, isTopLevelContainer) {
     var section = document.createElement("div");
     section.className = "rs-section";
 
@@ -73,10 +142,10 @@
 
         var panelName = panel.name;
         var panelSom  = panel.somExpression || panelName;
-        var title     = panel.title || panelName;
+        var title     = panelTitle(panel);
 
         var header = null;
-        if (panel.title) {
+        if (hasVisibleTitle(panel) && (isTopLevelContainer || !containsRepeatable(item.node))) {
           header = document.createElement("div");
           header.className = "rs-section-header" + (isTopLevelContainer ? " rs-page-header" : "");
 
@@ -86,21 +155,18 @@
           header.appendChild(heading);
         }
 
-        var childSection = buildSection(item.node, excludedFields, showEditLinks, false);
+        var childSection = buildSection(item.node, excludedFields, showEditLinks, editLinkText, false);
 
         var panelBlock = document.createElement("div");
         panelBlock.className = "rs-panel-block";
         if (header) panelBlock.appendChild(header);
         panelBlock.appendChild(childSection);
 
-        if (isTopLevelContainer && showEditLinks) {
-          var rootItems  = panel.parent && panel.parent.items;
-          var pageNumber = rootItems ? rootItems.indexOf(panel) : null;
-
+        if (isTopLevelContainer && showEditLinks && isPaged(panel.parent)) {
           var goBackBtn = document.createElement("button");
           goBackBtn.type = "button";
           goBackBtn.className = "rs-page-goto-btn";
-          goBackBtn.textContent = "Go back to page " + pageNumber + " to edit your " + title;
+          goBackBtn.textContent = editLinkText.replace("{page}", pageNumber(panel));
           goBackBtn.dataset.rsPanel = panelName;
           goBackBtn.dataset.rsPanelSom = panelSom;
           panelBlock.appendChild(goBackBtn);
@@ -134,6 +200,7 @@
   function render(root, guideBridge) {
     var excludedFields = [];
     var showEditLinks  = root.dataset.showEditLinks !== "false";
+    var editLinkText   = root.dataset.editLinkText || "Go back to page {page} to edit";
 
     try {
       excludedFields = JSON.parse(root.dataset.excludedFields || "[]");
@@ -158,6 +225,7 @@
       if (INPUT_CLASSES.indexOf(node.className) < 0) return;
       if (!node.visible) return;
       if (!allParentsVisible(node)) return;
+      if (!isEnabled(node)) return;
       if (!node.parent) return;
       if (excludedFields.indexOf(node.name) >= 0) return;
 
@@ -201,7 +269,7 @@
       return;
     }
 
-    root.appendChild(buildSection(treeRoot, excludedFields, showEditLinks, true));
+    root.appendChild(buildSection(treeRoot, excludedFields, showEditLinks, editLinkText, true));
 
     if (showEditLinks) {
       // Delegated handler on $root catches clicks regardless of DOM re-renders
@@ -228,8 +296,19 @@
     function attachBridge(guideBridge) {
       guideBridge.connect(function () {
         roots.forEach(function (root) {
-          guideBridge.on("elementFocusChanged", function () {
-            if (root.offsetParent !== null) render(root, guideBridge);
+          // Render once navigation has finished and the root is visible.
+          function refresh() {
+            setTimeout(function () {
+              if (root.offsetParent !== null) render(root, guideBridge);
+            }, 0);
+          }
+          // Wizard navigation fires focus changes (before the page is shown).
+          guideBridge.on("elementFocusChanged", refresh);
+          // Switching tabs on a tabbed layout fires no GuideBridge event.
+          ["click", "keyup"].forEach(function (type) {
+            document.addEventListener(type, function (e) {
+              if (e.target.closest && e.target.closest("[role='tab']")) refresh();
+            });
           });
           if (root.offsetParent !== null) render(root, guideBridge);
         });

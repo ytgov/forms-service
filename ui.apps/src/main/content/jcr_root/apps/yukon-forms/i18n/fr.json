@@ -1,3 +1,10 @@
 {
-  "&amp;copy; {0} Yukon Forms Site. All rights reserved." : "&amp;copy; {0} Yukon Forms Site. Tous droits réservés."
+  "&amp;copy; {0} Yukon Forms Site. All rights reserved." : "&amp;copy; {0} Yukon Forms Site. Tous droits réservés.",
+  "Online form name" : "Nom du formulaire en ligne",
+  "Date last modified" : "Date de dernière modification",
+  "There are no drafts saved for this form." : "Aucun brouillon enregistré pour ce formulaire.",
+  "Open ((Drafts table menu))" : "Ouvrir",
+  "Discard ((Drafts table menu))" : "Supprimer",
+  "Discard this draft? This can't be undone." : "Supprimer ce brouillon? Cette action est irréversible.",
+  "Updating…" : "Mise à jour…"
 }

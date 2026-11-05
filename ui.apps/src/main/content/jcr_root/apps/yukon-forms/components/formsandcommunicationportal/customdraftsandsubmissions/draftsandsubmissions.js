@@ -16,7 +16,9 @@
 
 use(function () {
     var clientlibsArr = ['core.forms.components.formsportal.draftsandsubmissions.v1.custom'];
-    var layoutPath = 'yukon-forms/components/formsandcommunicationportal/customdraftsandsubmissions/itemTemplates/' + this.layout + '.html';
+    // Only list.html: the Layout field is hidden in the dialog, and pages saved with "card" get it too.
+    // Its labels follow the page language through the i18n dictionary.
+    var layoutPath = 'yukon-forms/components/formsandcommunicationportal/customdraftsandsubmissions/itemTemplates/list.html';
     return {
         clientlibs: clientlibsArr,
         layoutPath: layoutPath,

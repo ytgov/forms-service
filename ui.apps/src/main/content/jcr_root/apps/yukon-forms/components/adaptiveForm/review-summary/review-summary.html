@@ -8,18 +8,15 @@
   Authoring dialog properties (set on the component node):
     - excludedFields  : String[] — field names to suppress (e.g. hidden tokens)
     - showEditLinks   : Boolean  — whether to render "Edit" nav links per section
+    - editLinkText    : String   — button text; {page} is replaced with the page number (default "Go back to page {page} to edit")
 -->
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
+     data-sly-call="${clientlib.all @ categories='yukon-forms.components.review-summary'}"/>
 <div data-sly-use.model="ca.yukon.aem.core.models.ReviewSummaryModel"
      class="review-summary"
      data-excluded-fields="${model.excludedFieldsJson}"
      data-show-edit-links="${model.showEditLinks ? 'true' : 'false'}"
+     data-edit-link-text="${model.editLinkText}"
      id="review-summary-root">
-
-  <!--
-    Rendered at runtime by review-summary.js.
-    This placeholder is shown only while GuideBridge initialises.
-  -->
-  <div class="review-summary__loading" aria-live="polite">
-    <span>Loading your responses&hellip;</span>
-  </div>
+  <!-- Rendered at runtime by review-summary.js. -->
 </div>
