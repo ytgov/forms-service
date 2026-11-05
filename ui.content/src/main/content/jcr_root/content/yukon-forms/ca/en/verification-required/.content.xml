@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Where VerificationStatusGateFilter sends signed-in users whose MyYukon verification_status is below
+    the level required by a form's folder (its redirect.page default). Demo content - authors can edit it,
+    and the ui.content merge filter won't overwrite their changes on later deploys.
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Verification required"
+        cq:template="/conf/yukon-forms/settings/wcm/templates/page-content"
+        sling:resourceType="yukon-forms/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="yukon-forms/components/container"
+            layout="responsiveGrid">
+            <container
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="yukon-forms/components/container"
+                layout="responsiveGrid">
+                <title
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="yukon-forms/components/title"
+                    jcr:title="You need to verify your identity to use this form"/>
+                <container
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="yukon-forms/components/container"
+                    layout="responsiveGrid">
+                    <text
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="yukon-forms/components/text"
+                        textIsRich="true"
+                        text="&lt;p>The form you tried to open needs a higher level of identity verification than your MyYukon account currently has.&lt;/p>&#xa;&lt;p>&lt;b>What you need to do&lt;/b>&lt;/p>&#xa;&lt;p>Sign in to your MyYukon account and complete identity verification. Once your verification level has been updated, sign out and sign in again, then return to the form.&lt;/p>&#xa;&lt;p>&lt;b>Signed in with a different account?&lt;/b>&lt;/p>&#xa;&lt;p>&lt;a href=&quot;/system/sling/logout?resource=/content/yukon-forms/ca/en.html&quot;>Sign out&lt;/a> and sign in with the account you have verified.&lt;/p>&#xa;&lt;p>Or go to the &lt;a href=&quot;https://yukon.ca&quot;>Government of Yukon website&lt;/a>.&lt;/p>"/>
+                </container>
+            </container>
+        </root>
+    </jcr:content>
+</jcr:root>

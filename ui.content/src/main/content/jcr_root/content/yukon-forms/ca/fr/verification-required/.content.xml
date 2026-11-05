@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    French version of ca/en/verification-required: where VerificationStatusGateFilter sends signed-in users
+    of French forms whose MyYukon verification_status is below the level required by the form's folder. Demo content - authors can edit it,
+    and the ui.content merge filter won't overwrite their changes on later deploys.
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Vérification requise"
+        cq:template="/conf/yukon-forms/settings/wcm/templates/page-content"
+        sling:resourceType="yukon-forms/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="yukon-forms/components/container"
+            layout="responsiveGrid">
+            <container
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="yukon-forms/components/container"
+                layout="responsiveGrid">
+                <title
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="yukon-forms/components/title"
+                    jcr:title="Vous devez faire vérifier votre identité pour utiliser ce formulaire"/>
+                <container
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="yukon-forms/components/container"
+                    layout="responsiveGrid">
+                    <text
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="yukon-forms/components/text"
+                        textIsRich="true"
+                        text='&lt;p&gt;Le formulaire que vous avez essayé d’ouvrir exige un niveau de vérification d’identité plus élevé que celui de votre compte MyYukon.&lt;/p&gt;&#10;&lt;p&gt;&lt;b&gt;Ce que vous devez faire&lt;/b&gt;&lt;/p&gt;&#10;&lt;p&gt;Connectez-vous à votre compte MyYukon et faites vérifier votre identité. Une fois votre niveau de vérification mis à jour, déconnectez-vous, reconnectez-vous, puis revenez au formulaire.&lt;/p&gt;&#10;&lt;p&gt;&lt;b&gt;Vous êtes connecté avec un autre compte?&lt;/b&gt;&lt;/p&gt;&#10;&lt;p&gt;&lt;a href="/system/sling/logout?resource=/content/yukon-forms/ca/fr.html"&gt;Déconnectez-vous&lt;/a&gt; et connectez-vous avec le compte dont l’identité a été vérifiée.&lt;/p&gt;&#10;&lt;p&gt;Ou consultez le &lt;a href="https://yukon.ca/fr"&gt;site Web du gouvernement du Yukon&lt;/a&gt;.&lt;/p&gt;'/>
+                </container>
+            </container>
+        </root>
+    </jcr:content>
+</jcr:root>
