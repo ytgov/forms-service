@@ -47,8 +47,8 @@
     <vault.password>admin</vault.password>
     <frontend-maven-plugin.version>1.12.0</frontend-maven-plugin.version>
     <core.wcm.components.version>2.25.4</core.wcm.components.version>
-    <core.forms.components.version>3.0.50</core.forms.components.version>
-    <core.forms.components.af.version>3.0.50</core.forms.components.af.version>
+    <core.forms.components.version>3.0.164</core.forms.components.version>
+    <core.forms.components.af.version>3.0.164</core.forms.components.af.version>
     <aem.forms.sdk.api>2024.09.08.00-240900</aem.forms.sdk.api>
     <bnd.version>5.1.2</bnd.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

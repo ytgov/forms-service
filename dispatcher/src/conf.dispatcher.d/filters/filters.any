@@ -12,6 +12,10 @@ $include "./default_filters.any"
 # Allow manifest.webmanifest files located in the content
 /0102 { /type "allow" /extension "webmanifest" /path "/content/*/manifest" }
 
+# Allow prefill (e.g. resuming a Forms Portal draft) for forms embedded in Sites pages;
+# handled by EmbeddedFormPrefillServlet, which forwards to the form's guideContainer
+/0110 { /type "allow" /method "POST" /path "/content/yukon-forms/*" /selectors "af.prefilldata" /extension "json" }
+
 # Allow SAML HTTP POST to ../saml_login end points
 /0190 { /type "allow" /method "POST" /url "*/saml_login" }
 

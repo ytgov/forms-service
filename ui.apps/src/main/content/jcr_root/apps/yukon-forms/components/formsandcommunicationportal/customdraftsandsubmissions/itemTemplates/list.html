@@ -1,29 +1,38 @@
 <template data-sly-template.layout="${@ hideTime}">
-    <table class="cmp-portallister__results cmp-portallister__results-list-container" data-cmp-hook-item-template="container">
-        <thead class="cmp-portallister__results-list-head">
+    <table class="cmp-portallister__results cmp-portallister__results-list-container" data-cmp-hook-item-template="container"
+           data-label-open="${'Open' @ i18n, hint='Drafts table menu'}"
+           data-label-discard="${'Discard' @ i18n, hint='Drafts table menu'}"
+           data-label-discard-confirm="${'Discard this draft? This can\'t be undone.' @ i18n}"
+           data-label-updating="${'Updating…' @ i18n}">
+        <thead class="cmp-portallister__results-list-head" style="display: none;">
             <tr>
                 <th class="cmp-portallister__item-list-image-wrapper-head"></th>
-                <th class="cmp-portallister__item-list-title-head">Name</th>
-                <th class="cmp-portallister__item-list-body-head">Details</th>
-                <th class="cmp-portallister__item-list-time-head" data-sly-test="${!hideTime}">Last Modified</th>
-                <th class="cmp-portallister__item-list-operations-head"></th>
+                <th scope="col" class="cmp-portallister__item-list-title-head">${'Online form name' @ i18n}</th>
+                <th scope="col" class="cmp-portallister__item-list-body-head">${'Details' @ i18n}</th>
+                <th scope="col" class="cmp-portallister__item-list-time-head" data-sly-test="${!hideTime}">${'Date last modified' @ i18n}</th>
+                <th scope="col" class="cmp-portallister__item-list-operations-head"><span class="cmp-drafts-and-submissions__visually-hidden">${'Actions' @ i18n}</span></th>
             </tr>
         </thead>
+	<tr class="no-drafts-row">
+	    <td>${'There are no drafts saved for this form.' @ i18n}</td>
+	</tr>
     </table>
     <table>
         <tr class="cmp-portallister__item cmp-portallister__item-list" data-cmp-hook-item-template="item">
             <td class="cmp-portallister__item-list-image-wrapper">
-                <img class="cmp-portallister__item-list-image" data-cmp-hook-item-template="thumbnail"/>
+                <img class="cmp-portallister__item-list-image" alt="" data-cmp-hook-item-template="thumbnail"/>
             </td>
             <td class="cmp-portallister__item-list-title">
-                <div data-cmp-hook-item-template="formLink">
-                    <div data-cmp-hook-item-template="itemTitle"></div>
-                </div>
+                <a class="cmp-portallister__item-list-link" data-cmp-hook-item-template="formLink">
+                    <span data-cmp-hook-item-template="itemTitle"></span>
+                </a>
             </td>
             <td class="cmp-portallister__item-list-body" data-cmp-hook-item-template="description"></td>
             <td data-sly-test="${!hideTime}" class="cmp-portallister__item-list-time" data-cmp-hook-item-template="timeinfo"></td>
             <td class="cmp-portallister__item-list-operations" data-cmp-hook-item-template="operations">
-                <div class="cmp-portallister__item-list-operations-icon"></div>
+                <button type="button" class="cmp-portallister__item-list-operations-button" aria-haspopup="menu" aria-expanded="false" aria-label="${'Actions' @ i18n}">
+                    <span class="cmp-portallister__item-list-operations-icon" aria-hidden="true">&#8942;</span>
+                </button>
             </td>
         </tr>
     </table>
