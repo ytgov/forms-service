@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="Likert Scale"
+          guideNodeClass="guideLikertScale"
+          inputType="radio">
+
+    <!-- Propriétés par défaut pour le composant -->
+    <items jcr:primaryType="nt:unstructured">
+        <!-- Éléments de l'échelle de Likert -->
+        <highEndLabel jcr:primaryType="nt:unstructured"
+                      guideNodeClass="guideLikertScaleItem"
+                      name="highEndLabel"
+                      value="Strongly Agree"/>
+
+        <lowEndLabel jcr:primaryType="nt:unstructured"
+                     guideNodeClass="guideLikertScaleItem"
+                     name="lowEndLabel"
+                     value="Strongly Disagree"/>
+
+        <!-- Options par défaut (ex: 1 à 5) -->
+        <options jcr:primaryType="nt:unstructured">
+            <option1 jcr:primaryType="nt:unstructured"
+                     guideNodeClass="guideLikertScaleOption"
+                     name="option1"
+                     value="1"
+                     label="1"/>
+            <option2 jcr:primaryType="nt:unstructured"
+                     guideNodeClass="guideLikertScaleOption"
+                     name="option2"
+                     value="2"
+                     label="2"/>
+            <option3 jcr:primaryType="nt:unstructured"
+                     guideNodeClass="guideLikertScaleOption"
+                     name="option3"
+                     value="3"
+                     label="3"/>
+            <option4 jcr:primaryType="nt:unstructured"
+                     guideNodeClass="guideLikertScaleOption"
+                     name="option4"
+                     value="4"
+                     label="4"/>
+            <option5 jcr:primaryType="nt:unstructured"
+                     guideNodeClass="guideLikertScaleOption"
+                     name="option5"
+                     value="5"
+                     label="5"/>
+        </options>
+        <comment
+            jcr:primaryType="nt:unstructured"
+            guideNodeClass="guideCompositeFieldItem"
+            name="comment"/>
+    </items>
+</jcr:root>
