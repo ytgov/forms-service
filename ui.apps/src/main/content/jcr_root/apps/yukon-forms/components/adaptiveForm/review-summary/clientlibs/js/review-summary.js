@@ -25,6 +25,14 @@
     "guideDatePicker"
   ];
 
+  // Fields whose display pattern the summary applies.
+  var FORMATTED_CLASSES = [
+    "guideTextBox",
+    "guideTelephone",
+    "guideNumericBox",
+    "guideDatePicker"
+  ];
+
   // ─── Model helpers ────────────────────────────────────────────────────────
 
   function allParentsVisible(node) {
@@ -71,6 +79,12 @@
         return optionText(field.jsonModel.options, String(value));
       });
       return labels.join(", ") || null;
+    }
+    if (FORMATTED_CLASSES.indexOf(field.className) >= 0) {
+      // The value with the field's display pattern applied (thousand
+      // separators, currency, date format), as the field shows it.
+      var formatted = field.formattedValue;
+      if (formatted !== null && formatted !== undefined && formatted !== "") return String(formatted);
     }
     if (Array.isArray(raw) && raw.length === 0) return null;
     if (Array.isArray(display)) return display.join(", ") || null;
@@ -185,7 +199,14 @@
         }
         var value = document.createElement("div");
         value.className = "rs-value";
-        value.innerHTML = item.value;
+        if (item.richText) {
+          value.className += " rs-value--rich";
+          value.innerHTML = item.value;
+        } else {
+          // Plain text, so line breaks in multi-line fields are kept (see
+          // .rs-value) and what the user typed isn't read as HTML.
+          value.textContent = item.value;
+        }
         row.appendChild(value);
 
         section.appendChild(row);
@@ -252,7 +273,9 @@
       current.items.push({
         type: "field",
         label: node.jsonModel && node.jsonModel.hideTitle === 'true' ? '' : (node.title || node.name),
-        value: value
+        value: value,
+        richText: node.className === "guideTextBox" && !!node.jsonModel &&
+          String(node.jsonModel.allowRichText) === "true"
       });
     });
 
