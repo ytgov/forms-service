@@ -4,7 +4,7 @@
           xmlns:cq="http://www.day.com/jcr/cq/1.0"
           jcr:primaryType="nt:unstructured"
           jcr:title="Likert Scale"
-          guideNodeClass="guideLikertScale"
+          guideNodeClass="guideRadioButton"
           inputType="radio">
 
     <!-- Propriétés par défaut pour le composant -->

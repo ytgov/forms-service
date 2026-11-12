@@ -2,7 +2,6 @@
   Likert Scale Component
 --%>
 <%@include file="/libs/fd/af/components/guidesglobal.jsp"%>
-<cq:includeClientLib categories="yukon-forms.components.likert-scale"/>
 <%@ page import="com.adobe.granite.toggle.api.ToggleRouter,
                  com.adobe.aemds.guide.fdfl.utils.FeatureToggleConstants" %>
 
@@ -25,7 +24,10 @@
                        aria-describedby="${guide:encodeForHtmlAttr(guideField.labelForId,xssAPI)}_input_label_${loopCounter.count} ${guide:encodeForHtmlAttr(guideField.labelForId,xssAPI)}_desc" />
             </div>
             <div class="likertWidgetLabel right" >
-                <label id="${guide:encodeForHtmlAttr(guideField.labelForId,xssAPI)}_input_label_${loopCounter.count}"><c:if test="${guideField.areOptionsRichText eq false}">${guide:encodeForHtml(option.value,xssAPI)}</c:if><c:if test="${guideField.areOptionsRichText}">${guide:filterHtml(option.value,xssAPI)}</c:if></label>
+                <label id="${guide:encodeForHtmlAttr(guideField.labelForId,xssAPI)}_input_label_${loopCounter.count}"
+                	for="${guideField.id}${'-'}${loopCounter.count}${'_widget'}"
+                
+                ><c:if test="${guideField.areOptionsRichText eq false}">${guide:encodeForHtml(option.value,xssAPI)}</c:if><c:if test="${guideField.areOptionsRichText}">${guide:filterHtml(option.value,xssAPI)}</c:if></label>
             </div>
         </div>
     </c:forEach>
