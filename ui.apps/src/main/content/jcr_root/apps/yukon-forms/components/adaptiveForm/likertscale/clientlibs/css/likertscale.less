@@ -1,0 +1,81 @@
+.guideFieldNode .afLikertScale {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	gap: 16px;
+	
+    &::before {
+		display: none;
+	}
+    
+    .likert-high-end-label {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	font-size: 0.9rem;
+	color: #737373;
+    
+    }
+
+	.likert-low-end-label {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		font-size: 0.9rem;
+		color: #737373;
+	}
+
+	input[type="radio"] {
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+
+		border-radius: 5px;
+		width: 40px;
+		height: 40px;
+		border-color: #cdcdcd;
+
+		cursor: pointer;
+	}
+
+	input[type="radio"]:checked {
+		background-color: #005a65;
+	}
+
+	.guideFieldWidget.left:has(> input[type="radio"]:checked)+.likertWidgetLabel.right label {
+		color: white;
+	}
+
+	.likertWidgetLabel {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
+		margin: auto;
+		width: fit-content;
+		height: fit-content;
+	}
+
+	.likertWidgetLabel label {
+		margin: 0;
+		font-size: 1rem;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+	.likertScaleContainer {
+		position: relative;
+	}
+
+	.likertWidgetLabel label::after {
+		display: none;
+	}
+
+}
+
+
