@@ -44,6 +44,11 @@ class DirectorySignInFilterTest {
                 "//content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory//",
                 "/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory/./jcr:content",
                 "/../content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory",
+                "/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory.json",
+                "/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory;x",
+                "/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory-copy",
+                "/content/dam/formsanddocuments-fdm/yukon-forms/YGDirectory",
+                "/content/dam/formsanddocuments-fdm/other-folder/ygdirectory",
         };
         for (String path : paths) {
             FilterChain chain = mock(FilterChain.class);
@@ -54,6 +59,17 @@ class DirectorySignInFilterTest {
             assertEquals(403, response.getStatus(), path);
             verify(chain, never()).doFilter(any(), any());
         }
+    }
+
+    @Test
+    void checksEveryFormDataModelIdValue() throws Exception {
+        FilterChain chain = mock(FilterChain.class);
+        MockSlingHttpServletResponse response = new MockSlingHttpServletResponse();
+
+        filter.doFilter(request("anonymous", OTHER_FDM, DirectorySignInFilter.FDM_PATH), response, chain);
+
+        assertEquals(403, response.getStatus());
+        verify(chain, never()).doFilter(any(), any());
     }
 
     @Test
@@ -69,7 +85,7 @@ class DirectorySignInFilterTest {
 
     @Test
     void leavesOtherFormDataModelsAlone() throws Exception {
-        for (String fdm : new String[] { OTHER_FDM, null, DirectorySignInFilter.FDM_PATH + "-copy" }) {
+        for (String fdm : new String[] { OTHER_FDM, null, "" }) {
             FilterChain chain = mock(FilterChain.class);
             SlingHttpServletRequest request = request("anonymous", fdm);
             MockSlingHttpServletResponse response = new MockSlingHttpServletResponse();
@@ -80,12 +96,14 @@ class DirectorySignInFilterTest {
         }
     }
 
-    private static SlingHttpServletRequest request(String userId, String fdm) {
+    private static SlingHttpServletRequest request(String userId, String... fdm) {
         SlingHttpServletRequest request = mock(SlingHttpServletRequest.class);
         ResourceResolver resolver = mock(ResourceResolver.class);
         when(resolver.getUserID()).thenReturn(userId);
         when(request.getResourceResolver()).thenReturn(resolver);
-        when(request.getParameter(DirectorySignInFilter.FDM_PARAM)).thenReturn(fdm);
+        String[] values = fdm.length == 1 && fdm[0] == null ? null : fdm;
+        when(request.getParameterValues(DirectorySignInFilter.FDM_PARAM)).thenReturn(values);
+        when(request.getParameter(DirectorySignInFilter.FDM_PARAM)).thenReturn(values == null ? null : values[0]);
         return request;
     }
 }

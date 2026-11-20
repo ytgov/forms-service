@@ -35,6 +35,7 @@ import java.nio.charset.StandardCharsets;
 public class DirectorySignInFilter implements Filter {
 
     static final String FDM_PATH = "/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory";
+    static final String FDM_NAME = "ygdirectory";
     static final String FDM_PARAM = "formDataModelId";
     static final String ANONYMOUS = "anonymous";
 
@@ -65,21 +66,35 @@ public class DirectorySignInFilter implements Filter {
     }
 
     /**
-     * Compares the normalized path: Sling resolves {@code //}, {@code /./} and {@code /../} when it
-     * loads the FDM, so a raw string comparison could be bypassed. A path that can't be normalized
-     * (for example one that climbs above the root) is treated as a directory call.
+     * Errs on the side of refusing: a call counts as a directory call when any
+     * {@code formDataModelId} value names the ygDirectory FDM in any form AEM might resolve, so the
+     * check doesn't depend on how AEM parses the value. That is when the value, normalized
+     * ({@code //}, {@code /./}, {@code /../}), starts with the FDM path (including variants like
+     * {@code ygdirectory.json}), when it contains {@code ygdirectory} in any case, or when it can't
+     * be normalized.
      */
     static boolean isDirectoryCall(SlingHttpServletRequest request) {
-        String raw = StringUtils.trimToEmpty(request.getParameter(FDM_PARAM));
+        String[] values = request.getParameterValues(FDM_PARAM);
+        if (values == null) {
+            return false;
+        }
+        for (String value : values) {
+            if (namesDirectory(StringUtils.trimToEmpty(value))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean namesDirectory(String raw) {
         if (raw.isEmpty()) {
             return false;
         }
-        String fdm = ResourceUtil.normalize(raw.replaceAll("/{2,}", "/"));
-        if (fdm == null) {
+        if (StringUtils.containsIgnoreCase(raw, FDM_NAME)) {
             return true;
         }
-        fdm = StringUtils.removeEnd(fdm, "/");
-        return fdm.equals(FDM_PATH) || fdm.startsWith(FDM_PATH + "/");
+        String fdm = ResourceUtil.normalize(raw.replaceAll("/{2,}", "/"));
+        return fdm == null || fdm.startsWith(FDM_PATH);
     }
 
     private static boolean isSignedIn(SlingHttpServletRequest request) {
