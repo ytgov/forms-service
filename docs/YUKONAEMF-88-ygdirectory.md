@@ -104,6 +104,8 @@ In the FDM the operations appear as `GET /bin/yukon-forms/ygdirectory/<operation
 3. `getEmployee`: filled from the first lookup's selection (email, title and department), or from a typed email.
 4. `getDepartments` → `getDivisions` → `getBranches` → `getUnits` as chained drop-downs, with each list's count.
 
+In chained drop-downs, call the next operation only when the field has a value (`if (this.value) { … }`): clearing a field, as a parent's rule does, fires its own change rule, and the FDM refuses a call without a required argument (`AEM-FDM-001-012: Missing input for required argument`, HTTP 400).
+
 Its rules use the code the rule editor's Invoke Service generates (`guidelib.dataIntegrationUtils.executeOperation` / `setOptionsFromService`), so they open in the code editor rather than the visual editor.
 
 ## Configuration
