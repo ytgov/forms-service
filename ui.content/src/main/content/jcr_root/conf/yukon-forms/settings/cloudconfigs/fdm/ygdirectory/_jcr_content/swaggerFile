@@ -1,0 +1,356 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ygDirectory",
+    "description": "Government of Yukon directory lookups for adaptive forms (YUKONAEMF-88). Served by AEM (DirectoryLookupServlet) from an hourly in-memory copy of https://api.gov.yk.ca/directory. No match returns 200 with empty values; 503 means the directory is unavailable.",
+    "version": "1.1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4502",
+      "description": "Replaced per environment by the serviceEndPoint override (Cloud Manager variable YG_DIRECTORY_FDM_ENDPOINT)"
+    }
+  ],
+  "security": [
+    {
+      "directoryKey": []
+    }
+  ],
+  "paths": {
+    "/bin/yukon-forms/ygdirectory/searchEmployees": {
+      "get": {
+        "operationId": "searchEmployees",
+        "summary": "searchEmployees",
+        "description": "Employee positions with a word in the first name, last name or email starting with each word of the keyword (3+ characters), sorted by last name then first name. A person with several titles appears once per title. Returns at most the configured maximum (10 by default), plus the total number of matches. Signed-in users only.",
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": true,
+            "description": "Text typed by the user, 3 characters or more",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matching employees (empty when none match)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeSearchResult"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Directory unavailable"
+          }
+        }
+      }
+    },
+    "/bin/yukon-forms/ygdirectory/getEmployee": {
+      "get": {
+        "operationId": "getEmployee",
+        "summary": "getEmployee",
+        "description": "One employee position by email, with its title, organization and manager. When the person holds several positions, title and department pick one; otherwise the first by title is returned. Every value is an empty string when no employee has that email or the manager cannot be resolved.",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "description": "Employee email, any case",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "description": "Optional: title of the selected position, for people with several",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "department",
+            "in": "query",
+            "required": false,
+            "description": "Optional: department of the selected position, for people with several",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The employee (empty strings when not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDetail"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Directory unavailable"
+          }
+        }
+      }
+    },
+    "/bin/yukon-forms/ygdirectory/getDepartments": {
+      "get": {
+        "operationId": "getDepartments",
+        "summary": "getDepartments",
+        "description": "All department names, unique and sorted.",
+        "responses": {
+          "200": {
+            "description": "Department names",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NameList"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Directory unavailable"
+          }
+        }
+      }
+    },
+    "/bin/yukon-forms/ygdirectory/getDivisions": {
+      "get": {
+        "operationId": "getDivisions",
+        "summary": "getDivisions",
+        "description": "Division names in a department, unique and sorted.",
+        "parameters": [
+          {
+            "name": "department",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Division names (empty list when none)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NameList"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Directory unavailable"
+          }
+        }
+      }
+    },
+    "/bin/yukon-forms/ygdirectory/getBranches": {
+      "get": {
+        "operationId": "getBranches",
+        "summary": "getBranches",
+        "description": "Branch names in a department and division, unique and sorted.",
+        "parameters": [
+          {
+            "name": "department",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "division",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Branch names (empty list when none)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NameList"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Directory unavailable"
+          }
+        }
+      }
+    },
+    "/bin/yukon-forms/ygdirectory/getUnits": {
+      "get": {
+        "operationId": "getUnits",
+        "summary": "getUnits",
+        "description": "Unit names in a department, division and branch, unique and sorted.",
+        "parameters": [
+          {
+            "name": "department",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "division",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "branch",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unit names (empty list when none)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NameList"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Directory unavailable"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "directoryKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-YG-Directory-Key"
+      }
+    },
+    "schemas": {
+      "EmployeeSummary": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "description": "First Last, for display"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Job title of this position"
+          },
+          "department": {
+            "type": "string"
+          }
+        },
+        "description": "One position. A person with several titles appears once per title."
+      },
+      "EmployeeSearchResult": {
+        "type": "object",
+        "properties": {
+          "employees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmployeeSummary"
+            }
+          },
+          "count": {
+            "type": "integer",
+            "description": "Number of positions returned (at most the configured maximum, 10 by default)"
+          },
+          "total": {
+            "type": "integer",
+            "description": "Number of positions that matched"
+          }
+        }
+      },
+      "EmployeeDetail": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Job title of this position"
+          },
+          "department": {
+            "type": "string"
+          },
+          "division": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "manager_first_name": {
+            "type": "string"
+          },
+          "manager_last_name": {
+            "type": "string"
+          },
+          "manager_email": {
+            "type": "string"
+          }
+        }
+      },
+      "NameList": {
+        "type": "object",
+        "properties": {
+          "names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "count": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,83 @@
+// Employee Lookup (YUKONAEMF-88). Scoped so it doesn't affect the address component's type-ahead.
+.employee-lookup {
+    position: relative;
+
+    .twitter-typeahead {
+        display: block !important;
+        width: 100%;
+    }
+
+    .employee-lookup__input {
+        width: 100%;
+    }
+
+    .tt-menu {
+        background: #fff;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 4px 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        z-index: 100 !important;
+    }
+
+    .tt-dataset {
+        max-height: 360px;
+        overflow-y: auto;
+        padding: 4px 0;
+    }
+
+    .tt-suggestion {
+        cursor: pointer;
+        padding: 6px 10px;
+
+        &:hover,
+        &.tt-cursor {
+            background: #244c5a;
+            color: #fff;
+
+            .employee-lookup__meta {
+                color: #e6eef0;
+            }
+        }
+    }
+
+    .employee-lookup__name,
+    .employee-lookup__meta {
+        display: block;
+    }
+
+    .employee-lookup__name strong,
+    .employee-lookup__meta strong {
+        font-weight: 700;
+    }
+
+    .employee-lookup__meta {
+        color: #595959; // 7:1 on white
+        font-size: 0.875em;
+    }
+
+    .employee-lookup__more {
+        border-top: 1px solid #e0e0e0;
+        color: #595959;
+        font-size: 0.875em;
+        padding: 6px 10px;
+    }
+
+    .employee-lookup__status {
+        margin-top: 4px;
+        color: #595959;
+    }
+
+    .employee-lookup__sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+}

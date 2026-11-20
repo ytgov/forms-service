@@ -1,0 +1,3 @@
+{
+  "access.key": "$[secret:YG_DIRECTORY_FDM_KEY;default=]"
+}
