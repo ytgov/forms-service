@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="\0"
+    sling:resourceType="cq/gui/components/authoring/dialog">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <accordion
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/accordion">
+                <items jcr:primaryType="nt:unstructured">
+                    <basic
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Basic"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"/>
+                    <help
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Help Content"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"/>
+                    <accessibility jcr:primaryType="nt:unstructured"/>
+                    <patterns
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"/>
+                    <employeeLookup
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Employee lookup"
+                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <messagesHeading
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/heading"
+                                level="{Long}4"
+                                text="Messages (translate these on French forms)"/>
+                            <msgNoResults
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="No results"
+                                fieldDescription="Shown under the field when nothing matches. {0} is the text typed."
+                                emptyText="No employees match “{0}”. Check the spelling or search by email address."
+                                name="./msgNoResults"/>
+                            <msgMoreResults
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="More results"
+                                fieldDescription="Shown under the list when more employees match than are listed. {0} is the number listed, {1} the total."
+                                emptyText="Showing {0} of {1} results. Keep typing to narrow the list."
+                                name="./msgMoreResults"/>
+                            <msgResultsAvailable
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Results announcement"
+                                fieldDescription="Read by screen readers when results arrive. {0} is the number listed."
+                                emptyText="\{0} results available."
+                                name="./msgResultsAvailable"/>
+                            <validateExpMessage
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Selection required"
+                                fieldDescription="Error shown when text is typed but no employee is selected."
+                                emptyText="Select an employee from the list"
+                                name="./validateExpMessage"/>
+                            <fieldsHeading
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/heading"
+                                level="{Long}4"
+                                text="Output fields (in the same panel)"/>
+                            <emailField
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Selected email field"
+                                fieldDescription="Name of the hidden field that receives the selected employee's email. If you rename it, update this field's validation script too."
+                                emptyText="empSelectedEmail"
+                                name="./lookupEmailField"/>
+                            <titleField
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Selected title field"
+                                fieldDescription="Name of the hidden field that receives the selected position's job title."
+                                emptyText="empSelectedTitle"
+                                name="./lookupTitleField"/>
+                            <departmentField
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Selected department field"
+                                fieldDescription="Name of the hidden field that receives the selected position's department. Pass it to getEmployee with the email and title to get the selected position."
+                                emptyText="empSelectedDepartment"
+                                name="./lookupDepartmentField"/>
+                            <statusField
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Search status field"
+                                fieldDescription="Name of the hidden field that receives ok, noResults or unavailable."
+                                emptyText="empSearchStatus"
+                                name="./lookupStatusField"/>
+                            <serviceHeading
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/heading"
+                                level="{Long}4"
+                                text="Service"/>
+                            <fdmPath
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Form data model"
+                                emptyText="/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory"
+                                name="./lookupFdmPath"/>
+                            <minChars
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                fieldLabel="Minimum characters"
+                                emptyText="3"
+                                min="{Long}1"
+                                max="{Long}10"
+                                name="./lookupMinChars"/>
+                            <timeout
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                fieldLabel="Timeout (ms)"
+                                fieldDescription="After this, the status becomes unavailable."
+                                emptyText="10000"
+                                min="{Long}1000"
+                                name="./lookupTimeoutMs"/>
+                        </items>
+                    </employeeLookup>
+                </items>
+            </accordion>
+        </items>
+    </content>
+</jcr:root>

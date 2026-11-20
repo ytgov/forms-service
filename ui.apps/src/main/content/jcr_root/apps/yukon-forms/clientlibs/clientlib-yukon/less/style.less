@@ -62,4 +62,56 @@ input[type=number] {
 	-moz-appearance:textfield;
 }
 
+.afToolbarButton:has(.saveAndResume) {
+	float: right;
+	padding-top: 0.5rem;
+}
+
+.yg.secondaryButton button {
+	color: #00616d;
+	background: #ffffff;
+	padding: 6px 12px;
+}
+
+.yg.secondaryButton button:hover {
+	background: #00454e;
+	color: #ffffff;
+	border-color: #00454e;
+}
+
+.yukonCourts.secondaryButton button {
+	color: #191D34;
+	background: #ffffff;
+	border-color: #191D34;
+	border-style: solid;
+	padding: 6px 12px;
+}
+
+.yukonCourts.secondaryButton button:hover {
+	background: #191D34;
+	border-color: #191D34;
+	color: #ffffff;
+}
+
+@media (max-width : 767px) {
+	.afToolbarButton:has(.saveAndResume) {
+		float: none;
+		padding-top: 0;
+	}
+
+	.afToolbarButton .guidebutton button .iconButton-icon {
+		display: none !important;
+	}
+
+	.afToolbarButton .guidebutton button .iconButton-label {
+		display: block !important;
+	}	
+}
+
+@media (max-width: 479px) {
+	.afToolbarButton .guidebutton button .iconButton-label {
+		background: none !important;
+	}
+}
+
 
