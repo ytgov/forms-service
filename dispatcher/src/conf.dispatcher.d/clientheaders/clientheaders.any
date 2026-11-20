@@ -5,3 +5,7 @@
 #
 
 $include "./default_clientheaders.any"
+
+# YUKONAEMF-88: the ygDirectory FDM calls /bin/yukon-forms/ygdirectory/* through the
+# public URL; DirectoryLookupServlet needs this header to accept the call.
+"X-YG-Directory-Key"

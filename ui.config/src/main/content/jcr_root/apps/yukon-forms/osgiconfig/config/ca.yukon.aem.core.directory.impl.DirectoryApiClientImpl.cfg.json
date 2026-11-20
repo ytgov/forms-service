@@ -1,0 +1,6 @@
+{
+  "base.url": "$[env:DIRECTORY_API_BASE_URL;default=https://api.gov.yk.ca/directory]",
+  "api.key": "$[secret:DIRECTORY_API_KEY;default=]",
+  "connect.timeout.ms": 5000,
+  "read.timeout.ms": 30000
+}

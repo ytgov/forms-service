@@ -1,0 +1,15 @@
+{
+  "count": 10,
+  "divisions": [
+    {"department": "Highways and Public Works", "division": null, "branch": null, "unit": null, "order": 100},
+    {"department": "Highways and Public Works", "division": "Transportation", "branch": null, "unit": null, "order": 110},
+    {"department": "Highways and Public Works", "division": "Transportation", "branch": "Engineering", "unit": null, "order": 111},
+    {"department": "Highways and Public Works", "division": "Transportation", "branch": "Engineering", "unit": "Bridges", "order": 112},
+    {"department": "Highways and Public Works", "division": "Transportation", "branch": "Engineering", "unit": "Asphalt", "order": 113},
+    {"department": "Highways and Public Works", "division": "Information Technology", "branch": null, "unit": null, "order": 120},
+    {"department": "Education ", "division": null, "branch": null, "unit": null, "order": 200},
+    {"department": "Education", "division": "Schools", "branch": " Elementary ", "unit": null, "order": 210},
+    {"department": "Education", "division": "Schools", "branch": "Secondary", "unit": null, "order": 211},
+    {"department": "Community Services", "division": null, "branch": null, "unit": null, "order": 300}
+  ]
+}
