@@ -36,6 +36,27 @@ class DirectorySignInFilterTest {
     }
 
     @Test
+    void refusesAnonymousCallsWithPathsThatResolveToTheDirectory() throws Exception {
+        String[] paths = {
+                "/content/dam/formsanddocuments-fdm//yukon-forms/ygdirectory",
+                "/content/dam/formsanddocuments-fdm/yukon-forms/./ygdirectory",
+                "/content/dam/formsanddocuments-fdm/yukon-forms/other/../ygdirectory",
+                "//content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory//",
+                "/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory/./jcr:content",
+                "/../content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory",
+        };
+        for (String path : paths) {
+            FilterChain chain = mock(FilterChain.class);
+            MockSlingHttpServletResponse response = new MockSlingHttpServletResponse();
+
+            filter.doFilter(request("anonymous", path), response, chain);
+
+            assertEquals(403, response.getStatus(), path);
+            verify(chain, never()).doFilter(any(), any());
+        }
+    }
+
+    @Test
     void letsSignedInUsersThrough() throws Exception {
         FilterChain chain = mock(FilterChain.class);
         SlingHttpServletRequest request = request("someone@yukon.ca", DirectorySignInFilter.FDM_PATH + "/");
