@@ -2,6 +2,7 @@ package ca.yukon.aem.core.filters;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.engine.EngineConstants;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
@@ -63,8 +64,21 @@ public class DirectorySignInFilter implements Filter {
         chain.doFilter(request, response);
     }
 
-    private static boolean isDirectoryCall(SlingHttpServletRequest request) {
-        String fdm = StringUtils.removeEnd(StringUtils.trimToEmpty(request.getParameter(FDM_PARAM)), "/");
+    /**
+     * Compares the normalized path: Sling resolves {@code //}, {@code /./} and {@code /../} when it
+     * loads the FDM, so a raw string comparison could be bypassed. A path that can't be normalized
+     * (for example one that climbs above the root) is treated as a directory call.
+     */
+    static boolean isDirectoryCall(SlingHttpServletRequest request) {
+        String raw = StringUtils.trimToEmpty(request.getParameter(FDM_PARAM));
+        if (raw.isEmpty()) {
+            return false;
+        }
+        String fdm = ResourceUtil.normalize(raw.replaceAll("/{2,}", "/"));
+        if (fdm == null) {
+            return true;
+        }
+        fdm = StringUtils.removeEnd(fdm, "/");
         return fdm.equals(FDM_PATH) || fdm.startsWith(FDM_PATH + "/");
     }
 
