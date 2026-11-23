@@ -28,10 +28,10 @@ form (browser) ─ Invoke Service ─▶ <form>.af.dermis ─▶ ygDirectory FDM
 
 - The API key never reaches the browser. The browser only calls the form's `.af.dermis` endpoint.
 - Lookups are for signed-in users only. `DirectorySignInFilter` refuses `.af.dermis` calls to the `ygDirectory` FDM from anonymous users with 403, which the type-ahead reports as `unavailable`. On publish, MyYukon (SAML) is the only way to sign in.
-- Only business contact information is kept in memory: first and last name, work email, job title, the org path (department, division, branch, unit) and the manager's name and email. Usernames, phone numbers, office addresses and every other API field are dropped when the data loads; the manager is resolved at load time and the API's `full_name` and `manager` values are not kept.
+- Only business contact information is kept in memory: first and last name, work email, job title, the org path (department, division, branch, unit) and the manager's name and email. Usernames, phone numbers, office addresses and every other API field are dropped when the data loads; the manager is resolved at load time and the API's `full_name` and `manager` values are not kept (a record with no first or last name uses its `full_name`, dots as spaces, as its display name).
 - Each AEM instance downloads `/divisions` and `/employees` when it starts and every 60 minutes by default (Cloud Manager variable `YG_DIRECTORY_REFRESH_MINUTES`, 5 to 1440). If a download fails, the previous copy stays in use. If there is no copy yet (the API was down when the instance started), the operations answer HTTP 503 at once, which forms see as a failed service call, and a request starts a new download in the background, at most once a minute. Requests never wait for a download, so the form's error handler runs within the board's 10 s.
 - AEM only lets a field invoke FDM operations that its own rules reference. The type-ahead calls `searchEmployees` from `empSearch`, so `empSearch` carries an inert `initScript` naming that operation. Don't remove it.
-- Logs name the operation only; no keyword, name or email is logged.
+- Logs name the operation only; no keyword, name or email is logged. A failed refresh logs the endpoint and HTTP status, or only the exception type (a parse error could quote the response).
 - AEM caches the OpenAPI spec and the FDM model. After changing either, update `jcr:lastModified` on the cloud config's `jcr:content` (the data source reloads on this one, not on `cq:lastModified`) and `jcr:lastModified` on the FDM's `jcr:content` (all set in the repo), or open and save each in the UI.
 - The `ui.content` filters use `mode="merge"`, so a deploy doesn't update the FDM, the cloud config or the forms once they exist on an environment. Install changes to them with a package, or make them in the UI.
 
@@ -41,8 +41,8 @@ Approved under the existing AEM and Adobe Sign PIA (HPW eServices, March 2026). 
 
 | Condition | How |
 |---|---|
-| Store business contact information only | `DirectorySnapshot` keeps name, work email, title, org path and manager name and email; other API fields are dropped while parsing (unit test `keepsBusinessContactInformationOnly`). |
-| No PII in logs | Logs name the operation and counts only. |
+| Store business contact information only | `DirectorySnapshot` keeps name, work email, title, org path and manager name and email; other API fields are dropped while parsing: each record is copied into a `Position` holding only those fields (unit test `keepsBusinessContactInformationOnly` checks that no dropped field reaches any output). |
+| No PII in logs | Logs name the operation, counts, and for a failed refresh the endpoint and status or the exception type only. |
 | Search only on forms where the user is signed in with MyYukon | `DirectorySignInFilter` (403 for anonymous users). RAP and LDF require MyYukon sign-in before the form. |
 
 ## Multiple positions
@@ -60,7 +60,7 @@ Every operation returns empty values (empty strings, an empty list, `count` 0) w
 
 | Operation | Input | Output |
 |---|---|---|
-| `searchEmployees` | `keyword` (3+ characters, not counting spaces) | `employees` (up to the maximum, 10 by default: `full_name`, `first_name`, `last_name`, `email`, `title`, `department`), `count` (returned), `total` (matches) |
+| `searchEmployees` | `keyword` (3+ characters, not counting spaces, commas or semicolons) | `employees` (up to the maximum, 10 by default: `full_name`, `first_name`, `last_name`, `email`, `title`, `department`), `count` (returned), `total` (matches) |
 | `getEmployee` | `email`; optional `title`, `department` (pick the position) | `first_name`, `last_name`, `email`, `title`, `department`, `division`, `branch`, `unit`, `manager_first_name`, `manager_last_name`, `manager_email` |
 | `getDepartments` | — | `names`, `count` |
 | `getDivisions` | `department` | `names`, `count` |
@@ -69,7 +69,7 @@ Every operation returns empty values (empty strings, an empty list, `count` 0) w
 
 In the FDM the operations appear as `GET /bin/yukon-forms/ygdirectory/<operation>`, described by the operation name.
 
-`searchEmployees` matches employees with a word in their first name, last name or email that starts with each typed word: `ada lov` finds Ada Lovelace, `lov` too, `velace` doesn't. A typed email prefix such as `ada.lovelace@` also matches. Results are sorted by last name, then first name, then email, then title.
+`searchEmployees` matches employees with a word in their first name, last name or email that starts with each typed word: `ada lov` finds Ada Lovelace, `lov` too, `velace` doesn't. A typed email prefix such as `ada.lovelace@` also matches. Results are sorted by last name, then first name, then email, title and department.
 
 ## Open questions (TBCs) resolved
 
@@ -99,6 +99,9 @@ The build follows the boards of 2026-11-16 except where later client decisions c
 | Manager: the single exact name match in the same department | The single person with that name in any department; when several share it, the one in the same department; otherwise empty | Finds managers in other departments; ambiguous names still give empty values |
 | "The YG Directory API is public and returns no personal information" | Lookups need MyYukon sign-in; only business contact information is kept, logs are PII-free | Privacy approval |
 | Max 10 options | Configurable, 10 by default | Requested |
+| Operations named `searchEmployees`, `getEmployee`, … | In the rule editor they are named `GET /bin/yukon-forms/ygdirectory/searchEmployees` and so on, with the short name as their description | AEM names OpenAPI 3 operations by method and path |
+| Matched text bold on line 1 | Also bold in the email on line 2 | Search matches the email too |
+| Live region "{n} results available" | Same, followed by the count line ("Showing {n} of {total} results. …") when there are more results | The count line in the list is hidden from screen readers; they hear it here |
 | Prefixed field names when a form uses the fragment twice | Same names, each instance working on the fields of its own panel; names can be changed in the dialog | Fragment instances are already scoped |
 | Test form can be a copy of the RAP form | A separate test form | Allowed by the board |
 | "Search for an employee" shown as required (*) | Not required by default | Fragment properties apply to every form that uses it; eServices decides per form |
@@ -107,15 +110,15 @@ The build follows the boards of 2026-11-16 except where later client decisions c
 
 - `empSearch` (component `yukon-forms/components/adaptiveForm/employeelookup`; label "Search for an employee", help text "Type at least 3 letters of the employee’s first name, last name or email address, then select the employee from the list." behind the "?" icon, no placeholder, not required), and hidden `empSelectedEmail`, `empSelectedTitle`, `empSelectedDepartment` and `empSearchStatus`.
 - Searches from 3 characters, 300 ms after the last keystroke, with a 10 s timeout, through `searchEmployees`.
-- List: line 1 "First Last" with the matching parts in bold; line 2 "email · title · department", muted. A person with several positions appears once per position. Up to the maximum number of results (10 by default; Cloud Manager variable `YG_DIRECTORY_SEARCH_MAX_RESULTS`, 1 to 100), then "Showing {n} of {total} results. Keep typing to narrow the list."
-- WAI-ARIA combobox: `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls`, `aria-activedescendant`; the list is a `listbox` of `option`s. Up/Down highlight (light blue-green background, dark text), Enter selects, Esc closes the list and keeps the typed text. A polite live region announces "{n} results available."
+- List: line 1 "First Last" with the matching parts in bold (also in the email on line 2); line 2 "email · title · department", muted. A person with several positions appears once per position. Up to the maximum number of results (10 by default; Cloud Manager variable `YG_DIRECTORY_SEARCH_MAX_RESULTS`, 1 to 100), then "Showing {n} of {total} results. Keep typing to narrow the list."
+- WAI-ARIA combobox: `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls`, `aria-activedescendant`; the list is a `listbox` of `option`s. Up/Down highlight (light blue-green background, dark text), Enter selects, Esc closes the list (and the no-match message) and keeps the typed text. Only Enter or a click selects: Tab moves on without picking the top result. Focusing the field again after a selection doesn't search. A polite live region announces "{n} results available", followed by the count line when there are more results.
 - No match: "No employees match “{text}”. Check the spelling or search by email address." in the list area (a box styled like the results list), and `empSearchStatus` = `noResults`.
 - Error, timeout or user not signed in: `empSearchStatus` = `unavailable`, with no message (the form's own rules show the fallback).
 - Selection: shows "First Last, Title (email)", sets `empSelectedTitle`, `empSelectedDepartment`, then `empSelectedEmail`, and `empSearchStatus` = `ok`. The email is set last so a rule on it can call `getEmployee` with the title and department. Typing again clears all three.
-- Text without a selection fails validation with "Select an employee from the list" (`validateExp` on `empSearch`, also checked on the server).
-- All messages are field properties (Employee lookup section of the field dialog), so French forms set their own text. Left blank, they show the English defaults. Forms that use a fragment share its text, so a French form uses a French copy of the fragment: copy `frag-employee-lookup` (for example to `frag-employee-lookup-fr`) and enter the French text on its `empSearch`: label, help text, the four messages, and the "Select an employee from the list" message in the Employee lookup section.
+- Text without a selection fails validation with "Select an employee from the list" (`validateExp` on `empSearch`; also checked on the server when the form has server-side validation enabled).
+- All messages are field properties (Employee lookup section of the field dialog), so French forms set their own text. Left blank, they show the English defaults. Forms that use a fragment share its text, so a French form uses a French copy of the fragment: copy `frag-employee-lookup` (for example to `frag-employee-lookup-fr`) and enter the French text on its `empSearch`: label, help text, and in the Employee lookup section the three messages (no results, more results, results announcement) and the "Select an employee from the list" message.
 - Whether the field is required is a fragment property too, so it applies to every form that uses the fragment. It is not required by default; a form that needs it required uses its own copy of the fragment with `empSearch` marked required.
-- Several lookups can be on one form: each instance uses the fields in its own panel. The output field names can be changed in the dialog; update `empSearch`'s validation script if `empSelectedEmail` is renamed.
+- Several lookups can be on one form: each instance uses the fields in its own panel. The output field names can be changed in the dialog; update `empSearch`'s validation script if `empSelectedEmail` is renamed. Nothing else is set per form: the FDM, the operation, 3 characters, 300 ms and 10 s are fixed in the component.
 
 ## Test form
 
@@ -126,10 +129,12 @@ The build follows the boards of 2026-11-16 except where later client decisions c
 3. `getEmployee`: filled from the first lookup's selection (email, title and department), or from a typed email.
 4. `getDepartments` → `getDivisions` → `getBranches` → `getUnits` as chained drop-downs, with each list's count.
 
-Its division and branch rules call the next operation only when the field has a value (`if (this.value) { … }`). Since the inputs became optional this only saves a call: without it, the next list is simply empty.
+Type-ahead states: 1 to 4 and 3C appear by using the first lookup. For 3B (`unavailable`), open the published form signed out and type 3 letters: the lookup is refused and the status field shows `unavailable`.
 
-Its rules use the code the rule editor's Invoke Service generates (`guidelib.dataIntegrationUtils.executeOperation` / `setOptionsFromService`), so they open in the code editor rather than the visual editor.
+Its division and branch rules call the next operation only when the field has a value (`if (this.value) { … }`). Since the inputs became optional this only saves a call: without it, the next list is simply empty. The counts of the lower lists keep their last value when a parent is cleared.
+
+Its rules use the code the rule editor's Invoke Service generates (`guidelib.dataIntegrationUtils.executeOperation` / `setOptionsFromService`), so they open in the code editor rather than the visual editor. The search button is the exception: it uses `executeOperationV2` with its own callback to list the returned employees in one text field.
 
 ## Configuration
 
-See README, "Directory lookups (ygDirectory)", for the Cloud Manager variables (`DIRECTORY_API_KEY`, `YG_DIRECTORY_FDM_KEY`, and the optional `YG_DIRECTORY_FDM_ENDPOINT`, `YG_DIRECTORY_REFRESH_MINUTES` and `YG_DIRECTORY_SEARCH_MAX_RESULTS`). The FDM data source can only hold a fixed URL, so it is set per environment: the endpoint by `DirectoryEndpointOverrideProvider` (the variable if set, otherwise the instance's own URL from the Externalizer: author URL on author, publish URL on publish), the key by `OsgiConfigurationOverrideProvider~ygdirectory`; the dispatcher allows `/bin/yukon-forms/ygdirectory/*` (rule `/0120`) and forwards the `X-YG-Directory-Key` header (`clientheaders.any`). Without that header entry the servlet answers 401 on publish.
+See README, "Directory lookups (ygDirectory)", for the Cloud Manager variables (`DIRECTORY_API_KEY`, `YG_DIRECTORY_FDM_KEY`, and the optional `DIRECTORY_API_BASE_URL`, `YG_DIRECTORY_FDM_ENDPOINT`, `YG_DIRECTORY_REFRESH_MINUTES` and `YG_DIRECTORY_SEARCH_MAX_RESULTS`). The FDM data source can only hold a fixed URL, so it is set per environment: the endpoint by `DirectoryEndpointOverrideProvider` (the variable if set, otherwise the instance's own URL from the Externalizer: author URL on author, publish URL on publish), the key by `OsgiConfigurationOverrideProvider~ygdirectory`; the dispatcher allows `/bin/yukon-forms/ygdirectory/*` (rule `/0120`) and forwards the `X-YG-Directory-Key` header (`clientheaders.any`). Without that header entry the servlet answers 401 on publish.

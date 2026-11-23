@@ -142,8 +142,7 @@ public class DirectoryServiceImpl implements DirectoryService {
                     loaded.employeeCount(), loaded.orgUnitCount());
             return true;
         } catch (IOException | RuntimeException e) {
-            // The exception message never holds directory data; the response body is not logged.
-            LOG.warn("Directory refresh failed, keeping the previous copy: {}", e.toString());
+            LOG.warn("Directory refresh failed, keeping the previous copy: {}", describe(e));
             return false;
         }
     }
@@ -151,9 +150,27 @@ public class DirectoryServiceImpl implements DirectoryService {
     private String download(String endpoint) throws IOException {
         DirectoryApiResponse response = apiClient.get(endpoint);
         if (!response.isSuccess()) {
-            throw new IOException("GET " + endpoint + " returned HTTP " + response.getStatusCode());
+            throw new DownloadFailedException("GET " + endpoint + " returned HTTP " + response.getStatusCode());
         }
         return response.getBody();
+    }
+
+    /**
+     * What a refresh failure logs. Only our own messages are logged in full: other exceptions, such
+     * as a JSON parse error, can quote part of the response body, which holds directory data, so
+     * only their type is logged.
+     */
+    static String describe(Exception e) {
+        return e instanceof DownloadFailedException ? e.getMessage() : e.getClass().getName();
+    }
+
+    /** A download that returned an error status; its message names the endpoint and status only. */
+    static final class DownloadFailedException extends IOException {
+        private static final long serialVersionUID = 1L;
+
+        DownloadFailedException(String message) {
+            super(message);
+        }
     }
 
     /**

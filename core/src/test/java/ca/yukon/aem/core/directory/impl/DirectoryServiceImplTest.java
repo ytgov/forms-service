@@ -153,6 +153,17 @@ class DirectoryServiceImplTest {
     }
 
     @Test
+    void refreshFailuresLogNoDirectoryData() {
+        assertEquals("GET /employees returned HTTP 500", DirectoryServiceImpl.describe(
+                new DirectoryServiceImpl.DownloadFailedException("GET /employees returned HTTP 500")));
+        // A parse error can quote the response body: only its type is logged.
+        String described = DirectoryServiceImpl.describe(
+                new IllegalStateException("Unexpected character at [Source: {\"first_name\":\"Ada\"...]"));
+        assertEquals(IllegalStateException.class.getName(), described);
+        assertFalse(described.contains("Ada"));
+    }
+
+    @Test
     void doesNotCallTheApiWithoutAKey() throws Exception {
         when(apiClient.isConfigured()).thenReturn(false);
 

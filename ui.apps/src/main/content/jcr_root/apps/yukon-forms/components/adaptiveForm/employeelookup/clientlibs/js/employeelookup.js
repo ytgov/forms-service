@@ -130,6 +130,7 @@
         };
         this.requestSeq = 0;
         this.timer = null;
+        this.selectedText = null;
         this.lastTotal = 0;
         this.lastCount = 0;
         this.init();
@@ -150,6 +151,11 @@
                     limit: 100,
                     display: selectedLabel,
                     source: function (query, syncResults, asyncResults) {
+                        // Focusing the field again after a selection asks for the selected label:
+                        // that is not a search (it would match nobody and report noResults).
+                        if (self.selectedText !== null && query === self.selectedText) {
+                            return;
+                        }
                         self.search(query, asyncResults);
                     },
                     templates: {
@@ -190,10 +196,28 @@
             this.$input.on("typeahead:render", function () { self.onRender(); });
             this.$input.on("typeahead:cursorchange", function () { self.onCursorChange(); });
             this.$input.on("typeahead:close", function () { self.setExpanded(false); });
-            this.$input.on("typeahead:select typeahead:autocomplete", function (e, employee) {
+            this.$input.on("typeahead:select", function (e, employee) {
                 self.select(employee);
             });
+            // typeahead.js fills in the top result on Tab or Right-arrow; the board selects with Enter only.
+            this.$input.on("typeahead:beforeautocomplete", function (e) {
+                e.preventDefault();
+            });
+            // Esc closes the list area, including the "No employees match" message.
+            this.$input.on("keydown", function (e) {
+                if (e.key === "Escape" || e.key === "Esc" || e.keyCode === 27) {
+                    self.showMessage("");
+                }
+            });
             this.$input.on("input", function () { self.onEdit(); });
+
+            // A form opened with a selection already made (for example a saved draft): its text is
+            // the selected label, not a search.
+            var email = this.sibling(this.emailFieldName);
+            var text = this.$input.val();
+            if (text && email && email.value) {
+                this.selectedText = text;
+            }
         },
 
         labelText: function () {
@@ -262,12 +286,15 @@
 
         onEdit: function () {
             // Any typing after a selection drops it.
+            this.selectedText = null;
             this.setSelection(null);
             var text = $.trim(this.$input.val());
             if (keywordTokens(text).join("").length < this.minChars) {
                 this.requestSeq++;
                 clearTimeout(this.timer);
                 this.showMessage("");
+                // typeahead.js empties the list without a render event: keep ARIA in step.
+                this.setExpanded(false);
             }
         },
 
@@ -296,6 +323,7 @@
                 return;
             }
             var label = selectedLabel(employee);
+            this.selectedText = label;
             this.setSelection(employee);
             this.setStatus(STATUS.OK);
             this.showMessage("");
@@ -325,7 +353,9 @@
                         self.showMessage("");
                         var announcement = format(self.messages.resultsAvailable, [employees.length]);
                         if (self.lastTotal > self.lastCount) {
-                            announcement += " " + format(self.messages.moreResults, [self.lastCount, self.lastTotal]);
+                            // The count line is hidden from screen readers in the list; they hear it here.
+                            announcement = announcement.replace(/[.\s]*$/, "") + ". "
+                                + format(self.messages.moreResults, [self.lastCount, self.lastTotal]);
                         }
                         self.announce(announcement);
                     } else {
