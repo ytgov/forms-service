@@ -101,18 +101,20 @@ The build follows the boards of 2026-11-16 except where later client decisions c
 | Max 10 options | Configurable, 10 by default | Requested |
 | Prefixed field names when a form uses the fragment twice | Same names, each instance working on the fields of its own panel; names can be changed in the dialog | Fragment instances are already scoped |
 | Test form can be a copy of the RAP form | A separate test form | Allowed by the board |
+| "Search for an employee" shown as required (*) | Not required by default | Fragment properties apply to every form that uses it; eServices decides per form |
 
 ## Type-ahead fragment `fragEmployeeLookup`
 
-- `empSearch` (component `yukon-forms/components/adaptiveForm/employeelookup`), and hidden `empSelectedEmail`, `empSelectedTitle`, `empSelectedDepartment` and `empSearchStatus`.
+- `empSearch` (component `yukon-forms/components/adaptiveForm/employeelookup`; label "Search for an employee", help text "Type at least 3 letters of the employee’s first name, last name or email address, then select the employee from the list." behind the "?" icon, no placeholder, not required), and hidden `empSelectedEmail`, `empSelectedTitle`, `empSelectedDepartment` and `empSearchStatus`.
 - Searches from 3 characters, 300 ms after the last keystroke, with a 10 s timeout, through `searchEmployees`.
 - List: line 1 "First Last" with the matching parts in bold; line 2 "email · title · department", muted. A person with several positions appears once per position. Up to the maximum number of results (10 by default; Cloud Manager variable `YG_DIRECTORY_SEARCH_MAX_RESULTS`, 1 to 100), then "Showing {n} of {total} results. Keep typing to narrow the list."
-- WAI-ARIA combobox: `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls`, `aria-activedescendant`; the list is a `listbox` of `option`s. Up/Down highlight, Enter selects, Esc closes. A polite live region announces "{n} results available."
-- No match: "No employees match “{text}”. Check the spelling or search by email address." under the field, and `empSearchStatus` = `noResults`.
+- WAI-ARIA combobox: `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls`, `aria-activedescendant`; the list is a `listbox` of `option`s. Up/Down highlight (light blue-green background, dark text), Enter selects, Esc closes the list and keeps the typed text. A polite live region announces "{n} results available."
+- No match: "No employees match “{text}”. Check the spelling or search by email address." in the list area (a box styled like the results list), and `empSearchStatus` = `noResults`.
 - Error, timeout or user not signed in: `empSearchStatus` = `unavailable`, with no message (the form's own rules show the fallback).
 - Selection: shows "First Last, Title (email)", sets `empSelectedTitle`, `empSelectedDepartment`, then `empSelectedEmail`, and `empSearchStatus` = `ok`. The email is set last so a rule on it can call `getEmployee` with the title and department. Typing again clears all three.
 - Text without a selection fails validation with "Select an employee from the list" (`validateExp` on `empSearch`, also checked on the server).
-- All messages are field properties (Employee lookup section of the field dialog), so French forms set their own text. Left blank, they show the English defaults. Forms that use a fragment share its text, so a French form uses a French copy of the fragment: copy `frag-employee-lookup` (for example to `frag-employee-lookup-fr`) and enter the French text on its `empSearch`: label, placeholder, the four messages, and the "Select an employee from the list" message in the Employee lookup section.
+- All messages are field properties (Employee lookup section of the field dialog), so French forms set their own text. Left blank, they show the English defaults. Forms that use a fragment share its text, so a French form uses a French copy of the fragment: copy `frag-employee-lookup` (for example to `frag-employee-lookup-fr`) and enter the French text on its `empSearch`: label, help text, the four messages, and the "Select an employee from the list" message in the Employee lookup section.
+- Whether the field is required is a fragment property too, so it applies to every form that uses the fragment. It is not required by default; a form that needs it required uses its own copy of the fragment with `empSearch` marked required.
 - Several lookups can be on one form: each instance uses the fields in its own panel. The output field names can be changed in the dialog; update `empSearch`'s validation script if `empSelectedEmail` is renamed.
 
 ## Test form
