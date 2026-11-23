@@ -3,7 +3,7 @@
   "info": {
     "title": "ygDirectory",
     "description": "Government of Yukon directory lookups for adaptive forms (YUKONAEMF-88). Served by AEM (DirectoryLookupServlet) from an hourly in-memory copy of https://api.gov.yk.ca/directory. No match returns 200 with empty values; 503 means the directory is unavailable.",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "servers": [
     {
@@ -26,7 +26,7 @@
           {
             "name": "keyword",
             "in": "query",
-            "required": true,
+            "required": false,
             "description": "Text typed by the user, 3 characters or more",
             "schema": {
               "type": "string"
@@ -59,7 +59,7 @@
           {
             "name": "email",
             "in": "query",
-            "required": true,
+            "required": false,
             "description": "Employee email, any case",
             "schema": {
               "type": "string"
@@ -132,7 +132,7 @@
           {
             "name": "department",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -164,7 +164,7 @@
           {
             "name": "department",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -172,7 +172,7 @@
           {
             "name": "division",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -204,7 +204,7 @@
           {
             "name": "department",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -212,7 +212,7 @@
           {
             "name": "division",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -220,7 +220,7 @@
           {
             "name": "branch",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "string"
             }

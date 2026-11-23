@@ -32,7 +32,8 @@ form (browser) ─ Invoke Service ─▶ <form>.af.dermis ─▶ ygDirectory FDM
 - Each AEM instance downloads `/divisions` and `/employees` when it starts and every 60 minutes by default (Cloud Manager variable `YG_DIRECTORY_REFRESH_MINUTES`, 5 to 1440). If a download fails, the previous copy stays in use. If there is no copy yet, requests retry at most once a minute and the operations return HTTP 503, which forms see as a failed service call.
 - AEM only lets a field invoke FDM operations that its own rules reference. The type-ahead calls `searchEmployees` from `empSearch`, so `empSearch` carries an inert `initScript` naming that operation. Don't remove it.
 - Logs name the operation only; no keyword, name or email is logged.
-- AEM caches the OpenAPI spec and the FDM model. After changing either, update `cq:lastModified` on the cloud config and `jcr:lastModified` on the FDM (both set in the repo), or open and save each in the UI.
+- AEM caches the OpenAPI spec and the FDM model. After changing either, update `jcr:lastModified` on the cloud config's `jcr:content` (the data source reloads on this one, not on `cq:lastModified`) and `jcr:lastModified` on the FDM's `jcr:content` (all set in the repo), or open and save each in the UI.
+- The `ui.content` filters use `mode="merge"`, so a deploy doesn't update the FDM, the cloud config or the forms once they exist on an environment. Install changes to them with a package, or make them in the UI.
 
 ## Privacy approval
 
@@ -55,7 +56,7 @@ Some people hold more than one position: same email, a different title and depar
 
 ## Operations
 
-Every operation returns empty values (empty strings, an empty list, `count` 0) with HTTP 200 when nothing matches. All matching ignores case, accents and surrounding spaces.
+Every operation returns empty values (empty strings, an empty list, `count` 0) with HTTP 200 when nothing matches, or when an input is empty or missing. All inputs are optional in the FDM, so a rule that fires on a cleared field (for example a division emptied by its department's rule, or `empSelectedEmail` emptied when the user types again) gets an empty result rather than an error. All matching ignores case, accents and surrounding spaces.
 
 | Operation | Input | Output |
 |---|---|---|
@@ -81,6 +82,25 @@ In the FDM the operations appear as `GET /bin/yukon-forms/ygdirectory/<operation
 | Manager name resolution | `manager` holds the manager's `full_name` (`First.Last`). It is matched against employees' `full_name`, ignoring case; several positions of one person count as one person. 4,260 of 4,358 managers match exactly one employee. When several people share the name, the one in the same department is used; if that is still ambiguous, or nobody matches, the manager values are empty. |
 | Source of the branch and unit lists | `/divisions`: `getBranches` and `getUnits` filter its rows by the parent names. Every employee's organization path exists there. |
 | `full_name` in `searchEmployees` | Returned as the display name "First Last" built from `first_name` and `last_name`, because the API's `full_name` is `First.Last`. |
+| No employee ID | Confirmed: the API has no ID field. Email identifies the person; with several positions, email, title and department identify the position. |
+| Missing levels (divisions without branches or units) | `getBranches` and `getUnits` return `names` empty and `count` 0 with HTTP 200, also when a parent is empty or missing. `getUnits` lists the units of a branch; whether some units sit directly under a division, with no branch, is still to be confirmed against the data. |
+
+## Differences from the boards
+
+The build follows the boards of 2026-11-16 except where later client decisions changed them:
+
+| Board | Built | Reason |
+|---|---|---|
+| Type-ahead has two hidden outputs, "nothing else" | Four: also `empSelectedTitle` and `empSelectedDepartment` | Multiple positions: the form must store the selected one |
+| Selected value "First Last (email)" | "First Last, Title (email)" | Multiple positions |
+| Option line 2 "email · department" | "email · title · department" | Multiple positions |
+| `getEmployee` input `email` | `email`, plus optional `title` and `department`; output adds `title` | Multiple positions; forms need the title |
+| `searchEmployees` output without `title` | Adds `title` | Multiple positions |
+| Manager: the single exact name match in the same department | The single person with that name in any department; when several share it, the one in the same department; otherwise empty | Finds managers in other departments; ambiguous names still give empty values |
+| "The YG Directory API is public and returns no personal information" | Lookups need MyYukon sign-in; only business contact information is kept, logs are PII-free | Privacy approval |
+| Max 10 options | Configurable, 10 by default | Requested |
+| Prefixed field names when a form uses the fragment twice | Same names, each instance working on the fields of its own panel; names can be changed in the dialog | Fragment instances are already scoped |
+| Test form can be a copy of the RAP form | A separate test form | Allowed by the board |
 
 ## Type-ahead fragment `fragEmployeeLookup`
 
@@ -104,7 +124,7 @@ In the FDM the operations appear as `GET /bin/yukon-forms/ygdirectory/<operation
 3. `getEmployee`: filled from the first lookup's selection (email, title and department), or from a typed email.
 4. `getDepartments` → `getDivisions` → `getBranches` → `getUnits` as chained drop-downs, with each list's count.
 
-In chained drop-downs, call the next operation only when the field has a value (`if (this.value) { … }`): clearing a field, as a parent's rule does, fires its own change rule, and the FDM refuses a call without a required argument (`AEM-FDM-001-012: Missing input for required argument`, HTTP 400).
+Its division and branch rules call the next operation only when the field has a value (`if (this.value) { … }`). Since the inputs became optional this only saves a call: without it, the next list is simply empty.
 
 Its rules use the code the rule editor's Invoke Service generates (`guidelib.dataIntegrationUtils.executeOperation` / `setOptionsFromService`), so they open in the code editor rather than the visual editor.
 
