@@ -83,7 +83,7 @@ In the FDM the operations appear as `GET /bin/yukon-forms/ygdirectory/<operation
 | Source of the branch and unit lists | `/divisions`: `getBranches` and `getUnits` filter its rows by the parent names. Every employee's organization path exists there. |
 | `full_name` in `searchEmployees` | Returned as the display name "First Last" built from `first_name` and `last_name`, because the API's `full_name` is `First.Last`. |
 | No employee ID | Confirmed: the API has no ID field. Email identifies the person; with several positions, email, title and department identify the position. |
-| Missing levels (divisions without branches or units) | `getBranches` and `getUnits` return `names` empty and `count` 0 with HTTP 200, also when a parent is empty or missing. `getUnits` lists the units of a branch; whether some units sit directly under a division, with no branch, is still to be confirmed against the data. |
+| Missing levels (divisions without branches or units) | `getBranches` and `getUnits` return `names` empty and `count` 0 with HTTP 200, also when a parent is empty or missing. `getUnits` lists the units of a branch. In the `/divisions` data of 2026-11-23 (713 rows) every unit has a branch and every branch a division, so no unit is left out. |
 
 ## Differences from the boards
 
