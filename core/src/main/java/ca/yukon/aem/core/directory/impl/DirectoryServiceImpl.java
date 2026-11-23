@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Keeps an in-memory copy of the directory on each AEM instance. It loads when the service starts
@@ -56,7 +57,10 @@ public class DirectoryServiceImpl implements DirectoryService {
     static final int MIN_REFRESH_MINUTES = 5;
     static final int MAX_REFRESH_MINUTES = 1440;
     private volatile int refreshMinutes;
-    private long lastAttempt;
+    /** When the last download started; package-private for tests. */
+    volatile long lastAttempt;
+    /** True while a download started by a request is queued or running. */
+    private final AtomicBoolean retrying = new AtomicBoolean();
 
     int maxResults() {
         return maxResults;
@@ -152,19 +156,42 @@ public class DirectoryServiceImpl implements DirectoryService {
         return response.getBody();
     }
 
+    /**
+     * Returns the cached copy. Without one, the request fails at once (HTTP 503, so the form's error
+     * handler runs within the board's 10 s) and, at most once a minute, a download starts in the
+     * background for the next requests. Requests never wait for a download.
+     */
     private DirectorySnapshot current() throws DirectoryUnavailableException {
         DirectorySnapshot current = snapshot;
         if (current != null) {
             return current;
         }
-        synchronized (this) {
-            if (snapshot == null && System.currentTimeMillis() - lastAttempt >= RETRY_WHEN_EMPTY_MILLIS) {
-                refresh();
+        retryInBackground();
+        throw new DirectoryUnavailableException("The directory has not been loaded");
+    }
+
+    private void retryInBackground() {
+        long now = System.currentTimeMillis();
+        if (now - lastAttempt < RETRY_WHEN_EMPTY_MILLIS || !retrying.compareAndSet(false, true)) {
+            return;
+        }
+        lastAttempt = now;
+        boolean scheduled = false;
+        try {
+            ScheduleOptions options = scheduler.NOW()
+                    .name(JOB_NAME + "-retry")
+                    .canRunConcurrently(false);
+            scheduled = scheduler.schedule((Runnable) () -> {
+                try {
+                    refresh();
+                } finally {
+                    retrying.set(false);
+                }
+            }, options);
+        } finally {
+            if (!scheduled) {
+                retrying.set(false);
             }
-            if (snapshot == null) {
-                throw new DirectoryUnavailableException("The directory has not been loaded");
-            }
-            return snapshot;
         }
     }
 }
