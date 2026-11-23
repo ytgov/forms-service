@@ -11,6 +11,7 @@ import org.apache.sling.commons.scheduler.Scheduler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -24,8 +25,10 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.RETURNS_SELF;
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,13 +37,14 @@ import static org.mockito.Mockito.when;
 class DirectoryServiceImplTest {
 
     private final DirectoryApiClient apiClient = mock(DirectoryApiClient.class);
+    private final Scheduler scheduler = mock(Scheduler.class);
     private DirectoryServiceImpl service;
 
     @BeforeEach
     void setUp(AemContext context) {
         // The scheduler is mocked so the refresh only runs when a test calls it.
-        Scheduler scheduler = mock(Scheduler.class);
         when(scheduler.NOW(anyInt(), anyLong())).thenReturn(mock(ScheduleOptions.class, RETURNS_SELF));
+        when(scheduler.NOW()).thenReturn(mock(ScheduleOptions.class, RETURNS_SELF));
         context.registerService(Scheduler.class, scheduler, "service.ranking", Integer.MAX_VALUE);
         context.registerService(DirectoryApiClient.class, apiClient);
         when(apiClient.isConfigured()).thenReturn(true);
@@ -120,6 +124,32 @@ class DirectoryServiceImplTest {
 
         // Only the explicit refresh above called the API: the requests came within a minute of it.
         verify(apiClient, times(1)).get(DirectoryApiClient.DIVISIONS);
+    }
+
+    @Test
+    void withoutACopyRequestsFailAtOnceAndTheDownloadRunsInTheBackground() throws Exception {
+        when(apiClient.get(anyString())).thenThrow(new SocketTimeoutException("connect timed out"));
+        service.refresh();
+        // The first download was more than a minute ago, and the API is back.
+        service.lastAttempt = 0;
+        reset(apiClient);
+        when(apiClient.isConfigured()).thenReturn(true);
+        apiReturnsTheFixture();
+        when(scheduler.schedule(any(Runnable.class), any(ScheduleOptions.class))).thenReturn(true);
+        clearInvocations(scheduler); // forget the refresh job scheduled on activation
+
+        assertThrows(DirectoryUnavailableException.class, () -> service.searchEmployees("smith"));
+        // A second request doesn't queue another download.
+        assertThrows(DirectoryUnavailableException.class, () -> service.getDepartments());
+
+        // The requests didn't download anything themselves.
+        verify(apiClient, never()).get(anyString());
+        ArgumentCaptor<Runnable> job = ArgumentCaptor.forClass(Runnable.class);
+        verify(scheduler, times(1)).schedule(job.capture(), any(ScheduleOptions.class));
+
+        job.getValue().run();
+
+        assertEquals(5, service.searchEmployees("smith").getTotal());
     }
 
     @Test
