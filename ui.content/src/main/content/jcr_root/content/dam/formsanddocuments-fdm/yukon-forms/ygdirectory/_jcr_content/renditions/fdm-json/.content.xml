@@ -421,7 +421,7 @@
                             fdm:primaryKey="{Boolean}false"
                             fdm:protected="{Boolean}false"
                             fdm:readOnly="{Boolean}false"
-                            fdm:required="{Boolean}true"
+                            fdm:required="{Boolean}false"
                             jcr:primaryType="nt:unstructured"
                             description="Text typed by the user, 3 characters or more"
                             name="keyword"
@@ -478,7 +478,7 @@
                             fdm:primaryKey="{Boolean}false"
                             fdm:protected="{Boolean}false"
                             fdm:readOnly="{Boolean}false"
-                            fdm:required="{Boolean}true"
+                            fdm:required="{Boolean}false"
                             jcr:primaryType="nt:unstructured"
                             description="Employee email, any case"
                             name="email"
@@ -606,7 +606,7 @@
                             fdm:primaryKey="{Boolean}false"
                             fdm:protected="{Boolean}false"
                             fdm:readOnly="{Boolean}false"
-                            fdm:required="{Boolean}true"
+                            fdm:required="{Boolean}false"
                             jcr:primaryType="nt:unstructured"
                             name="department"
                             type="string"/>
@@ -662,7 +662,7 @@
                             fdm:primaryKey="{Boolean}false"
                             fdm:protected="{Boolean}false"
                             fdm:readOnly="{Boolean}false"
-                            fdm:required="{Boolean}true"
+                            fdm:required="{Boolean}false"
                             jcr:primaryType="nt:unstructured"
                             name="department"
                             type="string"/>
@@ -676,7 +676,7 @@
                             fdm:primaryKey="{Boolean}false"
                             fdm:protected="{Boolean}false"
                             fdm:readOnly="{Boolean}false"
-                            fdm:required="{Boolean}true"
+                            fdm:required="{Boolean}false"
                             jcr:primaryType="nt:unstructured"
                             name="division"
                             type="string"/>
@@ -732,7 +732,7 @@
                             fdm:primaryKey="{Boolean}false"
                             fdm:protected="{Boolean}false"
                             fdm:readOnly="{Boolean}false"
-                            fdm:required="{Boolean}true"
+                            fdm:required="{Boolean}false"
                             jcr:primaryType="nt:unstructured"
                             name="department"
                             type="string"/>
@@ -746,7 +746,7 @@
                             fdm:primaryKey="{Boolean}false"
                             fdm:protected="{Boolean}false"
                             fdm:readOnly="{Boolean}false"
-                            fdm:required="{Boolean}true"
+                            fdm:required="{Boolean}false"
                             jcr:primaryType="nt:unstructured"
                             name="division"
                             type="string"/>
@@ -760,7 +760,7 @@
                             fdm:primaryKey="{Boolean}false"
                             fdm:protected="{Boolean}false"
                             fdm:readOnly="{Boolean}false"
-                            fdm:required="{Boolean}true"
+                            fdm:required="{Boolean}false"
                             jcr:primaryType="nt:unstructured"
                             name="branch"
                             type="string"/>
