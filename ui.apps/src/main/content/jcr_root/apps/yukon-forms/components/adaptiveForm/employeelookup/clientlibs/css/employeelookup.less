@@ -1,4 +1,7 @@
 // Employee Lookup (YUKONAEMF-88). Scoped so it doesn't affect the address component's type-ahead.
+
+// The board's info-bg: light blue-green.
+@employee-lookup-highlight: #d6ebef;
 .employee-lookup {
     position: relative;
 
@@ -31,14 +34,11 @@
         cursor: pointer;
         padding: 6px 10px;
 
+        // Highlight: light info background, dark text (Employee search board). #595959 on it is 5.6:1.
         &:hover,
         &.tt-cursor {
-            background: #244c5a;
-            color: #fff;
-
-            .employee-lookup__meta {
-                color: #e6eef0;
-            }
+            background: @employee-lookup-highlight;
+            color: #1a1a1a;
         }
     }
 
@@ -64,9 +64,19 @@
         padding: 6px 10px;
     }
 
+    // "No employees match …" sits in the list area, styled like the results list.
     .employee-lookup__status {
-        margin-top: 4px;
-        color: #595959;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        color: #1a1a1a;
+        margin: 4px 0;
+        padding: 8px 10px;
+    }
+
+    .employee-lookup__status[hidden] {
+        display: none;
     }
 
     .employee-lookup__sr-only {
