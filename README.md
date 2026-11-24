@@ -140,6 +140,24 @@ To test email locally without a real mail server, run [Mailpit](https://mailpit.
 
 The Yukon form themes use the Adobe Fonts (Typekit) configuration `yg-fonts`. If it doesn't exist locally, forms using those themes fail to render (`TypekitConfiguration ... is null`). Create it under Tools > Cloud Services > Adobe Fonts in `/conf/global`, with name `yg-fonts` and kit ID `plb4eig` (the kit imported by `ui.apps/.../clientlibs/clientlibs-forms/theme-base-clientlibs/yukon-default-theme/css/style.css`).
 
+## File Attachment (Custom)
+
+`yukon-forms/components/adaptiveForm/customfileupload` extends AEM's Foundation File Attachment. It shows each file's size, a total row under the list (display only), and authorable messages.
+
+- **Check order per added file:** file type (AEM's check, AEM's message), then file name characters, then the Maximum file size. A file stops at its first failed check and gets its own message; valid files are added in selection order. The Required check is AEM's, unchanged.
+- **Sizes:** limits are compared on raw bytes. AEM's Maximum file size uses binary MB (1 MB = 1,048,576 bytes), so the display does too. `formatSize(bytes, locale, base)` in `yukon-forms.utils` always rounds up: under 1 KB shows `1 KB`, then whole KB, then MB with one decimal (`5.7 MB`; French `5,7 Mo`). The total is the sum of raw bytes, formatted once.
+- **Messages** (Validation tab; blank uses the default in the form's language). The language comes from `afAcceptLang`, a selector, or the form's `jcr:language`, as for the validation summary.
+
+  | Message | Placeholders |
+  |---|---|
+  | File name not allowed (`fileNamePatternMessage`) | `{fileName}`, `{size}` |
+  | File too large (`msgFileTooLarge`) | `{fileName}`, `{size}`, `{maxSize}` |
+  | Total row (`msgTotal`) | `{total}` |
+
+  `fillMessagePlaceholders(template, values, locale)` in `yukon-forms.utils` fills them; it also supports `{maxTotal}` for the maximum total size check (WEBPLAN-177). A placeholder without a value is left out, with any `()` or quotes around it. In French, the spaces inside « » and before `:` `;` `?` `!` become non-breaking.
+- **Messages on screen** show under the Attach button, one per rejected file, and the button's `aria-describedby` points to them. They clear on the next add or remove. With **Show Alert Message** ticked, they show in one browser alert instead.
+- **Save and resume:** a resumed draft gives AEM only each attachment's name and URL. The widget reads each size with a 1-byte `Range` request to that URL, and hides the total until all sizes are known.
+
 ## Adaptive form custom functions
 
 Custom functions for the Foundation adaptive form Rule Editor live in `ui.apps/.../clientlibs/clientlib-yukon` (category `yukon-forms.custom`). They include `validatePHN`, `validateDateByDaysPassed`, `calculatePug`, `downloadDorPreview` and `previewDorInNewTab`. A form uses them by listing the category in its container's **Client Library Category** (`clientLibRef`).

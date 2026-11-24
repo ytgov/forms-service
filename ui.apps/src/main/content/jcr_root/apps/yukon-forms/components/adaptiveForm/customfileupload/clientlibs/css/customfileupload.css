@@ -1,0 +1,66 @@
+/* File Attachment (Custom): per-file size column, total row and messages. */
+
+.afFileUpload .guide-fu-fileItemList .guide-fu-fileItem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+/* O1: long names wrap within their column; the size column keeps its 96px. */
+.afFileUpload .guide-fu-fileItem .guide-fu-fileName {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.afFileUpload .guide-fu-fileItem .yf-fu-fileSize {
+  flex: 0 0 96px;
+  width: 96px;
+  text-align: right;
+  color: #1d1e1f;
+  white-space: nowrap;
+}
+
+.afFileUpload .guide-fu-fileItem .guide-fu-fileClose {
+  flex: 0 0 32px;
+  text-align: center;
+}
+
+.afFileUpload .guide-fu-fileItem .guide-fu-filePreview {
+  flex: 0 0 24px;
+}
+
+.afFileUpload .guide-fu-fileItem .guide-fu-comment {
+  flex: 1 0 100%;
+}
+
+.afFileUpload .yf-fu-total {
+  border-top: 1px solid #6b7075;
+  color: #1d1e1f;
+  font-weight: 700;
+  margin-top: 4px;
+  padding-top: 4px;
+  text-align: right; /* the script lines it up with the size column */
+}
+
+.afFileUpload .yf-fu-total[hidden],
+.afFileUpload .yf-fu-messages:empty {
+  display: none;
+}
+
+.afFileUpload .yf-fu-message {
+  color: #563B00;
+  border-left: 4px solid #563B00;
+  margin: 8px 0;
+  padding-left: 8px;
+}
+
+/* Below 768px the size moves under the file name. */
+@media (max-width: 767px) {
+  .afFileUpload .guide-fu-fileItem .yf-fu-fileSize {
+    order: 10;
+    flex: 1 0 100%;
+    width: auto;
+    text-align: left;
+  }
+}

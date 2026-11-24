@@ -36,6 +36,11 @@
            data-file-name-pattern="${guide:encodeForHtmlAttr(guideField.fileNamePattern,xssAPI)}"
            data-file-name-pattern-message="${guide:encodeForHtmlAttr(guideField.fileNamePatternMessage,xssAPI)}"
            data-show-alert-message="${guide:encodeForHtmlAttr(guideField.showAlertMessage,xssAPI)}"
+           data-yf-file-upload="true"
+           data-yf-language="${guide:encodeForHtmlAttr(guideField.language,xssAPI)}"
+           data-yf-msg-file-too-large="${guide:encodeForHtmlAttr(guideField.msgFileTooLarge,xssAPI)}"
+           data-yf-msg-file-name="${guide:encodeForHtmlAttr(guideField.msgFileNameNotAllowed,xssAPI)}"
+           data-yf-msg-total="${guide:encodeForHtmlAttr(guideField.msgTotal,xssAPI)}"
            <c:if test="${guideField.multiSelection}"> multiple</c:if>/>
     <button class="button-default button-medium guide-fu-attach-button" type="button" style="${guide:encodeForHtmlAttr(guideField.widgetInlineStyles,xssAPI)}" 
             aria-labelledby="${guide:encodeForHtmlAttr(guideField.labelForId,xssAPI)}_desc">${guide:encodeForHtmlAttr(guideField.buttonText,xssAPI)}</button>
