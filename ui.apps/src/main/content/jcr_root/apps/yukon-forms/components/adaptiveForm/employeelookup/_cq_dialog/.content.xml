@@ -52,7 +52,7 @@
                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                 fieldLabel="Results announcement"
                                 fieldDescription="Read by screen readers when results arrive. {0} is the number listed."
-                                emptyText="\{0} results available."
+                                emptyText="\{0} results available"
                                 name="./msgResultsAvailable"/>
                             <validateExpMessage
                                 jcr:primaryType="nt:unstructured"
@@ -94,33 +94,6 @@
                                 fieldDescription="Name of the hidden field that receives ok, noResults or unavailable."
                                 emptyText="empSearchStatus"
                                 name="./lookupStatusField"/>
-                            <serviceHeading
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/heading"
-                                level="{Long}4"
-                                text="Service"/>
-                            <fdmPath
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                fieldLabel="Form data model"
-                                emptyText="/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory"
-                                name="./lookupFdmPath"/>
-                            <minChars
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                fieldLabel="Minimum characters"
-                                emptyText="3"
-                                min="{Long}1"
-                                max="{Long}10"
-                                name="./lookupMinChars"/>
-                            <timeout
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                fieldLabel="Timeout (ms)"
-                                fieldDescription="After this, the status becomes unavailable."
-                                emptyText="10000"
-                                min="{Long}1000"
-                                name="./lookupTimeoutMs"/>
                         </items>
                     </employeeLookup>
                 </items>

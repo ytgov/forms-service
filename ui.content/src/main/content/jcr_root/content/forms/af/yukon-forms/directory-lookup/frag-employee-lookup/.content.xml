@@ -41,13 +41,13 @@
                     sling:resourceType="fd/af/layouts/gridFluidLayout2">
                     <empSearch
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Employee"
+                        jcr:title="Search for an employee"
                         sling:resourceType="yukon-forms/components/adaptiveForm/employeelookup"
                         autocomplete="{Boolean}false"
+                        description="&lt;p>Type at least 3 letters of the employee’s first name, last name or email address, then select the employee from the list.&lt;/p>"
                         guideNodeClass="guideTextBox"
                         initScript="// Registers the ygDirectory searchEmployees operation that the Employee Lookup type-ahead calls from this field.&#xa;// AEM only lets a field invoke form data model operations that its own rules reference. Do not remove.&#xa;if (false) {&#xa;    guidelib.dataIntegrationUtils.executeOperation({&#xa;        &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;        &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/searchEmployees&quot;,&#xa;        &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/searchEmployees&quot;&#xa;    }, {}, {});&#xa;}"
                         name="empSearch"
-                        placeholderText="Type a name or email address"
                         validateExp="!this.value || !!empSelectedEmail.value"
                         validateExpMessage="Select an employee from the list">
                         <cq:responsive jcr:primaryType="nt:unstructured">
