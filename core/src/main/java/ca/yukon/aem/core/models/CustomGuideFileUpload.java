@@ -34,6 +34,13 @@ public class CustomGuideFileUpload extends GuideFileUpload {
             "«\u00A0{fileName}\u00A0» ({size}) n'a pas été ajouté. Renommez le fichier en utilisant seulement "
                     + "les caractères permis, puis téléversez-le de nouveau.";
 
+    static final String DEFAULT_TOTAL_TOO_LARGE =
+            "\"{fileName}\" ({size}) wasn't added. Remove a file or choose a smaller one so the total is "
+                    + "{maxTotal} or less.";
+    static final String DEFAULT_TOTAL_TOO_LARGE_FR =
+            "«\u00A0{fileName}\u00A0» ({size}) n'a pas été ajouté. Retirez un fichier ou choisissez-en un plus petit "
+                    + "pour que le total soit de {maxTotal} ou moins.";
+
     private Boolean french;
 
     public CustomGuideFileUpload() {
@@ -64,6 +71,31 @@ public class CustomGuideFileUpload extends GuideFileUpload {
 
     public String getMsgFileNameNotAllowed() {
         return message("fileNamePatternMessage", DEFAULT_FILE_NAME_NOT_ALLOWED, DEFAULT_FILE_NAME_NOT_ALLOWED_FR);
+    }
+
+    /** "Total too large": used only when a Maximum total size is set. */
+    public String getMsgTotalTooLarge() {
+        return message("msgTotalTooLarge", DEFAULT_TOTAL_TOO_LARGE, DEFAULT_TOTAL_TOO_LARGE_FR);
+    }
+
+    /**
+     * The Maximum total size in MB (binary, as AEM's Maximum file size), as a plain number such as
+     * "20" or "12.5". Blank when it isn't set or isn't a positive number: the total is then not checked.
+     */
+    public String getMaxTotalSize() {
+        Object value = this.resourceProps.get("maxTotalSize");
+        if (value == null) {
+            return "";
+        }
+        try {
+            double mb = Double.parseDouble(value.toString().trim());
+            if (!(mb > 0) || Double.isInfinite(mb)) {
+                return "";
+            }
+            return java.math.BigDecimal.valueOf(mb).stripTrailingZeros().toPlainString();
+        } catch (NumberFormatException e) {
+            return "";
+        }
     }
 
     public String getMsgTotal() {

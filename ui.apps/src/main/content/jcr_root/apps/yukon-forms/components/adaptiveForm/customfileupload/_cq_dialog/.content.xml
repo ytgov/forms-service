@@ -21,9 +21,6 @@
                         jcr:title="Help Content"
                         sling:resourceType="granite/ui/components/coral/foundation/container"/>
                     <accessibility jcr:primaryType="nt:unstructured"/>
-                    <patterns
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/container"/>
                     <validation
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Validation"
@@ -36,6 +33,19 @@
                                 fieldDescription="Regex pattern matching characters that are NOT allowed in file names. Leave blank to use the default pattern which blocks: &lt; &gt; : &quot; / \ | ? * and control characters."
                                 name="./fileNamePattern"
                                 emptyText='e.g. [&lt;&gt;:"/\\|?*]'/>
+                            <maxTotalSize
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                fieldLabel="Maximum total size (MB)"
+                                fieldDescription="Optional. When set, a file that would push the total of all files over this size isn't added. Same MB as the Maximum file size (1 MB = 1,048,576 bytes). Leave blank to show the total without checking it."
+                                name="./maxTotalSize"
+                                min="0"
+                                step="any"/>
+                            <maxTotalSizeType
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                                name="./maxTotalSize@TypeHint"
+                                value="String"/>
                             <messagesHeading
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/heading"
@@ -55,6 +65,13 @@
                                 fieldDescription="Shown when a file is larger than the Maximum file size. Placeholders: {fileName}, {size}, {maxSize}. French default: « {fileName} » ({size}) n'a pas été ajouté. Choisissez un fichier de {maxSize} ou moins."
                                 name="./msgFileTooLarge"
                                 emptyText="&quot;{fileName}&quot; ({size}) wasn't added. Choose a file that is {maxSize} or smaller."/>
+                            <msgTotalTooLarge
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Total too large"
+                                fieldDescription="Shown when a file would push the total over the Maximum total size. Placeholders: {fileName}, {size}, {maxTotal}. French default: « {fileName} » ({size}) n'a pas été ajouté. Retirez un fichier ou choisissez-en un plus petit pour que le total soit de {maxTotal} ou moins."
+                                name="./msgTotalTooLarge"
+                                emptyText="&quot;{fileName}&quot; ({size}) wasn't added. Remove a file or choose a smaller one so the total is {maxTotal} or less."/>
                             <msgTotal
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"

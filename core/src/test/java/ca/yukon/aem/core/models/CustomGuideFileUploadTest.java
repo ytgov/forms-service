@@ -71,6 +71,31 @@ class CustomGuideFileUploadTest {
         assertEquals("Sum {total}", field.getMsgTotal());
     }
 
+    @Test
+    void totalTooLargeDefaultsInBothLanguages() {
+        assertEquals("\"{fileName}\" ({size}) wasn't added. Remove a file or choose a smaller one so the total is "
+                + "{maxTotal} or less.", field(Collections.emptyMap()).getMsgTotalTooLarge());
+        context.create().resource("/content/forms/af/yukon-forms/fr-form/jcr:content", "jcr:language", "fr");
+        Resource frField = context.create().resource("/content/forms/af/yukon-forms/fr-form/jcr:content/guideContainer/upload");
+        assertEquals("«\u00A0{fileName}\u00A0» ({size}) n'a pas été ajouté. Retirez un fichier ou choisissez-en un plus "
+                + "petit pour que le total soit de {maxTotal} ou moins.", field(frField, Collections.emptyMap()).getMsgTotalTooLarge());
+        assertEquals("Too much: {maxTotal}",
+                field(Collections.singletonMap("msgTotalTooLarge", "Too much: {maxTotal}")).getMsgTotalTooLarge());
+    }
+
+    @Test
+    void maxTotalSizeIsAPositiveNumberOrBlank() {
+        assertEquals("", field(Collections.emptyMap()).getMaxTotalSize());
+        assertEquals("20", field(Collections.singletonMap("maxTotalSize", "20")).getMaxTotalSize());
+        assertEquals("20", field(Collections.singletonMap("maxTotalSize", " 20.0 ")).getMaxTotalSize());
+        assertEquals("12.5", field(Collections.singletonMap("maxTotalSize", 12.5d)).getMaxTotalSize());
+        assertEquals("20", field(Collections.singletonMap("maxTotalSize", 20L)).getMaxTotalSize());
+        assertEquals("", field(Collections.singletonMap("maxTotalSize", "")).getMaxTotalSize());
+        assertEquals("", field(Collections.singletonMap("maxTotalSize", "0")).getMaxTotalSize());
+        assertEquals("", field(Collections.singletonMap("maxTotalSize", "-5")).getMaxTotalSize());
+        assertEquals("", field(Collections.singletonMap("maxTotalSize", "abc")).getMaxTotalSize());
+    }
+
     private CustomGuideFileUpload field(Map<String, Object> props) {
         return field(context.resourceResolver().getResource(FIELD), props);
     }

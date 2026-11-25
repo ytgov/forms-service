@@ -30,8 +30,17 @@
   cursor: pointer;
 }
 
-.afFileUpload .guide-fu-attach-button:hover {
+/* Themes grey out any focused button (e.g. canvas-3-0: button:not(.af-icon-button):focus). AEM focuses
+   this button after a failed Required check, so keep it teal; the outline shows the focus. */
+.afFileUpload .guide-fu-attach-button:focus {
+  background: #00616d;
+  color: #ffffff;
+}
+
+.afFileUpload .guide-fu-attach-button:hover,
+.afFileUpload .guide-fu-attach-button:active {
   background: #00454e;
+  color: #ffffff;
 }
 
 .afFileUpload .guide-fu-attach-button:focus-visible {

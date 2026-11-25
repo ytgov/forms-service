@@ -3,7 +3,8 @@
  *
  * Patches each AdobeFileAttachment widget of this component (marked data-yf-file-upload) to:
  *  - check each added file in order: file type (AEM's check) → file name characters → maximum file
- *    size, stopping at the first failure, with one authorable message per rejected file;
+ *    size → maximum total size (optional), stopping at the first failure, with one authorable
+ *    message per rejected file;
  *  - show each file's size in its row and a total row under the list (display only);
  *  - show messages under the total row (box turns red), linked to the button through aria-describedby, cleared on the next
  *    add or remove.
@@ -44,6 +45,11 @@
 
   function sizeText(bytes, language) {
     return typeof window.formatSize === "function" ? window.formatSize(bytes, language) : "";
+  }
+
+  /** A limit for a message: "20 MB", not "20.0 MB" (French "20 Mo"). Other decimals are kept. */
+  function limitText(bytes, language) {
+    return sizeText(bytes, language).replace(/[.,]0(?=[\s\u00A0])/, "");
   }
 
   function fillMessage(template, values, language) {
@@ -119,8 +125,10 @@
         language = $input.data("yfLanguage") === "fr" ? "fr" : "en",
         customRegex = buildRegex($input.data("fileNamePattern")),
         alertMode = $input.data("showAlertMessage") === true || $input.data("showAlertMessage") === "true",
+        maxTotalBytes = parseFloat($input.attr("data-yf-max-total-size")) * BYTES_PER_MB, // NaN: not set
         templates = {
           fileTooLarge: $input.attr("data-yf-msg-file-too-large") || "",
+          totalTooLarge: $input.attr("data-yf-msg-total-too-large") || "",
           fileName: $input.attr("data-yf-msg-file-name") || "",
           total: $input.attr("data-yf-msg-total") || ""
         },
@@ -179,10 +187,25 @@
       var values = {
         fileName: rejection.name,
         size: sizeText(rejection.size, language),
-        maxSize: isFinite(limitBytes) ? sizeText(limitBytes, language) : "",
-        maxTotal: ""
+        maxSize: isFinite(limitBytes) ? limitText(limitBytes, language) : "",
+        maxTotal: maxTotalBytes > 0 ? limitText(maxTotalBytes, language) : ""
       };
-      return fillMessage(rejection.reason === "size" ? templates.fileTooLarge : templates.fileName, values, language);
+      var template = rejection.reason === "size" ? templates.fileTooLarge
+          : rejection.reason === "total" ? templates.totalTooLarge
+          : templates.fileName;
+      return fillMessage(template, values, language);
+    }
+
+    /** Sum of the listed files' raw bytes; a restored file whose size isn't known yet counts as 0. */
+    function listedBytes() {
+      var total = 0;
+      $list.children("li.guide-fu-fileItem").each(function () {
+        var bytes = Number($(this).attr("data-yf-size"));
+        if (bytes > 0) {
+          total += bytes;
+        }
+      });
+      return total;
     }
 
     // ── Total row: the sum of raw bytes, formatted once ──
@@ -296,6 +319,7 @@
 
       var self = this,
           limitBytes = parseFloat(this.options.fileSizeLimit) * BYTES_PER_MB,
+          totalBytes = listedBytes(), // grows as each accepted file is added
           invalidIndexes = [],
           rejections = [];
       $.each(files, function (index, file) {
@@ -307,6 +331,8 @@
           reason = "name";
         } else if (file.size > limitBytes) { // raw bytes; false when no limit is set
           reason = "size";
+        } else if (maxTotalBytes > 0 && totalBytes + file.size > maxTotalBytes) { // false when not set
+          reason = "total";
         }
         if (reason) {
           invalidIndexes.push(index);
@@ -314,6 +340,7 @@
           return;
         }
         sizes[name] = file.size;
+        totalBytes += file.size;
         pendingSize = file.size;
         try {
           self.showFileList(name);
