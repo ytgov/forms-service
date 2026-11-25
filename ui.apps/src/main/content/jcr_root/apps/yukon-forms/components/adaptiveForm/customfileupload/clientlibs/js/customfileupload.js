@@ -5,7 +5,7 @@
  *  - check each added file in order: file type (AEM's check) → file name characters → maximum file
  *    size, stopping at the first failure, with one authorable message per rejected file;
  *  - show each file's size in its row and a total row under the list (display only);
- *  - show messages under the button, linked to it through aria-describedby, cleared on the next
+ *  - show messages under the total row (box turns red), linked to the button through aria-describedby, cleared on the next
  *    add or remove.
  *
  * Sizes are compared on raw bytes; formatSize() (yukon-forms.utils) only formats them for display.
@@ -132,12 +132,15 @@
         sizes = {};          // raw bytes by file name and by attachment URL
     var pendingSize = null;  // size of the file handleChange is adding right now
 
-    $button.after($messages);
+    // Box order (wireframe): button, file list, total row, then messages.
     $list.after($total);
+    $total.after($messages);
+    var $box = $list.closest(".afFileUpload");
 
     // ── Messages ──
     function clearMessages() {
       $messages.empty();
+      $box.removeClass("yf-fu-has-error");
       if (originalDescribedBy) {
         $button.attr("aria-describedby", originalDescribedBy);
       } else {
@@ -160,6 +163,7 @@
         ids.push(id);
         $("<p class='yf-fu-message' role='alert'></p>").attr("id", id).text(text).appendTo($messages);
       });
+      $box.addClass("yf-fu-has-error");
       $button.attr("aria-describedby", $.trim(originalDescribedBy + " " + ids.join(" ")));
     }
 

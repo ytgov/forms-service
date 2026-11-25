@@ -1,15 +1,68 @@
-/* File Attachment (Custom): per-file size column, total row and messages. */
+/*
+ * File Attachment (Custom), styled to the wireframe "Custom file upload component" (Nov 12, 2026):
+ * a box holding the button, the file list, the total row and the messages.
+ */
+
+/* ── Box ── */
+.afFileUpload {
+  border: 1px solid #1d1e1f;
+  border-radius: 4px;
+  background: #ffffff;
+  padding: 16px 16px 12px;
+}
+
+/* Error: AEM's Required check (validation-failure) or a file we didn't add (yf-fu-has-error). */
+.validation-failure .afFileUpload,
+.afFileUpload.yf-fu-has-error {
+  border-color: #b10e1e;
+  background: #fdeceb;
+}
+
+/* ── Upload button ── */
+.afFileUpload .guide-fu-attach-button {
+  background: #00616d;
+  border: 0;
+  border-radius: 4px;
+  color: #ffffff;
+  font-weight: 700;
+  line-height: 1.25;
+  padding: 14px 22px;
+  cursor: pointer;
+}
+
+.afFileUpload .guide-fu-attach-button:hover {
+  background: #00454e;
+}
+
+.afFileUpload .guide-fu-attach-button:focus-visible {
+  outline: 3px solid #f2a900;
+  outline-offset: 2px;
+}
+
+/* ── File list ── */
+.afFileUpload .guide-fu-fileItemList {
+  margin-top: 16px;
+}
+
+.afFileUpload .guide-fu-fileItemList:empty {
+  margin-top: 0;
+}
 
 .afFileUpload .guide-fu-fileItemList .guide-fu-fileItem {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
+  background: transparent;
+  border-top: 1px solid #c4c8cc;
+  color: #1d1e1f;
+  padding: 12px 0;
 }
 
-/* O1: long names wrap within their column; the size column keeps its 96px. */
+/* Long names wrap within their column; the size column keeps its 96px. */
 .afFileUpload .guide-fu-fileItem .guide-fu-fileName {
   flex: 1 1 0;
   min-width: 0;
+  color: #1d1e1f;
   overflow-wrap: anywhere;
 }
 
@@ -21,8 +74,10 @@
   white-space: nowrap;
 }
 
+/* AEM's "X", unchanged; it sits in its own column to the right of the size. */
 .afFileUpload .guide-fu-fileItem .guide-fu-fileClose {
-  flex: 0 0 32px;
+  flex: 0 0 64px;
+  float: none;
   text-align: center;
 }
 
@@ -34,13 +89,13 @@
   flex: 1 0 100%;
 }
 
+/* ── Total row: 1px rule above, bold; the script lines it up with the size column ── */
 .afFileUpload .yf-fu-total {
   border-top: 1px solid #6b7075;
   color: #1d1e1f;
   font-weight: 700;
-  margin-top: 4px;
-  padding-top: 4px;
-  text-align: right; /* the script lines it up with the size column */
+  padding-top: 12px;
+  text-align: right;
 }
 
 .afFileUpload .yf-fu-total[hidden],
@@ -48,11 +103,14 @@
   display: none;
 }
 
+/* ── Messages: under the total, inside the box ── */
+.afFileUpload .yf-fu-messages {
+  margin-top: 12px;
+}
+
 .afFileUpload .yf-fu-message {
-  color: #563B00;
-  border-left: 4px solid #563B00;
-  margin: 8px 0;
-  padding-left: 8px;
+  color: #b10e1e;
+  margin: 0 0 4px;
 }
 
 /* Below 768px the size moves under the file name. */
