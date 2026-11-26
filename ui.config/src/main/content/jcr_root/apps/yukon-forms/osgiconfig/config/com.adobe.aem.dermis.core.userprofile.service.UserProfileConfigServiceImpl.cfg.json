@@ -1,0 +1,32 @@
+{
+  "user.default.properties": [
+    "name=profile/familyName,type=string",
+    "name=profile/displayName,type=string",
+    "name=profile/givenName,type=string",
+    "name=profile/middleName,type=string",
+    "name=profile/honoricPrefix,type=string",
+    "name=profile/honoricSuffix,type=string",
+    "name=profile/email,type=string",
+    "name=profile/gender,type=string",
+    "name=profile/aboutMe,type=string",
+    "name=profile/jobTitle,type=string",
+    "name=profile/mobile,type=string",
+    "name=profile/phoneNumber,type=string",
+    "name=profile/photos/primary/image,type=byte",
+    "name=profile/addresses/*/firstname,type=string",
+    "name=profile/addresses/*/lastname,type=string",
+    "name=profile/addresses/*/street1,type=string",
+    "name=profile/addresses/*/street2,type=string",
+    "name=profile/addresses/*/zip,type=string",
+    "name=profile/addresses/*/city,type=string",
+    "name=profile/addresses/*/state,type=string",
+    "name=profile/addresses/*/country,type=string",
+    "name=profile/yukon/email,type=string",
+    "name=profile/yukon/firstName,type=string",
+    "name=profile/yukon/lastName,type=string",
+    "name=profile/yukon/verificationStatus,type=string",
+    "name=profile/yukon/birthDate,type=string",
+    "name=profile/yukon/fullName,type=string",
+    "name=profile/yukon/nickname,type=string"
+  ]
+}

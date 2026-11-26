@@ -51,10 +51,10 @@ class MyCustomPrefillServiceTest {
         profile.put("profile/givenName", "Jane \"JJ\"");
         profile.put("profile/familyName", "Ndī");
         profile.put("profile/email", "loa2@example.com");
-        profile.put("profile/verificationStatus", "2");
-        profile.put("profile/birthDate", "1980-05-17");
-        profile.put("profile/fullName", "Loa Two Test");
-        profile.put("profile/nickname", "Loa2");
+        profile.put("profile/yukon/verificationStatus", "2");
+        profile.put("profile/yukon/birthDate", "1980-05-17");
+        profile.put("profile/yukon/fullName", "Loa Two Test");
+        profile.put("profile/yukon/nickname", "Loa2");
         withProfile(profile);
 
         JsonObject data = read().getJsonObject("simple_submission");

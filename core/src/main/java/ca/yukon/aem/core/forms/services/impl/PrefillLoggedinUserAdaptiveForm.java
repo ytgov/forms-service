@@ -46,7 +46,7 @@ public class PrefillLoggedinUserAdaptiveForm implements DataProvider {
 
     /** Prefix of every prefill data field name, so MyYukon-sourced fields are recognisable in forms. */
     static final String FIELD_PREFIX = "MyYukon_";
-    private static final String BIRTH_DATE_PROPERTY = "profile/birthDate";
+    private static final String BIRTH_DATE_PROPERTY = "profile/yukon/birthDate";
 
     /** Profile property -> prefill data field name. */
     private static final Map<String, String> PROFILE_FIELDS = new LinkedHashMap<>();
@@ -55,10 +55,10 @@ public class PrefillLoggedinUserAdaptiveForm implements DataProvider {
         PROFILE_FIELDS.put("profile/givenName", FIELD_PREFIX + "FirstName");
         PROFILE_FIELDS.put("profile/familyName", FIELD_PREFIX + "LastName");
         PROFILE_FIELDS.put("profile/email", FIELD_PREFIX + "Email");
-        PROFILE_FIELDS.put("profile/verificationStatus", FIELD_PREFIX + "VerificationStatus");
+        PROFILE_FIELDS.put("profile/yukon/verificationStatus", FIELD_PREFIX + "VerificationStatus");
         PROFILE_FIELDS.put(BIRTH_DATE_PROPERTY, FIELD_PREFIX + "Birthdate");
-        PROFILE_FIELDS.put("profile/fullName", FIELD_PREFIX + "FullName");
-        PROFILE_FIELDS.put("profile/nickname", FIELD_PREFIX + "Nickname");
+        PROFILE_FIELDS.put("profile/yukon/fullName", FIELD_PREFIX + "FullName");
+        PROFILE_FIELDS.put("profile/yukon/nickname", FIELD_PREFIX + "Nickname");
     }
 
     /** Leading yyyy-MM-dd of an ISO date or date-time, e.g. "1980-05-17" or "1980-05-17T00:00:00Z". */

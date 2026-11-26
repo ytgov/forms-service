@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  *   <li>No property declared, or declared as {@code 0}: not gated by this filter.
  *   <li>Property {@code > 0} and the requester is anonymous: redirected to SAML login
  *       ({@code /system/sling/login}), so they get a chance to authenticate.
- *   <li>Property {@code > 0} and the requester's synced {@code profile/verificationStatus} is lower
+ *   <li>Property {@code > 0} and the requester's synced {@code profile/yukon/verificationStatus} is lower
  *       than required: redirected to the configurable {@code redirect.page}, in the form's language
  *       (see {@link #resolveLanguage}), with the user's level ({@code u_loa}), the folder's required
  *       level ({@code f_low}), the form's path under yukon-forms ({@code form_path}) and the form's
@@ -84,7 +84,7 @@ public class VerificationStatusGateFilter implements Filter {
     /** Property the Adaptive Form - Embed component stores the embedded form's DAM path in. */
     static final String FORM_REF_PROPERTY = "formRef";
     static final String REQUIRED_STATUS_PROPERTY = "required_verification_status";
-    static final String USER_STATUS_PROPERTY = "profile/verificationStatus";
+    static final String USER_STATUS_PROPERTY = "profile/yukon/verificationStatus";
     static final String SAML_LOGIN_PATH = "/system/sling/login";
     /**
      * Must be a path the SAML handler's {@code path} config actually covers, so

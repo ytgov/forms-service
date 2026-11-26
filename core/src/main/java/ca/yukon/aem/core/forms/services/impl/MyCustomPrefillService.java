@@ -57,10 +57,10 @@ public class MyCustomPrefillService implements DataProvider {
                     .add("MyYukon_LastName", profileValue(loggedinUser, "profile/familyName", "Family Name Undefined"))
                     .add("MyYukon_Email", profileValue(loggedinUser, "profile/email", "Email Undefined"))
                     // Same default as VerificationStatusGateFilter: no synced status means unverified.
-                    .add("MyYukon_VerificationStatus", profileValue(loggedinUser, "profile/verificationStatus", "0"))
-                    .add("MyYukon_Birthdate", profileValue(loggedinUser, "profile/birthDate", ""))
-                    .add("MyYukon_FullName", profileValue(loggedinUser, "profile/fullName", ""))
-                    .add("MyYukon_Nickname", profileValue(loggedinUser, "profile/nickname", ""));
+                    .add("MyYukon_VerificationStatus", profileValue(loggedinUser, "profile/yukon/verificationStatus", "0"))
+                    .add("MyYukon_Birthdate", profileValue(loggedinUser, "profile/yukon/birthDate", ""))
+                    .add("MyYukon_FullName", profileValue(loggedinUser, "profile/yukon/fullName", ""))
+                    .add("MyYukon_Nickname", profileValue(loggedinUser, "profile/yukon/nickname", ""));
             String json = Json.createObjectBuilder().add("simple_submission", fields).build().toString();
 
             return new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
