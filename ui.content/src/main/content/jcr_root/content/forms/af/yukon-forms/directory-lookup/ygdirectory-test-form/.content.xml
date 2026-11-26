@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:fd="http://www.adobe.com/aemfd/fd/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:deviceGroups="[mobile/groups/responsive]"
+        cq:lastModified="{Date}2026-11-19T08:30:19.787-08:00"
+        cq:lastModifiedBy="admin"
+        cq:template="/conf/yukon-forms/settings/wcm/templates/yukon-blank-adaptive-form"
+        jcr:language="en"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="ygDirectory test form"
+        sling:resourceType="fd/af/components/page2/aftemplatedpage">
+        <guideContainer
+            fd:version="1.1"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="fd/af/components/guideContainer"
+            actionType="fd/af/components/guidesubmittype/restendpoint"
+            clientLibRef="yukon-forms.custom"
+            dorType="none"
+            enableFocusOnFirstField="{Boolean}true"
+            enableServerValidation="false"
+            guideCss="guideContainer"
+            guideNodeClass="guideContainerNode"
+            name="guide1"
+            schemaType="none"
+            textIsRich="true"
+            thankYouMessage="&lt;p>Test form: nothing was sent.&lt;/p>"
+            thankYouOption="message"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-theme--tab-wrap--12_2025"
+            useExistingAF="false">
+            <layout
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="fd/af/layouts/defaultGuideLayout"
+                toolbarPosition="Bottom"/>
+            <rootPanel
+                jcr:primaryType="nt:unstructured"
+                jcr:title="Root Panel"
+                sling:resourceType="fd/af/components/rootPanel"
+                guideNodeClass="rootPanelNode"
+                name="guideRootPanel"
+                panelSetType="Navigable">
+                <layout
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="fd/af/layouts/gridFluidLayout2"
+                    nonNavigable="{Boolean}true"
+                    toolbarPosition="Bottom"/>
+                <items
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="fd/af/layouts/gridFluidLayout2">
+                    <intro
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="fd/af/components/guidetextdraw"
+                        _value="&lt;h2>ygDirectory test form (YUKONAEMF-88)&lt;/h2>&lt;p>Exercises the type-ahead fragment and each operation of the ygDirectory form data model. Not for publication.&lt;/p>"
+                        guideNodeClass="guideTextDraw"
+                        name="intro"
+                        textIsRich="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                behavior="newline"
+                                offset="0"
+                                width="12"/>
+                        </cq:responsive>
+                    </intro>
+                    <typeAhead
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="1. Type-ahead (fragEmployeeLookup)"
+                        sling:resourceType="fd/af/components/panel"
+                        guideNodeClass="guidePanel"
+                        name="typeAhead">
+                        <layout
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="fd/af/layouts/gridFluidLayout2"
+                            nonNavigable="{Boolean}true"
+                            toolbarPosition="Bottom"/>
+                        <items
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="fd/af/layouts/gridFluidLayout2">
+                            <typeAheadHelp
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="fd/af/components/guidetextdraw"
+                                _value="&lt;p>Try: a name (3+ letters), two words such as &lt;em>first last&lt;/em>, an email, text that matches nothing, then edit or clear a selection. Leave text without selecting and press Validate to see the required-selection error. The second lookup shows two instances on one form.&lt;/p>"
+                                guideNodeClass="guideTextDraw"
+                                name="typeAheadHelp"
+                                textIsRich="true">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="12"/>
+                                </cq:responsive>
+                            </typeAheadHelp>
+                            <employee
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Employee"
+                                sling:resourceType="fd/af/components/panel"
+                                fragRef="/content/dam/formsanddocuments/yukon-forms/directory-lookup/frag-employee-lookup"
+                                guideNodeClass="guidePanel"
+                                name="employee">
+                                <layout
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="fd/af/layouts/gridFluidLayout2"
+                                    nonNavigable="{Boolean}true"
+                                    toolbarPosition="Bottom"/>
+                                <items
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="fd/af/layouts/gridFluidLayout2"/>
+                            </employee>
+                            <employeeEmailShown
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="empSelectedEmail"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                calcExp="employee.empSelectedEmail.value"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="employeeEmailShown">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </employeeEmailShown>
+                            <employeeStatusShown
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="empSearchStatus"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                calcExp="employee.empSearchStatus.value"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="employeeStatusShown">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </employeeStatusShown>
+                            <employeeTitleShown
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="empSelectedTitle"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                calcExp="employee.empSelectedTitle.value"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="employeeTitleShown">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </employeeTitleShown>
+                            <employeeDepartmentShown
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="empSelectedDepartment"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                calcExp="employee.empSelectedDepartment.value"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="employeeDepartmentShown">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </employeeDepartmentShown>
+                            <approver
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Approver (second instance)"
+                                sling:resourceType="fd/af/components/panel"
+                                fragRef="/content/dam/formsanddocuments/yukon-forms/directory-lookup/frag-employee-lookup"
+                                guideNodeClass="guidePanel"
+                                name="approver">
+                                <layout
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="fd/af/layouts/gridFluidLayout2"
+                                    nonNavigable="{Boolean}true"
+                                    toolbarPosition="Bottom"/>
+                                <items
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="fd/af/layouts/gridFluidLayout2"/>
+                            </approver>
+                            <approverEmailShown
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Approver empSelectedEmail"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                calcExp="approver.empSelectedEmail.value"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="approverEmailShown">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </approverEmailShown>
+                            <approverStatusShown
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Approver empSearchStatus"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                calcExp="approver.empSearchStatus.value"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="approverStatusShown">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </approverStatusShown>
+                            <validateLookups
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Validate"
+                                sling:resourceType="fd/af/components/guidebutton"
+                                clickExp="guideBridge.validate([], this.parent.somExpression, true);"
+                                dorExclusion="true"
+                                guideNodeClass="guideButton"
+                                name="validateLookups"
+                                type="button">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="4"/>
+                                </cq:responsive>
+                            </validateLookups>
+                        </items>
+                    </typeAhead>
+                    <searchPanel
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="2. searchEmployees"
+                        sling:resourceType="fd/af/components/panel"
+                        guideNodeClass="guidePanel"
+                        name="searchPanel">
+                        <layout
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="fd/af/layouts/gridFluidLayout2"
+                            nonNavigable="{Boolean}true"
+                            toolbarPosition="Bottom"/>
+                        <items
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="fd/af/layouts/gridFluidLayout2">
+                            <searchKeyword
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Keyword (3+ characters)"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                guideNodeClass="guideTextBox"
+                                name="searchKeyword">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="8"/>
+                                </cq:responsive>
+                            </searchKeyword>
+                            <searchButton
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Search"
+                                sling:resourceType="fd/af/components/guidebutton"
+                                clickExp="var operationInfo = {&#xa;    &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;    &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/searchEmployees&quot;,&#xa;    &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/searchEmployees&quot;&#xa;};&#xa;var inputs = {&#xa;    &quot;keyword&quot;: searchKeyword&#xa;};&#xa;var model = this;&#xa;guidelib.dataIntegrationUtils.executeOperationV2(operationInfo, inputs, {}, function (text) {&#xa;    var result = JSON.parse(text || &quot;{}&quot;);&#xa;    searchCount.value = result.count;&#xa;    searchTotal.value = result.total;&#xa;    searchResults.value = (result.employees || []).map(function (e) {&#xa;        return e.full_name + &quot; &lt;&quot; + e.email + &quot;> &quot; + e.title + &quot;, &quot; + e.department;&#xa;    }).join(&quot;\\n&quot;);&#xa;}, null, model);&#xa;"
+                                dorExclusion="true"
+                                guideNodeClass="guideButton"
+                                name="searchButton"
+                                type="button">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="4"/>
+                                </cq:responsive>
+                            </searchButton>
+                            <searchCount
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="count"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="searchCount">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </searchCount>
+                            <searchTotal
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="total"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="searchTotal">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </searchTotal>
+                            <searchResults
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="employees"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                multiLine="{Boolean}true"
+                                name="searchResults">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="12"/>
+                                </cq:responsive>
+                            </searchResults>
+                        </items>
+                    </searchPanel>
+                    <employeePanel
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="3. getEmployee"
+                        sling:resourceType="fd/af/components/panel"
+                        guideNodeClass="guidePanel"
+                        name="employeePanel">
+                        <layout
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="fd/af/layouts/gridFluidLayout2"
+                            nonNavigable="{Boolean}true"
+                            toolbarPosition="Bottom"/>
+                        <items
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="fd/af/layouts/gridFluidLayout2">
+                            <employeeHelp
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="fd/af/components/guidetextdraw"
+                                _value="&lt;p>Filled from the first type-ahead's selection (email, title and department pick the selected position), or type an email and press Get employee.&lt;/p>"
+                                guideNodeClass="guideTextDraw"
+                                name="employeeHelp"
+                                textIsRich="true">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="12"/>
+                                </cq:responsive>
+                            </employeeHelp>
+                            <lookupEmail
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Email"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                calcExp="employee.empSelectedEmail.value"
+                                guideNodeClass="guideTextBox"
+                                name="lookupEmail"
+                                valueCommitScript="if (this.value) {&#xa;var operationInfo = {&#xa;    &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;    &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getEmployee&quot;,&#xa;    &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getEmployee&quot;&#xa;};&#xa;var inputs = {&#xa;    &quot;email&quot;: lookupEmail,&#xa;    &quot;title&quot;: lookupTitle,&#xa;    &quot;department&quot;: lookupDepartment&#xa;};&#xa;var outputs = {&#xa;    &quot;first_name&quot;: detFirstName,&#xa;    &quot;last_name&quot;: detLastName,&#xa;    &quot;email&quot;: detEmail,&#xa;    &quot;title&quot;: detTitle,&#xa;    &quot;department&quot;: detDepartment,&#xa;    &quot;division&quot;: detDivision,&#xa;    &quot;branch&quot;: detBranch,&#xa;    &quot;unit&quot;: detUnit,&#xa;    &quot;manager_first_name&quot;: detManagerFirstName,&#xa;    &quot;manager_last_name&quot;: detManagerLastName,&#xa;    &quot;manager_email&quot;: detManagerEmail&#xa;};&#xa;guidelib.dataIntegrationUtils.executeOperation(operationInfo, inputs, outputs, null, null, this);&#xa;}&#xa;">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="8"/>
+                                </cq:responsive>
+                            </lookupEmail>
+                            <lookupTitle
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Title (optional)"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                calcExp="employee.empSelectedTitle.value"
+                                guideNodeClass="guideTextBox"
+                                name="lookupTitle">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </lookupTitle>
+                            <lookupDepartment
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Department (optional)"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                calcExp="employee.empSelectedDepartment.value"
+                                guideNodeClass="guideTextBox"
+                                name="lookupDepartment">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </lookupDepartment>
+                            <getEmployeeButton
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Get employee"
+                                sling:resourceType="fd/af/components/guidebutton"
+                                clickExp="var operationInfo = {&#xa;    &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;    &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getEmployee&quot;,&#xa;    &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getEmployee&quot;&#xa;};&#xa;var inputs = {&#xa;    &quot;email&quot;: lookupEmail,&#xa;    &quot;title&quot;: lookupTitle,&#xa;    &quot;department&quot;: lookupDepartment&#xa;};&#xa;var outputs = {&#xa;    &quot;first_name&quot;: detFirstName,&#xa;    &quot;last_name&quot;: detLastName,&#xa;    &quot;email&quot;: detEmail,&#xa;    &quot;title&quot;: detTitle,&#xa;    &quot;department&quot;: detDepartment,&#xa;    &quot;division&quot;: detDivision,&#xa;    &quot;branch&quot;: detBranch,&#xa;    &quot;unit&quot;: detUnit,&#xa;    &quot;manager_first_name&quot;: detManagerFirstName,&#xa;    &quot;manager_last_name&quot;: detManagerLastName,&#xa;    &quot;manager_email&quot;: detManagerEmail&#xa;};&#xa;guidelib.dataIntegrationUtils.executeOperation(operationInfo, inputs, outputs, null, null, this);&#xa;"
+                                dorExclusion="true"
+                                guideNodeClass="guideButton"
+                                name="getEmployeeButton"
+                                type="button">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="4"/>
+                                </cq:responsive>
+                            </getEmployeeButton>
+                            <detFirstName
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="First name"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="detFirstName">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </detFirstName>
+                            <detLastName
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Last name"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="detLastName">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </detLastName>
+                            <detEmail
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Email"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="detEmail">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </detEmail>
+                            <detTitle
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Title"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="detTitle">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </detTitle>
+                            <detDepartment
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Department"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="detDepartment">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </detDepartment>
+                            <detDivision
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Division"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="detDivision">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </detDivision>
+                            <detBranch
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Branch"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="detBranch">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </detBranch>
+                            <detUnit
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Unit"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="detUnit">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </detUnit>
+                            <detManagerFirstName
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Manager first name"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="detManagerFirstName">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </detManagerFirstName>
+                            <detManagerLastName
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Manager last name"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="detManagerLastName">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </detManagerLastName>
+                            <detManagerEmail
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Manager email"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="detManagerEmail">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </detManagerEmail>
+                        </items>
+                    </employeePanel>
+                    <orgPanel
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="4. getDepartments, getDivisions, getBranches, getUnits"
+                        sling:resourceType="fd/af/components/panel"
+                        guideNodeClass="guidePanel"
+                        name="orgPanel">
+                        <layout
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="fd/af/layouts/gridFluidLayout2"
+                            nonNavigable="{Boolean}true"
+                            toolbarPosition="Bottom"/>
+                        <items
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="fd/af/layouts/gridFluidLayout2">
+                            <department
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Department"
+                                sling:resourceType="fd/af/components/guidedropdownlist"
+                                guideNodeClass="guideDropDownList"
+                                initScript="var operationInfo = {&#xa;    &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;    &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getDepartments&quot;,&#xa;    &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getDepartments&quot;&#xa;};&#xa;var inputs = {&#xa;&#xa;};&#xa;var outputs = {&#xa;    &quot;field&quot;: department,&#xa;    &quot;savedValue&quot;: &quot;names&quot;,&#xa;    &quot;displayedValue&quot;: &quot;names&quot;&#xa;};&#xa;guidelib.dataIntegrationUtils.setOptionsFromService(operationInfo, inputs, outputs);&#xa;var operationInfo = {&#xa;    &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;    &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getDepartments&quot;,&#xa;    &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getDepartments&quot;&#xa;};&#xa;var inputs = {&#xa;&#xa;};&#xa;var outputs = {&#xa;    &quot;count&quot;: departmentCount&#xa;};&#xa;guidelib.dataIntegrationUtils.executeOperation(operationInfo, inputs, outputs, null, null, this);&#xa;"
+                                name="department"
+                                valueCommitScript="division.items = [];&#xa;division.value = null;&#xa;branch.items = [];&#xa;branch.value = null;&#xa;unit.items = [];&#xa;unit.value = null;&#xa;var operationInfo = {&#xa;    &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;    &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getDivisions&quot;,&#xa;    &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getDivisions&quot;&#xa;};&#xa;var inputs = {&#xa;    &quot;department&quot;: department&#xa;};&#xa;var outputs = {&#xa;    &quot;field&quot;: division,&#xa;    &quot;savedValue&quot;: &quot;names&quot;,&#xa;    &quot;displayedValue&quot;: &quot;names&quot;&#xa;};&#xa;guidelib.dataIntegrationUtils.setOptionsFromService(operationInfo, inputs, outputs);&#xa;var operationInfo = {&#xa;    &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;    &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getDivisions&quot;,&#xa;    &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getDivisions&quot;&#xa;};&#xa;var inputs = {&#xa;    &quot;department&quot;: department&#xa;};&#xa;var outputs = {&#xa;    &quot;count&quot;: divisionCount&#xa;};&#xa;guidelib.dataIntegrationUtils.executeOperation(operationInfo, inputs, outputs, null, null, this);&#xa;">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </department>
+                            <departmentCount
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Department count"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="departmentCount">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </departmentCount>
+                            <division
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Division"
+                                sling:resourceType="fd/af/components/guidedropdownlist"
+                                guideNodeClass="guideDropDownList"
+                                name="division"
+                                valueCommitScript="branch.items = [];&#xa;branch.value = null;&#xa;unit.items = [];&#xa;unit.value = null;&#xa;if (this.value) {&#xa;var operationInfo = {&#xa;    &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;    &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getBranches&quot;,&#xa;    &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getBranches&quot;&#xa;};&#xa;var inputs = {&#xa;    &quot;department&quot;: department,&#xa;    &quot;division&quot;: division&#xa;};&#xa;var outputs = {&#xa;    &quot;field&quot;: branch,&#xa;    &quot;savedValue&quot;: &quot;names&quot;,&#xa;    &quot;displayedValue&quot;: &quot;names&quot;&#xa;};&#xa;guidelib.dataIntegrationUtils.setOptionsFromService(operationInfo, inputs, outputs);&#xa;var operationInfo = {&#xa;    &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;    &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getBranches&quot;,&#xa;    &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getBranches&quot;&#xa;};&#xa;var inputs = {&#xa;    &quot;department&quot;: department,&#xa;    &quot;division&quot;: division&#xa;};&#xa;var outputs = {&#xa;    &quot;count&quot;: branchCount&#xa;};&#xa;guidelib.dataIntegrationUtils.executeOperation(operationInfo, inputs, outputs, null, null, this);&#xa;}&#xa;">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </division>
+                            <divisionCount
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Division count"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="divisionCount">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </divisionCount>
+                            <branch
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Branch"
+                                sling:resourceType="fd/af/components/guidedropdownlist"
+                                guideNodeClass="guideDropDownList"
+                                name="branch"
+                                valueCommitScript="unit.items = [];&#xa;unit.value = null;&#xa;if (this.value) {&#xa;var operationInfo = {&#xa;    &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;    &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getUnits&quot;,&#xa;    &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getUnits&quot;&#xa;};&#xa;var inputs = {&#xa;    &quot;department&quot;: department,&#xa;    &quot;division&quot;: division,&#xa;    &quot;branch&quot;: branch&#xa;};&#xa;var outputs = {&#xa;    &quot;field&quot;: unit,&#xa;    &quot;savedValue&quot;: &quot;names&quot;,&#xa;    &quot;displayedValue&quot;: &quot;names&quot;&#xa;};&#xa;guidelib.dataIntegrationUtils.setOptionsFromService(operationInfo, inputs, outputs);&#xa;var operationInfo = {&#xa;    &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;    &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getUnits&quot;,&#xa;    &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/getUnits&quot;&#xa;};&#xa;var inputs = {&#xa;    &quot;department&quot;: department,&#xa;    &quot;division&quot;: division,&#xa;    &quot;branch&quot;: branch&#xa;};&#xa;var outputs = {&#xa;    &quot;count&quot;: unitCount&#xa;};&#xa;guidelib.dataIntegrationUtils.executeOperation(operationInfo, inputs, outputs, null, null, this);&#xa;}&#xa;">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </branch>
+                            <branchCount
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Branch count"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="branchCount">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </branchCount>
+                            <unit
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Unit"
+                                sling:resourceType="fd/af/components/guidedropdownlist"
+                                guideNodeClass="guideDropDownList"
+                                name="unit">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </unit>
+                            <unitCount
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Unit count"
+                                sling:resourceType="fd/af/components/guidetextbox"
+                                enabled="{Boolean}false"
+                                guideNodeClass="guideTextBox"
+                                name="unitCount">
+                                <cq:responsive jcr:primaryType="nt:unstructured">
+                                    <default
+                                        jcr:primaryType="nt:unstructured"
+                                        behavior="newline"
+                                        offset="0"
+                                        width="6"/>
+                                </cq:responsive>
+                            </unitCount>
+                        </items>
+                    </orgPanel>
+                </items>
+            </rootPanel>
+        </guideContainer>
+    </jcr:content>
+</jcr:root>

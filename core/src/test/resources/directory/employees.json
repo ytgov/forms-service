@@ -1,0 +1,15 @@
+{
+  "count": 10,
+  "employees": [
+    {"full_name": "Ada.Lovelace", "first_name": "Ada", "last_name": "Lovelace", "organization": null, "department": "Highways and Public Works", "division": "Transportation", "branch": "Engineering", "unit": "Bridges", "title": "Engineer", "email": "Ada.Lovelace@yukon.ca", "manager": "Grace.Hopper", "username": "alovelac"},
+    {"full_name": "Grace.Hopper", "first_name": "Grace", "last_name": "Hopper", "organization": null, "department": "Highways and Public Works", "division": "Transportation", "branch": "Engineering", "unit": null, "title": "Director", "email": "grace.hopper@yukon.ca", "manager": "Chris.Smith", "username": "ghopper"},
+    {"full_name": "Grace.Hopper", "first_name": "Grace", "last_name": "Hopper", "organization": null, "department": "Community Services", "division": null, "branch": null, "unit": null, "title": "Acting ADM", "email": "Grace.Hopper@yukon.ca", "manager": "Pat.Smith", "username": "ghopper2", "phone_office": "867-555-0100", "address": "2071 2nd Avenue"},
+    {"full_name": "Chris.Smith", "first_name": "Chris", "last_name": "Smith", "organization": null, "department": "Highways and Public Works", "division": null, "branch": null, "unit": null, "title": "ADM", "email": "chris.smith@yukon.ca", "manager": null, "username": "csmith"},
+    {"full_name": "Chris.Smith", "first_name": "Chris", "last_name": "Smith", "organization": null, "department": "Education", "division": "Schools", "branch": null, "unit": null, "title": "Teacher", "email": "chris.smith2@yukon.ca", "manager": "Ada.Lovelace", "username": "csmith2"},
+    {"full_name": "Zoe.Smith", "first_name": "Zoé", "last_name": "Smith", "organization": null, "department": "Education", "division": "Schools", "branch": " Elementary ", "unit": null, "title": "Principal", "email": "zoe.smith@yukon.ca", "manager": "Chris.Smith", "username": "zsmith"},
+    {"full_name": "Amelie.Smithers", "first_name": "Amélie", "last_name": "Smithers", "organization": null, "department": "Education", "division": "Schools", "branch": null, "unit": null, "title": "Clerk", "email": "amelie.smithers@yukon.ca", "manager": "Nobody.Here", "username": "asmither"},
+    {"full_name": "Bob.Anderson", "first_name": "Bob", "last_name": "Anderson", "organization": null, "department": "Education", "division": null, "branch": null, "unit": null, "title": "Clerk", "email": "bob.anderson@yukon.ca", "manager": "Chris.Smith", "username": "banderso"},
+    {"full_name": "Pat.Smith", "first_name": "Pat", "last_name": "Smith", "organization": null, "department": "Community Services", "division": null, "branch": null, "unit": null, "title": "Officer", "email": "pat.smith@yukon.ca", "manager": "Chris.Smith", "username": "-"},
+    {"full_name": "No.Email", "first_name": "No", "last_name": "Email", "organization": null, "department": "Education", "division": null, "branch": null, "unit": null, "title": "Ghost", "email": "", "manager": null, "username": "noemail"}
+  ]
+}

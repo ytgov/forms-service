@@ -1,0 +1,3 @@
+{
+  "endpoint": "$[env:YG_DIRECTORY_FDM_ENDPOINT;default=]"
+}

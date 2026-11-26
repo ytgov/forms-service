@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:lastModified="{Date}2026-11-23T10:00:00.000-08:00"
+        jcr:lastModified="{Date}2026-11-23T10:00:00.000-08:00"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="ygDirectory"
+        sling:resourceType="fd/fdm/gui/components/admin/fdmcloudservice/rest"
+        authenticationType="API Key"
+        dataSourceType="REST"
+        filename="ygdirectory-openapi.json"
+        location="header"
+        name="ygdirectory"
+        openApiVersion="3.0.1"
+        paramName="X-YG-Directory-Key"
+        restfulService="swagger"
+        selectAuthentication="API Key"
+        serverTemplateUrl="http://localhost:4502"
+        serviceEndPoint="http://localhost:4502"
+        swaggerSource="swaggerFile">
+        <swaggerFile/>
+    </jcr:content>
+</jcr:root>

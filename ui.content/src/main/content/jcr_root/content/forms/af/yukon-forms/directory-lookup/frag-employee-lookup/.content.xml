@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:fd="http://www.adobe.com/aemfd/fd/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:conf="/conf/yukon-forms"
+        cq:lastModified="{Date}2026-11-19T08:30:19.722-08:00"
+        cq:lastModifiedBy="admin"
+        cq:template="/libs/fd/af/templateForFragment/defaultFragmentTemplate"
+        jcr:description="Employee type-ahead search (YUKONAEMF-88): empSearch, empSelectedEmail, empSelectedTitle, empSelectedDepartment, empSearchStatus"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="fragEmployeeLookup"
+        sling:resourceType="fd/af/components/page/basePageForFragment">
+        <guideContainer
+            fd:version="1.1"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="fd/af/components/guideFragmentContainer"
+            clientLibRef="yukon-forms.custom"
+            dorType="none"
+            guideCss="guideContainer"
+            guideNodeClass="guideContainerNode"
+            name="fragment1"
+            schemaType="none">
+            <layout
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="fd/af/layouts/defaultGuideLayout"
+                toolbarPosition="Bottom"/>
+            <rootPanel
+                jcr:primaryType="nt:unstructured"
+                jcr:title="Root Panel"
+                sling:resourceType="fd/af/components/rootPanel"
+                guideNodeClass="rootPanelNode"
+                name="guideRootPanel"
+                panelSetType="Navigable">
+                <layout
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="fd/af/layouts/gridFluidLayout2"
+                    nonNavigable="{Boolean}true"
+                    toolbarPosition="Bottom"/>
+                <items
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="fd/af/layouts/gridFluidLayout2">
+                    <empSearch
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Search for an employee"
+                        sling:resourceType="yukon-forms/components/adaptiveForm/employeelookup"
+                        autocomplete="{Boolean}false"
+                        description="&lt;p>Type at least 3 letters of the employee’s first name, last name or email address, then select the employee from the list.&lt;/p>"
+                        guideNodeClass="guideTextBox"
+                        initScript="// Registers the ygDirectory searchEmployees operation that the Employee Lookup type-ahead calls from this field.&#xa;// AEM only lets a field invoke form data model operations that its own rules reference. Do not remove.&#xa;if (false) {&#xa;    guidelib.dataIntegrationUtils.executeOperation({&#xa;        &quot;formDataModelId&quot;: &quot;/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory&quot;,&#xa;        &quot;operationTitle&quot;: &quot;GET /bin/yukon-forms/ygdirectory/searchEmployees&quot;,&#xa;        &quot;operationName&quot;: &quot;GET /bin/yukon-forms/ygdirectory/searchEmployees&quot;&#xa;    }, {}, {});&#xa;}"
+                        name="empSearch"
+                        validateExp="!this.value || !!empSelectedEmail.value"
+                        validateExpMessage="Select an employee from the list">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                behavior="newline"
+                                offset="0"
+                                width="12"/>
+                        </cq:responsive>
+                    </empSearch>
+                    <empSelectedEmail
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Selected employee email"
+                        sling:resourceType="fd/af/components/guidetextbox"
+                        guideNodeClass="guideTextBox"
+                        name="empSelectedEmail"
+                        visible="{Boolean}false">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                behavior="newline"
+                                offset="0"
+                                width="12"/>
+                        </cq:responsive>
+                    </empSelectedEmail>
+                    <empSelectedTitle
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Selected employee title"
+                        sling:resourceType="fd/af/components/guidetextbox"
+                        guideNodeClass="guideTextBox"
+                        name="empSelectedTitle"
+                        visible="{Boolean}false">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                behavior="newline"
+                                offset="0"
+                                width="12"/>
+                        </cq:responsive>
+                    </empSelectedTitle>
+                    <empSelectedDepartment
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Selected employee department"
+                        sling:resourceType="fd/af/components/guidetextbox"
+                        guideNodeClass="guideTextBox"
+                        name="empSelectedDepartment"
+                        visible="{Boolean}false">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                behavior="newline"
+                                offset="0"
+                                width="12"/>
+                        </cq:responsive>
+                    </empSelectedDepartment>
+                    <empSearchStatus
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Employee search status"
+                        sling:resourceType="fd/af/components/guidetextbox"
+                        guideNodeClass="guideTextBox"
+                        name="empSearchStatus"
+                        visible="{Boolean}false">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                behavior="newline"
+                                offset="0"
+                                width="12"/>
+                        </cq:responsive>
+                    </empSearchStatus>
+                </items>
+            </rootPanel>
+        </guideContainer>
+    </jcr:content>
+</jcr:root>

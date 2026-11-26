@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "description": "ygDirectory FDM data source (YUKONAEMF-88): the shared key DirectoryLookupServlet expects. The endpoint URL is set by DirectoryEndpointOverrideProvider.",
+  "overrides": [
+    "cloudconfigs/fdm/ygdirectory/apiKey=\"$[secret:YG_DIRECTORY_FDM_KEY;default=]\""
+  ]
+}

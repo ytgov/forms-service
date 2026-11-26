@@ -1,0 +1,36 @@
+<sly data-sly-include="/libs/fd/af/components/guidesglobal.jsp"/>
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
+     data-sly-call="${clientlib.js @ categories='yukon-forms.components.employeelookup'}"/>
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
+     data-sly-call="${clientlib.css @ categories='yukon-forms.components.employeelookup'}"/>
+<sly data-sly-use.guideConstants="com.adobe.aemds.guide.utils.GuideConstants"/>
+<sly data-sly-use.guideField="com.adobe.aemds.guide.common.GuideTextBox"/>
+
+<div class="${guideConstants.GUIDE_FIELD_WIDGET} textField employee-lookup"
+     data-cmp-is="adaptiveFormEmployeeLookup"
+     data-fdm-path="/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory"
+     data-operation="GET /bin/yukon-forms/ygdirectory/searchEmployees"
+     data-email-field="${properties.lookupEmailField || 'empSelectedEmail'}"
+     data-title-field="${properties.lookupTitleField || 'empSelectedTitle'}"
+     data-department-field="${properties.lookupDepartmentField || 'empSelectedDepartment'}"
+     data-status-field="${properties.lookupStatusField || 'empSearchStatus'}"
+     data-min-chars="3"
+     data-debounce-ms="300"
+     data-timeout-ms="10000"
+     data-msg-no-results="${properties.msgNoResults || 'No employees match “{0}”. Check the spelling or search by email address.'}"
+     data-msg-more-results="${properties.msgMoreResults || 'Showing {0} of {1} results. Keep typing to narrow the list.'}"
+     data-msg-results-available="${properties.msgResultsAvailable || '{0} results available'}"
+     style="${guideField.styles @ context='scriptString'}">
+    <input type="text"
+           class="employee-lookup__input"
+           data-sly-attribute="{maxlength: guideField.html5MaxLength}"
+           autocomplete="off"
+           spellcheck="false"
+           id="${guideField.id}_widget"
+           name="${guideField.name}"
+           value="${guideField.value}"
+           style="${guideField.widgetInlineStyles @ context='scriptString'}"
+           placeholder="${guideField.placeholderText}"
+           aria-describedby="${guideField.labelForId}_desc ${guideField.id}_status"/>
+    <div id="${guideField.id}_status" class="employee-lookup__status" aria-live="polite" hidden></div>
+</div>

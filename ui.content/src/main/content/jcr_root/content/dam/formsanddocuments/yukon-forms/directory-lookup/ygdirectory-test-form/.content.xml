@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:fd="http://www.adobe.com/aemfd/fd/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:primaryType="dam:Asset">
+    <jcr:content
+        jcr:lastModified="{Date}2026-11-19T08:30:19.778-08:00"
+        jcr:primaryType="dam:AssetContent"
+        sling:resourceType="fd/fm/af/render"
+        guide="1"
+        type="guide">
+        <metadata
+            cq:conf="/conf/yukon-forms"
+            fd:version="1.1"
+            jcr:primaryType="nt:unstructured"
+            description="Demonstrates the ygDirectory FDM operations and fragEmployeeLookup (YUKONAEMF-88)"
+            formmodel="none"
+            themeRef="/content/dam/formsanddocuments-themes/yukon-forms/yukon-theme--tab-wrap--12_2025"
+            title="ygDirectory test form"/>
+    </jcr:content>
+</jcr:root>

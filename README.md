@@ -101,6 +101,30 @@ Authenticated users can save a draft of a long form and reopen it on the same si
 - **Forked Adobe script:** `customdraftsandsubmissions/clientlibs/custom/js/draftsandsubmissions.js` is a copy of Adobe's Drafts & Submissions client script (Core Forms Components 3.0.172) with our filtering and resume changes; Adobe's version isn't loaded. On a Core Forms Components or Forms add-on upgrade, diff it against upstream and retest list, open and resume.
 - **Don't use the iframe embed for this:** a page URL with `?dataRef=` makes Adobe's iframe embed template (Core Forms Components 3.0.172) return HTTP 500.
 
+## Directory lookups (ygDirectory)
+
+Employee and department lookups for forms use the YG Directory API (https://api.gov.yk.ca/directory) through the `ygDirectory` form data model (YUKONAEMF-88). See `docs/YUKONAEMF-88-ygdirectory.md` for the design, the operations and the answers to the ticket's open questions.
+
+- **`DirectoryService`** (core) keeps an in-memory copy of the directory on each AEM instance and refreshes it every 60 minutes by default (`YG_DIRECTORY_REFRESH_MINUTES`). A failed refresh keeps the last good copy. Nothing about staff is stored in the repository. The copy holds business contact information only (name, work email, title, org path, manager name and email), per the privacy approval; usernames, phone numbers and office addresses are dropped when the data loads.
+- **`DirectoryLookupServlet`** serves the six operations at `/bin/yukon-forms/ygdirectory/*`. Only callers sending the shared key in `X-YG-Directory-Key` are served; the FDM sends it.
+- **`DirectoryEndpointOverrideProvider`** sets the FDM data source's endpoint URL: `YG_DIRECTORY_FDM_ENDPOINT` if set, otherwise the instance's own URL from the Externalizer. The log says which (`ygDirectory FDM endpoint: … (from …)`).
+- **`DirectorySignInFilter`** refuses `.af.dermis` calls to the `ygDirectory` FDM from anonymous users (403), so lookups only work for users signed in with MyYukon.
+- **FDM:** `/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory`, data source `/conf/yukon-forms/settings/cloudconfigs/fdm/ygdirectory` (OpenAPI 3 spec in the cloud config). AEM caches both: after changing the spec or the model, update `jcr:lastModified` on the cloud config's `jcr:content` (the data source reloads on it, not on `cq:lastModified`) and `jcr:lastModified` on the FDM's `jcr:content` (or open and save each in the UI), or the FDM keeps returning the old fields.
+- **Type-ahead:** the `employeelookup` component and the `fragEmployeeLookup` fragment (`/content/dam/formsanddocuments/yukon-forms/directory-lookup/frag-employee-lookup`). Test form: `.../directory-lookup/ygdirectory-test-form`.
+
+Cloud Manager variables, per environment:
+
+| Variable | Type | Value |
+|---|---|---|
+| `DIRECTORY_API_KEY` | Secret | YG Directory API subscription key (`Ocp-Apim-Subscription-Key`) |
+| `DIRECTORY_API_BASE_URL` | Variable | Optional. YG Directory API address (default `https://api.gov.yk.ca/directory`). |
+| `YG_DIRECTORY_FDM_KEY` | Secret | Any long random string; shared by the FDM and `DirectoryLookupServlet` |
+| `YG_DIRECTORY_FDM_ENDPOINT` | Variable | Optional. The URL the FDM calls for `/bin/yukon-forms/ygdirectory`. Default: the instance's own URL from the Externalizer (author URL on author, publish URL on publish). |
+| `YG_DIRECTORY_REFRESH_MINUTES` | Variable | Optional. Minutes between directory downloads, 5 to 1440 (default 60). |
+| `YG_DIRECTORY_SEARCH_MAX_RESULTS` | Variable | Optional. Most results per search, 1 to 100 (default 10). |
+
+Locally, start AEM with the same names exported (`export DIRECTORY_API_KEY=… YG_DIRECTORY_FDM_KEY=$(openssl rand -hex 24)`); without `YG_DIRECTORY_FDM_ENDPOINT` the FDM calls the Externalizer's URL (`http://localhost:4502` on a local author). Without `YG_DIRECTORY_FDM_KEY` the endpoint refuses every request, and searches report `unavailable`.
+
 ## Local AEM Forms setup
 
 Some AEM Forms features need extra local setup on top of the AEM SDK quickstart.

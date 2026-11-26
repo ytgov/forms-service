@@ -1,0 +1,5 @@
+{
+  "refresh.interval.minutes": "$[env:YG_DIRECTORY_REFRESH_MINUTES;default=60]",
+  "search.min.length": 3,
+  "search.max.results": "$[env:YG_DIRECTORY_SEARCH_MAX_RESULTS;default=10]"
+}

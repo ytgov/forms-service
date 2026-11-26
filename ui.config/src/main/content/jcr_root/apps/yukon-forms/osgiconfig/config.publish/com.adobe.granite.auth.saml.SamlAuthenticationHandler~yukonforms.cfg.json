@@ -17,7 +17,11 @@
   "synchronizeAttributes": [
     "Email=profile/email",
     "FirstName=profile/givenName",
-    "LastName=profile/familyName"
+    "LastName=profile/familyName",
+    "urn:myyukon.ca/verification_status=profile/verificationStatus",
+    "urn:myyukon.ca/birthdate=profile/birthDate",
+    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name=profile/fullName",
+    "http://schemas.auth0.com/nickname=profile/nickname"
   ],
   "addGroupMemberships": true,
   "groupMembershipAttribute": "groups",

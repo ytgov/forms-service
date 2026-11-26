@@ -16,6 +16,11 @@ $include "./default_filters.any"
 # handled by EmbeddedFormPrefillServlet, which forwards to the form's guideContainer
 /0110 { /type "allow" /method "POST" /path "/content/yukon-forms/*" /selectors "af.prefilldata" /extension "json" }
 
+# Allow the ygDirectory form data model to reach its REST endpoint (YUKONAEMF-88).
+# The FDM calls it server to server through this domain; DirectoryLookupServlet
+# rejects requests without the shared X-YG-Directory-Key header.
+/0120 { /type "allow" /method "GET" /url "/bin/yukon-forms/ygdirectory/*" }
+
 # Allow SAML HTTP POST to ../saml_login end points
 /0190 { /type "allow" /method "POST" /url "*/saml_login" }
 
@@ -24,6 +29,9 @@ $include "./default_filters.any"
 
 # Allow POST-based SAML authentication invocation
 /0192 { /type "allow" /method "POST" /url "/system/sling/login" }
+
+# Allow Sling logout (drops the AEM login-token, then redirects to the "resource" param)
+/0193 { /type "allow" /method "GET" /url "/system/sling/logout" /query "*" }
 
 # Allow prefill (e.g. resuming a Forms Portal draft) for forms embedded in Sites pages;
 /0200 { /type "allow" /method "POST" /url "/content/yukon-forms/*.af.prefilldata.json" }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Employee"
+    guideNodeClass="guideTextBox"
+    name="empSearch"
+    autocomplete="{Boolean}false"
+    initScript='// Registers the ygDirectory searchEmployees operation that the Employee Lookup type-ahead calls from this field.&#10;// AEM only lets a field invoke form data model operations that its own rules reference. Do not remove.&#10;if (false) {&#10;    guidelib.dataIntegrationUtils.executeOperation({&#10;        "formDataModelId": "/content/dam/formsanddocuments-fdm/yukon-forms/ygdirectory",&#10;        "operationTitle": "GET /bin/yukon-forms/ygdirectory/searchEmployees",&#10;        "operationName": "GET /bin/yukon-forms/ygdirectory/searchEmployees"&#10;    }, {}, {});&#10;}'
+    validateExp="!this.value || !!empSelectedEmail.value"
+    validateExpMessage="Select an employee from the list"/>
