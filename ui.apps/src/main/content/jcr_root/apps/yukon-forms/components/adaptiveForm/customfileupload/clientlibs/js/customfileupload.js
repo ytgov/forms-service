@@ -2,8 +2,9 @@
  * customfileupload.js — File Attachment (Custom).
  *
  * Patches each AdobeFileAttachment widget of this component (marked data-yf-file-upload) to:
- *  - check each added file in order: file type (AEM's check) → file name characters → maximum file
- *    size → maximum total size (optional), stopping at the first failure, with one authorable
+ *  - check each added file in order: file type (AEM's check) → file name characters → same name as
+ *    an attached file → maximum file size → maximum total size (optional), stopping at the first
+ *    failure, with one authorable
  *    message per rejected file;
  *  - show each file's size in its row and a total row under the list (display only);
  *  - show messages under the total row (box turns red), linked to the button through aria-describedby, cleared on the next
@@ -130,6 +131,7 @@
           fileTooLarge: $input.attr("data-yf-msg-file-too-large") || "",
           totalTooLarge: $input.attr("data-yf-msg-total-too-large") || "",
           fileName: $input.attr("data-yf-msg-file-name") || "",
+          duplicate: $input.attr("data-yf-msg-duplicate") || "",
           total: $input.attr("data-yf-msg-total") || ""
         },
         $button = widget.$elementFileUploadBtn,
@@ -192,6 +194,7 @@
       };
       var template = rejection.reason === "size" ? templates.fileTooLarge
           : rejection.reason === "total" ? templates.totalTooLarge
+          : rejection.reason === "duplicate" ? templates.duplicate
           : templates.fileName;
       return fillMessage(template, values, language);
     }
@@ -206,6 +209,15 @@
         }
       });
       return total;
+    }
+
+    /** Lower-cased names of the listed files, including attachments restored from a draft. */
+    function listedNames() {
+      var names = {};
+      $list.children("li.guide-fu-fileItem").find(".guide-fu-fileName").each(function () {
+        names[$.trim($(this).text()).toLowerCase()] = true;
+      });
+      return names;
     }
 
     // ── Total row: the sum of raw bytes, formatted once ──
@@ -297,8 +309,14 @@
     };
 
     // ── Remove: clear messages, then AEM's handler ──
+    // AEM finds the file to remove from the element just before the close button ($(target).prev()),
+    // which is our size label. Take it out first so AEM reads the file name; the row is removed anyway.
+    // Otherwise the file stays in the field's value and comes back on the next change.
     widget.handleClick = function (event) {
       clearMessages();
+      if (event && event.target) {
+        $(event.target).siblings(".yf-fu-fileSize").remove();
+      }
       return proto.handleClick.call(this, event);
     };
 
@@ -320,6 +338,7 @@
       var self = this,
           limitBytes = parseFloat(this.options.fileSizeLimit) * BYTES_PER_MB,
           totalBytes = listedBytes(), // grows as each accepted file is added
+          names = listedNames(),      // likewise
           invalidIndexes = [],
           rejections = [];
       $.each(files, function (index, file) {
@@ -329,6 +348,8 @@
           reason = "type";
         } else if (!self.isValid(name)) {
           reason = "name";
+        } else if (names[name.toLowerCase()]) { // same name as an attached file, ignoring case
+          reason = "duplicate";
         } else if (file.size > limitBytes) { // raw bytes; false when no limit is set
           reason = "size";
         } else if (maxTotalBytes > 0 && totalBytes + file.size > maxTotalBytes) { // false when not set
@@ -341,6 +362,7 @@
         }
         sizes[name] = file.size;
         totalBytes += file.size;
+        names[name.toLowerCase()] = true;
         pendingSize = file.size;
         try {
           self.showFileList(name);
@@ -371,6 +393,11 @@
     // the function's guid, so .off() with the prototype function removes that binding only.
     widget.$element.off("change", proto.handleChange).on("change", $.proxy(widget.handleChange, widget));
 
+    // Server-side errors on submit (e.g. the total check): shown like the widget's own messages.
+    $input.on("yf-fu-server-error", function (event, text) {
+      showMessages([text]);
+    });
+
     // Rows are rebuilt from the model (e.g. after a draft save or restore); keep the total in step.
     if (window.MutationObserver) {
       new MutationObserver(updateTotal).observe($list[0], { childList: true });
@@ -378,8 +405,27 @@
     updateTotal();
   }
 
+  // ── Server-side validation errors ─────────────────────────────────────────
+  // On a failed submit, guideBridge.handleServerValidationError calls markAsInvalid(message) on the
+  // field named in the error. AEM's file upload model is a composite field, not a Field, and has no
+  // markAsInvalid: the call throws and the error is never shown. Give it one that passes the message
+  // to this component's widget (its input's id is the field's id + "_widget").
+  function installServerErrorHandler() {
+    var model = window.guidelib && window.guidelib.model && window.guidelib.model.GuideFileUpload;
+    if (!model || typeof model.prototype.markAsInvalid === "function") {
+      return;
+    }
+    model.prototype.markAsInvalid = function (errorText) {
+      var input = document.getElementById(this.id + "_widget");
+      if (input) {
+        $(input).trigger("yf-fu-server-error", [String(errorText || "")]);
+      }
+    };
+  }
+
   // ── Find and patch this component's file inputs ───────────────────────────
   function processInputs() {
+    installServerErrorHandler();
     $("input[type='file'][data-yf-file-upload]").each(function () {
       try {
         var $input = $(this);

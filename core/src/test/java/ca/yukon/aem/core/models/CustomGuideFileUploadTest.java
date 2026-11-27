@@ -84,6 +84,18 @@ class CustomGuideFileUploadTest {
     }
 
     @Test
+    void duplicateFileDefaultsInBothLanguages() {
+        assertEquals("\"{fileName}\" ({size}) wasn't added. A file with the same name is already attached.",
+                field(Collections.emptyMap()).getMsgDuplicateFile());
+        context.create().resource("/content/forms/af/yukon-forms/fr-form/jcr:content", "jcr:language", "fr");
+        Resource frField = context.create().resource("/content/forms/af/yukon-forms/fr-form/jcr:content/guideContainer/upload");
+        assertEquals("« {fileName} » ({size}) n'a pas été ajouté. Un fichier du même nom est déjà joint.",
+                field(frField, Collections.emptyMap()).getMsgDuplicateFile());
+        assertEquals("Already there: {fileName}",
+                field(Collections.singletonMap("msgDuplicateFile", "Already there: {fileName}")).getMsgDuplicateFile());
+    }
+
+    @Test
     void maxTotalSizeIsAPositiveNumberOrBlank() {
         assertEquals("", field(Collections.emptyMap()).getMaxTotalSize());
         assertEquals("20", field(Collections.singletonMap("maxTotalSize", "20")).getMaxTotalSize());

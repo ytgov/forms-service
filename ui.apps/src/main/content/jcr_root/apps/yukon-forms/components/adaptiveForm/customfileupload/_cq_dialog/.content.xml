@@ -65,6 +65,13 @@
                                 fieldDescription="Shown when a file is larger than the Maximum file size. Placeholders: {fileName}, {size}, {maxSize}. French default: « {fileName} » ({size}) n'a pas été ajouté. Choisissez un fichier de {maxSize} ou moins."
                                 name="./msgFileTooLarge"
                                 emptyText="&quot;{fileName}&quot; ({size}) wasn't added. Choose a file that is {maxSize} or smaller."/>
+                            <msgDuplicateFile
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Duplicate file"
+                                fieldDescription="Shown when a file has the same name as one already attached (ignoring case). Placeholders: {fileName}, {size}. French default: « {fileName} » ({size}) n'a pas été ajouté. Un fichier du même nom est déjà joint."
+                                name="./msgDuplicateFile"
+                                emptyText="&quot;{fileName}&quot; ({size}) wasn't added. A file with the same name is already attached."/>
                             <msgTotalTooLarge
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"

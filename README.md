@@ -168,14 +168,16 @@ The Yukon form themes use the Adobe Fonts (Typekit) configuration `yg-fonts`. If
 
 `yukon-forms/components/adaptiveForm/customfileupload` extends AEM's Foundation File Attachment. It shows each file's size, a total row under the list (display only), and authorable messages.
 
-- **Check order per added file:** file type (AEM's check, AEM's message), then file name characters, then the Maximum file size, then the Maximum total size. A file stops at its first failed check and gets its own message; valid files are added in selection order. The Required check is AEM's, unchanged.
+- **Check order per added file:** file type (AEM's check, AEM's message), then file name characters, then a duplicate name (a file named like an attached one, ignoring case, isn't added: the submission identifies files by name), then the Maximum file size, then the Maximum total size. A file stops at its first failed check and gets its own message; valid files are added in selection order. The Required check is AEM's, unchanged.
 - **Maximum total size (MB)** (Validation tab, optional): when set, a file that would push the total of the listed files over it isn't added (`current total + file > maximum`). With several files picked at once, each is checked against the total including the ones added before it. Same binary MB as the Maximum file size. Blank: the total shows but isn't checked. Attachments restored from a draft count once their size is known.
+- **Server-side total check:** `FileUploadTotalSizeFilter` checks the Maximum total size again on submit (`.af.submit`, `.af.signSubmit`, `.af.agreement`), since the browser check can be bypassed. For each field of this component with a limit, it adds up the sizes of the field's file parts in the request (from `fileAttachmentMap`); over the limit, it answers 400 with a server-side validation error on that field, and the submit action doesn't run. Files not re-sent with the submission aren't counted. The message is fixed (English or French by the form's language), not authorable.
 - **Sizes:** limits are compared on raw bytes. AEM's Maximum file size uses binary MB (1 MB = 1,048,576 bytes), so the display does too. `formatSize(bytes, locale, base)` in `yukon-forms.utils` always rounds up: under 1 KB shows `1 KB`, then whole KB, then MB with one decimal (`5.7 MB`; French `5,7 Mo`). The total is the sum of raw bytes, formatted once.
 - **Messages** (Validation tab; blank uses the default in the form's language). The language comes from `afAcceptLang`, a selector, or the form's `jcr:language`, as for the validation summary.
 
   | Message | Placeholders |
   |---|---|
   | File name not allowed (`fileNamePatternMessage`) | `{fileName}`, `{size}` |
+  | Duplicate file (`msgDuplicateFile`) | `{fileName}`, `{size}` |
   | File too large (`msgFileTooLarge`) | `{fileName}`, `{size}`, `{maxSize}` |
   | Total too large (`msgTotalTooLarge`) | `{fileName}`, `{size}`, `{maxTotal}` |
   | Total row (`msgTotal`) | `{total}` |
