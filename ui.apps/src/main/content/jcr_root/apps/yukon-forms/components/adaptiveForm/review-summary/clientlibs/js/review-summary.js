@@ -71,6 +71,11 @@
     var raw     = field.value;
     var display = field.displayValue;
     if (raw === null || raw === undefined || raw === "") return null;
+    if (field.className === "guideFileUpload" && typeof field._getFileAttachmentNames === "function") {
+      // A file restored from a draft has its storage URL as its value; show the file names instead.
+      var names = field._getFileAttachmentNames();
+      if (names) return String(names).split("\n").filter(Boolean).join(", ") || null;
+    }
     if ((field.className === "guideCheckBox" || field.className === "guideRadioButton") &&
         field.jsonModel && field.jsonModel.options) {
       // Several selected checkbox values arrive as one comma-separated string.
