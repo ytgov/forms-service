@@ -40,6 +40,7 @@
            data-yf-language="${guide:encodeForHtmlAttr(guideField.language,xssAPI)}"
            data-yf-msg-file-too-large="${guide:encodeForHtmlAttr(guideField.msgFileTooLarge,xssAPI)}"
            data-yf-msg-file-name="${guide:encodeForHtmlAttr(guideField.msgFileNameNotAllowed,xssAPI)}"
+           data-yf-msg-duplicate="${guide:encodeForHtmlAttr(guideField.msgDuplicateFile,xssAPI)}"
            data-yf-max-total-size="${guide:encodeForHtmlAttr(guideField.maxTotalSize,xssAPI)}"
            data-yf-msg-total-too-large="${guide:encodeForHtmlAttr(guideField.msgTotalTooLarge,xssAPI)}"
            data-yf-msg-total="${guide:encodeForHtmlAttr(guideField.msgTotal,xssAPI)}"
