@@ -259,12 +259,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /**
  * Ensures that focus stays on the scribble signature field when the user uses it.
+ * Restoring a saved draft also sets the signature, before the field is drawn: focusing it then throws,
+ * and the error stops the draft from loading (endless spinner). So a failed focus is only logged.
  */
 document.addEventListener('DOMContentLoaded', function() {
         window.guideBridge.on("elementValueChanged", function(event, payload) {
                 if (payload.target.className === "guideScribble") {
                         console.debug("Target was a scribble signature field. Setting focus to it again.");
-                        window.guideBridge.setFocus(payload.target);
+                        try {
+                                window.guideBridge.setFocus(payload.target);
+                        } catch (e) {
+                                console.debug("Couldn't focus the scribble signature field.", e);
+                        }
                 }
         });
 });
