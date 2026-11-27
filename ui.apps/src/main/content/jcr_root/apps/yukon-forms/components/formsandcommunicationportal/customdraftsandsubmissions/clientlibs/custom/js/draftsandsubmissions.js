@@ -209,8 +209,9 @@
 	    if (formURL) {
 		queryResults.data = queryResults.data
 	            .filter(function(item) {
-			// Make sure that only drafts and submissions related to the current form are displayed
-		        return item.formLink.includes(formURL);
+			// Make sure that only drafts and submissions related to the current form are displayed.
+			// An item whose form no longer exists has no formLink ("Item not available"): skip it.
+		        return typeof item.formLink === "string" && item.formLink.includes(formURL);
 		    })
 		    .map(function(item) {
 			var isDraft = item.operations.some(function(op) {
