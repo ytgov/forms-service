@@ -64,7 +64,7 @@ class PrefillLoggedinUserAdaptiveFormTest {
         profile.put("profile/givenName", "Jane");
         profile.put("profile/familyName", "Doe & Co");
         profile.put("profile/email", "jane@example.com");
-        profile.put("profile/verificationStatus", "2");
+        profile.put("profile/yukon/verificationStatus", "2");
         withUser("jane@example.com", profile);
 
         String xml = read(service.getPrefillData(options));
@@ -78,7 +78,7 @@ class PrefillLoggedinUserAdaptiveFormTest {
     @Test
     void birthdate_prefilledAsDateFieldValue() throws Exception {
         Map<String, String> profile = new HashMap<>();
-        profile.put("profile/birthDate", "1980-05-17T00:00:00Z");
+        profile.put("profile/yukon/birthDate", "1980-05-17T00:00:00Z");
         withUser("jane@example.com", profile);
 
         String xml = read(service.getPrefillData(options));
@@ -89,8 +89,8 @@ class PrefillLoggedinUserAdaptiveFormTest {
     @Test
     void fullNameAndNickname_prefilled() throws Exception {
         Map<String, String> profile = new HashMap<>();
-        profile.put("profile/fullName", "Shèhtsō Ndī");
-        profile.put("profile/nickname", "Loa2");
+        profile.put("profile/yukon/fullName", "Shèhtsō Ndī");
+        profile.put("profile/yukon/nickname", "Loa2");
         withUser("loa2@example.com", profile);
 
         String xml = read(service.getPrefillData(options));
@@ -150,7 +150,7 @@ class PrefillLoggedinUserAdaptiveFormTest {
         when(options.getContentType()).thenReturn(ContentType.JSON);
         Map<String, String> profile = new HashMap<>();
         profile.put("profile/givenName", "Jane \"JJ\"");
-        profile.put("profile/verificationStatus", "2");
+        profile.put("profile/yukon/verificationStatus", "2");
         withUser("jane@example.com", profile);
 
         PrefillData data = service.getPrefillData(options);

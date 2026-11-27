@@ -18,10 +18,13 @@
     "Email=profile/email",
     "FirstName=profile/givenName",
     "LastName=profile/familyName",
-    "urn:myyukon.ca/verification_status=profile/verificationStatus",
-    "urn:myyukon.ca/birthdate=profile/birthDate",
-    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name=profile/fullName",
-    "http://schemas.auth0.com/nickname=profile/nickname"
+    "Email=profile/yukon/email",
+    "FirstName=profile/yukon/firstName",
+    "LastName=profile/yukon/lastName",
+    "urn:myyukon.ca/verification_status=profile/yukon/verificationStatus",
+    "urn:myyukon.ca/birthdate=profile/yukon/birthDate",
+    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name=profile/yukon/fullName",
+    "http://schemas.auth0.com/nickname=profile/yukon/nickname"
   ],
   "addGroupMemberships": true,
   "groupMembershipAttribute": "groups",
