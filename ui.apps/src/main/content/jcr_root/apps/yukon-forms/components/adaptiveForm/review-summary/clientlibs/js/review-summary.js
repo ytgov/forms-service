@@ -80,6 +80,12 @@
       });
       return labels.join(", ") || null;
     }
+    // A file restored from a draft has its storage URL as its value; the field still keeps the
+    // original file names (one per line), so show those.
+    if (field.className === "guideFileUpload" && typeof field._getFileAttachmentNames === "function") {
+      var names = field._getFileAttachmentNames();
+      if (names) return String(names).split("\n").filter(Boolean).join(", ") || null;
+    }
     if (FORMATTED_CLASSES.indexOf(field.className) >= 0) {
       // The value with the field's display pattern applied (thousand
       // separators, currency, date format), as the field shows it.
