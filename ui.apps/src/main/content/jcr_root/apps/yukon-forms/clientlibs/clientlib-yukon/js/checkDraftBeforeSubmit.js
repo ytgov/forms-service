@@ -132,8 +132,9 @@
     guideBridge.submit.yfDraftCheck = true;
 
     // Clear the message once the user changes the field (e.g. removes the file or attaches a new one).
-    guideBridge.on("elementValueChanged", function (event) {
-      var target = event && event.target;
+    // The changed field is the payload's target; the event's own target is guideBridge.
+    guideBridge.on("elementValueChanged", function (event, payload) {
+      var target = payload && payload.target;
       flagged = flagged.filter(function (field) {
         if (target === field || (target && target.parent === field)) {
           clearMessage(field);

@@ -11,5 +11,4 @@ setLanguageLinkParameters.js
 triggerPerPanelValidation.js
 panel.js
 downloadDorPreview.js
-staleDraftGuard.js
 checkDraftBeforeSubmit.js
