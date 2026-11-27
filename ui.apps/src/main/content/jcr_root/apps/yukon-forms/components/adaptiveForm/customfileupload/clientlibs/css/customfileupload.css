@@ -1,0 +1,133 @@
+/*
+ * File Attachment (Custom), styled to the wireframe "Custom file upload component" (Nov 12, 2026):
+ * a box holding the button, the file list, the total row and the messages.
+ */
+
+/* ── Box ── */
+.afFileUpload {
+  border: 1px solid #1d1e1f;
+  border-radius: 4px;
+  background: #ffffff;
+  padding: 16px 16px 12px;
+}
+
+/* Error: AEM's Required check (validation-failure) or a file we didn't add (yf-fu-has-error). */
+.validation-failure .afFileUpload,
+.afFileUpload.yf-fu-has-error {
+  border-color: #b10e1e;
+  background: #fdeceb;
+}
+
+/* ── Upload button ── */
+.afFileUpload .guide-fu-attach-button {
+  background: #00616d;
+  border: 0;
+  border-radius: 4px;
+  color: #ffffff;
+  font-weight: 700;
+  line-height: 1.25;
+  padding: 14px 22px;
+  cursor: pointer;
+}
+
+/* Themes grey out any focused button (e.g. canvas-3-0: button:not(.af-icon-button):focus). AEM focuses
+   this button after a failed Required check, so keep it teal; the outline shows the focus. */
+.afFileUpload .guide-fu-attach-button:focus {
+  background: #00616d;
+  color: #ffffff;
+}
+
+.afFileUpload .guide-fu-attach-button:hover,
+.afFileUpload .guide-fu-attach-button:active {
+  background: #00454e;
+  color: #ffffff;
+}
+
+.afFileUpload .guide-fu-attach-button:focus-visible {
+  outline: 3px solid #f2a900;
+  outline-offset: 2px;
+}
+
+/* ── File list ── */
+.afFileUpload .guide-fu-fileItemList {
+  margin-top: 16px;
+}
+
+.afFileUpload .guide-fu-fileItemList:empty {
+  margin-top: 0;
+}
+
+.afFileUpload .guide-fu-fileItemList .guide-fu-fileItem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  background: transparent;
+  border-top: 1px solid #c4c8cc;
+  color: #1d1e1f;
+  padding: 12px 0;
+}
+
+/* Long names wrap within their column; the size column keeps its 96px. */
+.afFileUpload .guide-fu-fileItem .guide-fu-fileName {
+  flex: 1 1 0;
+  min-width: 0;
+  color: #1d1e1f;
+  overflow-wrap: anywhere;
+}
+
+.afFileUpload .guide-fu-fileItem .yf-fu-fileSize {
+  flex: 0 0 96px;
+  width: 96px;
+  text-align: right;
+  color: #1d1e1f;
+  white-space: nowrap;
+}
+
+/* AEM's "X", unchanged; it sits in its own column to the right of the size. */
+.afFileUpload .guide-fu-fileItem .guide-fu-fileClose {
+  flex: 0 0 64px;
+  float: none;
+  text-align: center;
+}
+
+.afFileUpload .guide-fu-fileItem .guide-fu-filePreview {
+  flex: 0 0 24px;
+}
+
+.afFileUpload .guide-fu-fileItem .guide-fu-comment {
+  flex: 1 0 100%;
+}
+
+/* ── Total row: 1px rule above, bold; the script lines it up with the size column ── */
+.afFileUpload .yf-fu-total {
+  border-top: 1px solid #6b7075;
+  color: #1d1e1f;
+  font-weight: 700;
+  padding-top: 12px;
+  text-align: right;
+}
+
+.afFileUpload .yf-fu-total[hidden],
+.afFileUpload .yf-fu-messages:empty {
+  display: none;
+}
+
+/* ── Messages: under the total, inside the box ── */
+.afFileUpload .yf-fu-messages {
+  margin-top: 12px;
+}
+
+.afFileUpload .yf-fu-message {
+  color: #b10e1e;
+  margin: 0 0 4px;
+}
+
+/* Below 768px the size moves under the file name. */
+@media (max-width: 767px) {
+  .afFileUpload .guide-fu-fileItem .yf-fu-fileSize {
+    order: 10;
+    flex: 1 0 100%;
+    width: auto;
+    text-align: left;
+  }
+}
